@@ -69,10 +69,13 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 
 				const tokenData: object = {
 					access_token: authData.access_token,
+					userName: authData.name,
+					userResidence: authData.residence,
+					userEmail: emailValue,
 				};
 				saveToken(tokenData);
 				setLoading(false);
-				navigation.dispatch(StackActions.replace("Visita"));
+				navigation.dispatch(StackActions.replace("Visita", tokenData));
 			} catch (error) {
 				console.log(error);
 				setLoading(false);
@@ -85,7 +88,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				Toast.show({
 					type: ALERT_TYPE.DANGER,
 					title: "Login Error",
-					textBody: "An error occurred while logging in.",
+					textBody: `${error}`,
 				});
 			}
 		}

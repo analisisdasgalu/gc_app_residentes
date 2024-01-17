@@ -43,7 +43,8 @@ export const InitializeConnection = async (
 
 	if (response.status === 200) {
 		const res = await callback(email, password);
-		return res;
+		if (res.code === "200" && res.access_token) return res;
+		else throw new Error(res.message);
 	}
 };
 
