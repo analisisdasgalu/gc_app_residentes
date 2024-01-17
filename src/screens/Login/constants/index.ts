@@ -149,7 +149,7 @@ export const loginScreenStyles = StyleSheet.create({
 		marginTop: 87,
 	},
 	linkContainer: {
-		marginTop: 10,
+		marginTop: 35,
 	},
 	forgotPasswordContainer: {
 		marginBottom: 31,

@@ -21,5 +21,5 @@ export const fonts = {
 
 export const line = {
 	thickLine: 2,
-	thinLine: 0.5,
+	thinLine: 1,
 };
