@@ -137,8 +137,7 @@ export const loginScreenStyles = StyleSheet.create({
 		flex: 1,
 	},
 	passwordContainer: {
-		marginTop: -20,
-		marginBottom: -19,
+		marginTop: 20,
 	},
 	overlay: {
 		...StyleSheet.absoluteFillObject,
@@ -157,11 +156,11 @@ export const loginScreenStyles = StyleSheet.create({
 		marginLeft: 227,
 	},
 	signupContainer: {
-		marginTop: 146,
+		marginTop: 100,
 		flexDirection: "row",
 	},
 	termsContainer: {
-		marginTop: 56,
+		marginTop: 10,
 		width: 199,
 	},
 	signupText: {
