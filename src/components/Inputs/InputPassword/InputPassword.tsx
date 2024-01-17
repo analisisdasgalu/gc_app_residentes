@@ -42,10 +42,10 @@ const InputPassword = ({
 	useEffect(() => {
 		if (isClicked && !regexState) {
 			setInputColor(colors.red);
-		} else if (isFocused || inputValue) {
+		} else if (inputValue) {
 			setInputColor(colors.green);
 		} else {
-			setInputColor(styles);
+			setInputColor(colors.gray);
 		}
 	}, [isClicked, isFocused, inputValue, regexState, styles]);
 
@@ -67,8 +67,7 @@ const InputPassword = ({
 						inputPasswordStyles.input,
 						{
 							borderBottomColor: inputColor,
-							borderBottomWidth:
-								isFocused || inputValue ? line.thickLine : line.thinLine,
+							borderBottomWidth: line.thinLine,
 						},
 					]}
 					onFocus={handleFocus}

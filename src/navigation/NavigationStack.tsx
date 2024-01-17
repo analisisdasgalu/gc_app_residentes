@@ -14,8 +14,35 @@ const NavigationStack = () => {
 			<Stack.Screen name='Login' component={LoginScreen} />
 			<Stack.Screen
 				name='Visita'
-				component={({ navigation }: any) => (
+				component={({ route, navigation }: any) => (
 					<View>
+						<Text
+							style={{
+								marginTop: 200,
+								fontSize: 18,
+								color: colors.blue,
+								textAlign: "center",
+							}}>
+							{route.params.userResidence}
+						</Text>
+						<Text
+							style={{
+								marginTop: 10,
+								fontSize: 18,
+								color: colors.gray,
+								textAlign: "center",
+							}}>
+							{route.params.userName}
+						</Text>
+						<Text
+							style={{
+								marginTop: 10,
+								fontSize: 18,
+								color: colors.gray,
+								textAlign: "center",
+							}}>
+							{route.params.userEmail}
+						</Text>
 						<Button
 							styles={{
 								backgroundColor: colors.red,

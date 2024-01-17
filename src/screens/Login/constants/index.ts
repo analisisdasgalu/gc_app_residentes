@@ -43,7 +43,8 @@ export const InitializeConnection = async (
 
 	if (response.status === 200) {
 		const res = await callback(email, password);
-		return res;
+		if (res.code === "200" && res.access_token) return res;
+		else throw new Error(res.message);
 	}
 };
 
@@ -136,8 +137,7 @@ export const loginScreenStyles = StyleSheet.create({
 		flex: 1,
 	},
 	passwordContainer: {
-		marginTop: -20,
-		marginBottom: -19,
+		marginTop: 20,
 	},
 	overlay: {
 		...StyleSheet.absoluteFillObject,
@@ -149,18 +149,18 @@ export const loginScreenStyles = StyleSheet.create({
 		marginTop: 87,
 	},
 	linkContainer: {
-		marginTop: 10,
+		marginTop: 35,
 	},
 	forgotPasswordContainer: {
 		marginBottom: 31,
 		marginLeft: 227,
 	},
 	signupContainer: {
-		marginTop: 146,
+		marginTop: 100,
 		flexDirection: "row",
 	},
 	termsContainer: {
-		marginTop: 56,
+		marginTop: 10,
 		width: 199,
 	},
 	signupText: {
