@@ -19,6 +19,7 @@ import {
 } from "./constants";
 import Loader from "../../components/Loader";
 import { buttonComponentStyles } from "@gcMobile/components/Button/constants";
+import { colors } from "@gcMobile/theme/default.styles";
 
 interface INavigationProps {
 	navigation: any;
@@ -40,6 +41,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 	const [emailValue, setEmailValue] = useState("");
 	const [passwordValue, setPasswordValue] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [customerCode, setCustomerCode] = useState<string>("");
 
 	const getInputValue = (value?: string) => {
 		if (value) setEmailValue(value);
@@ -60,10 +62,20 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				textBody: "Please enter a valid email address.",
 			});
 		} else if (passwordStyles.regexState) {
+			if (customerCode === "") {
+				setLoading(false);
+				Toast.show({
+					type: ALERT_TYPE.DANGER,
+					title: "Empty code",
+					textBody: "Please enter a valid code",
+				});
+				return;
+			}
 			try {
 				const authData = await InitializeConnection(
 					emailValue,
 					passwordValue,
+					customerCode,
 					authenticate
 				);
 
@@ -77,7 +89,6 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				setLoading(false);
 				navigation.dispatch(StackActions.replace("Visita", tokenData));
 			} catch (error) {
-				console.log(error);
 				setLoading(false);
 				const tokenData: object = {
 					access_token: "",
@@ -102,12 +113,13 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 						loginScreenStyles.overlay,
 						loginScreenStyles.alignItemsCenter,
 						loginScreenStyles.justifyContentCenter,
+						{ overflow: "scroll" },
 					]}>
 					<Image
 						style={loginScreenStyles.img}
 						source={require("@gcMobile/images/logoGcMobile.jpeg")}
 					/>
-					<View>
+					<View style={{ marginTop: 50 }}>
 						<InputComponent
 							textInput='Email Adress'
 							styles={emailStyles.email}
@@ -131,6 +143,14 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							regularExpression={/\S+/}
 						/>
 					</View>
+					<View style={{ marginTop: 25 }}>
+						<InputComponent
+							textInput='Code'
+							styles={colors.gray}
+							isClicked={clicked}
+							textInputValue={(value: string) => setCustomerCode(value)}
+						/>
+					</View>
 					<View style={loginScreenStyles.linkContainer}>
 						<Button
 							styles={buttonComponentStyles.button}
@@ -138,11 +158,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							onPress={handleSubmit}
 						/>
 					</View>
-					<View
-						style={[
-							loginScreenStyles.signupContainer,
-							loginScreenStyles.alignItemsCenter,
-						]}>
+					<View style={{ marginTop: 15, flexDirection: "row" }}>
 						<Text style={loginScreenStyles.signupText}>New user? </Text>
 						<TouchableOpacity onPress={() => navigation.navigate("Register")}>
 							<Text style={loginScreenStyles.signupStyle}>Sign up</Text>

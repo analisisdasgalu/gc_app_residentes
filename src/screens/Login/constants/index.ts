@@ -27,14 +27,12 @@ export const logout = async () => {
 export const InitializeConnection = async (
 	email: string,
 	password: string,
+	customerCode: string,
 	callback: any
 ) => {
 	const formdata = new FormData();
 	formdata.append("prefix", "u579469339");
-	formdata.append("code", "0968EUKD4W");
-	formdata.append("user", "u579469339_dasgalu_gc");
-	formdata.append("password", "32V*uiGh07");
-	formdata.append("email", "admin@admin.com");
+	formdata.append("code", customerCode);
 	const requestOptions = {
 		method: "POST",
 		body: formdata,
@@ -56,10 +54,17 @@ export const authenticate = async (email: string, password: string) => {
 	const requestOptions = {
 		method: "POST",
 		body: formdata,
+		Headers: {
+			"content-type": "multipart/form-data",
+		},
 	};
+
 	try {
 		const response = await fetch(`${base_url}/?login`, requestOptions);
-
+		if (!response.ok) {
+			logout();
+			throw new Error("Falló la conexión.");
+		}
 		//save user credentials and time
 		try {
 			const userCredentials = {
@@ -75,10 +80,6 @@ export const authenticate = async (email: string, password: string) => {
 			await AsyncStorage.setItem("@loginTime", currentTime.toString());
 		} catch (error) {
 			throw error;
-		}
-
-		if (!response.ok) {
-			throw new Error("Network response was not ok");
 		}
 
 		const data = await response.json();
@@ -137,7 +138,7 @@ export const loginScreenStyles = StyleSheet.create({
 		flex: 1,
 	},
 	passwordContainer: {
-		marginTop: 20,
+		marginTop: 0,
 	},
 	overlay: {
 		...StyleSheet.absoluteFillObject,
@@ -145,7 +146,6 @@ export const loginScreenStyles = StyleSheet.create({
 	},
 	img: {
 		height: 126.5,
-		marginBottom: 77,
 		marginTop: 87,
 	},
 	linkContainer: {
