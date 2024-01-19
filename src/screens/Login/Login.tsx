@@ -143,7 +143,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							regularExpression={/\S+/}
 						/>
 					</View>
-					<View style={{ marginTop: 25 }}>
+					<View style={{ marginTop: 50 }}>
 						<InputComponent
 							textInput='Code'
 							styles={colors.gray}
