@@ -52,6 +52,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 	};
 
 	const handleSubmit = async () => {
+		// -- Should remove: navigation.navigate("Visits");
 		setClicked(true);
 		setLoading(true);
 		if (!emailStyles.regexState) {
@@ -84,10 +85,11 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					userName: authData.name,
 					userResidence: authData.residence,
 					userEmail: emailValue,
+					userId: authData.id,
 				};
 				saveToken(tokenData);
 				setLoading(false);
-				navigation.dispatch(StackActions.replace("Visita", tokenData));
+				navigation.dispatch(StackActions.replace("Visits", tokenData));
 			} catch (error) {
 				setLoading(false);
 				const tokenData: object = {
@@ -143,7 +145,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							regularExpression={/\S+/}
 						/>
 					</View>
-					<View style={{ marginTop: 50 }}>
+					<View style={{ marginTop: 10 }}>
 						<InputComponent
 							textInput='Code'
 							styles={colors.gray}

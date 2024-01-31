@@ -6,12 +6,16 @@ import Button from "@gcMobile/components/Button";
 import { colors } from "@gcMobile/theme/default.styles";
 import { logout } from "@gcMobile/screens/Login/constants";
 import { StackActions } from "@react-navigation/native";
+import Form from "@gcMobile/components/Form";
+import VisitsScreen from "@gcMobile/screens/VisitsScreen";
 
 const Stack = createNativeStackNavigator();
 const NavigationStack = () => {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: false }}>
 			<Stack.Screen name='Login' component={LoginScreen} />
+			<Stack.Screen name='Form' component={Form} />
+			<Stack.Screen name='Visits' component={VisitsScreen} />
 			<Stack.Screen
 				name='Visita'
 				component={({ route, navigation }: any) => (

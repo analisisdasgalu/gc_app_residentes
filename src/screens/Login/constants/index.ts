@@ -138,7 +138,7 @@ export const loginScreenStyles = StyleSheet.create({
 		flex: 1,
 	},
 	passwordContainer: {
-		marginTop: 0,
+		marginTop: 15,
 	},
 	overlay: {
 		...StyleSheet.absoluteFillObject,
