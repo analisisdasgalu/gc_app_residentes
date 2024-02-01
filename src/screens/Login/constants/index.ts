@@ -5,9 +5,12 @@ import { base_url } from "@gcMobile/components/Auth/constants";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const saveToken = async (tokenData: object) => {
+export const saveToken = async (tokenData: string) => {
 	try {
-		await AsyncStorage.setItem("@token", JSON.stringify(tokenData));
+		await AsyncStorage.setItem(
+			"@token",
+			JSON.stringify({ access_toke: tokenData })
+		);
 	} catch (error) {
 		throw error;
 	}
@@ -65,25 +68,7 @@ export const authenticate = async (email: string, password: string) => {
 			logout();
 			throw new Error("Falló la conexión.");
 		}
-		//save user credentials and time
-		try {
-			const userCredentials = {
-				email: email,
-				password: password,
-			};
-
-			await AsyncStorage.setItem(
-				"@userCredentials",
-				JSON.stringify(userCredentials)
-			);
-			const currentTime = Date.now();
-			await AsyncStorage.setItem("@loginTime", currentTime.toString());
-		} catch (error) {
-			throw error;
-		}
-
 		const data = await response.json();
-
 		return data;
 	} catch (error) {
 		throw error;
