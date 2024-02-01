@@ -4,6 +4,7 @@ import { Entypo } from "@expo/vector-icons";
 import { colors } from "@gcMobile/theme/default.styles";
 import { useSelector } from "react-redux";
 import { RootState } from "@gcMobile/store";
+import { useNavigation } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
 	container: {
@@ -24,10 +25,11 @@ const styles = StyleSheet.create({
 });
 
 export const Menu = () => {
+	const navigation = useNavigation();
 	const { access_token } = useSelector((state: RootState) => state.userReducer);
 
 	const onPress = () => {
-		Alert.alert("You tapped the menu!");
+		navigation.navigate("Menu" as never);
 	};
 
 	return (

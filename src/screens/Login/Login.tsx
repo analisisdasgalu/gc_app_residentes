@@ -20,6 +20,8 @@ import {
 import Loader from "../../components/Loader";
 import { buttonComponentStyles } from "@gcMobile/components/Button/constants";
 import { colors } from "@gcMobile/theme/default.styles";
+import { useDispatch } from "react-redux";
+import { setUserData } from "@gcMobile/store/User";
 
 interface INavigationProps {
 	navigation: any;
@@ -28,6 +30,7 @@ interface ErrorResponse {
 	status: number;
 }
 export default function LoginScreen({ navigation }: INavigationProps) {
+	const dispatch = useDispatch();
 	const {
 		emailStyles,
 		setEmailStyles,
@@ -80,24 +83,29 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					authenticate
 				);
 
-				const tokenData: object = {
+				const tokenData: { [key: string]: string } = {
 					access_token: authData.access_token,
 					userName: authData.name,
 					userResidence: authData.residence,
 					userEmail: emailValue,
 					userId: authData.id,
 				};
-				saveToken(tokenData);
+				saveToken(tokenData.access_token);
+				dispatch(
+					setUserData({
+						access_token: tokenData.access_token,
+						id_instalacion: authData.id_instalacion,
+						name: authData.name,
+						id: authData.id,
+						currentInstalacion: "3",
+						currentManaza: "A",
+					})
+				);
 				setLoading(false);
 				navigation.dispatch(StackActions.replace("Visits", tokenData));
 			} catch (error) {
 				setLoading(false);
-				const tokenData: object = {
-					access_token: "",
-					expires_in: "",
-				};
-				saveToken(tokenData);
-
+				saveToken("");
 				Toast.show({
 					type: ALERT_TYPE.DANGER,
 					title: "Login Error",
