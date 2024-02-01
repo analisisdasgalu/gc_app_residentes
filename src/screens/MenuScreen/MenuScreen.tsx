@@ -10,8 +10,8 @@ import { RootState } from "@gcMobile/store";
 import { setUserData } from "@gcMobile/store/User";
 
 export const MenuScreen = ({ navigation }: MenuProps) => {
-	const { currentManaza, currentInstalacion } = useSelector(
-		(state: RootState) => state.userReducer
+	const { currentHouseInstalacion, currentHouseManzana } = useSelector(
+		(state: RootState) => state.houseReducer
 	);
 
 	const dispatch = useDispatch();
@@ -24,8 +24,6 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
 				id_instalacion: "",
 				name: "",
 				id: "",
-				currentInstalacion: "",
-				currentManaza: "",
 			})
 		);
 		if (value) navigation.navigate("Login" as never);
@@ -42,16 +40,25 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
 							Asociacion de condominos Puerta Real II Las Baixas A.C.
 						</Text>
 						<View style={{ flexDirection: "row" }}>
-							<Text style={styles.tinyText}>{`Manzana: ${currentManaza}`}</Text>
 							<Text
-								style={styles.tinyText}>{`Casa: ${currentInstalacion}`}</Text>
+								style={
+									styles.tinyText
+								}>{`Manzana: ${currentHouseManzana}`}</Text>
+							<Text
+								style={
+									styles.tinyText
+								}>{`Casa: ${currentHouseInstalacion}`}</Text>
 						</View>
 					</View>
 				</View>
 			</View>
 			{/** Consulta de casas */}
 			<View style={styles.tenthHeight}>
-				<TouchableOpacity style={{ flexDirection: "row" }}>
+				<TouchableOpacity
+					style={{ flexDirection: "row" }}
+					onPress={() => {
+						navigation.navigate("HouseManagement" as never);
+					}}>
 					<FontAwesome name='building-o' style={styles.iconStyles} />
 					<Text style={styles.textStyles}>Consultar otra casa</Text>
 				</TouchableOpacity>

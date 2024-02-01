@@ -1,0 +1,45 @@
+[
+	{
+		"id": 3,
+		"0": "A",
+		"manzana": "A",
+		"1": "3",
+		"num_int": "3",
+		"2": "Paseos de Tezoyuca",
+		"residencial": "Paseos de Tezoyuca",
+		"3": "Benito Juarez",
+		"calle": "Benito Juarez",
+		"4": "33",
+		"num_ext": "33",
+		"5": "Tezoyuca",
+		"colonia": "Tezoyuca",
+		"6": "Emiliano Zapata",
+		"ciudad": "Emiliano Zapata",
+		"7": "Morelos",
+		"estado": "Morelos",
+		"8": "62767",
+		"cp": "62767"
+	},
+
+	{
+		"id": 13,
+		"0": "B",
+		"manzana": "B",
+		"1": "3",
+		"num_int": "3",
+		"2": "Paseos de Tezoyuca",
+		"residencial": "Paseos de Tezoyuca",
+		"3": "Benito Ju\u00e1rez",
+		"calle": "Benito Ju\u00e1rez",
+		"4": "33",
+		"num_ext": "33",
+		"5": "Tezoyuca",
+		"colonia": "Tezoyuca",
+		"6": "Emiliano Zapata",
+		"ciudad": "Emiliano Zapata",
+		"7": "Morelos",
+		"estado": "Morelos",
+		"8": "62767",
+		"cp": "62767"
+	}
+]

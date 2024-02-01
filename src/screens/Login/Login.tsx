@@ -22,6 +22,9 @@ import { buttonComponentStyles } from "@gcMobile/components/Button/constants";
 import { colors } from "@gcMobile/theme/default.styles";
 import { useDispatch } from "react-redux";
 import { setUserData } from "@gcMobile/store/User";
+import { setCurrentHouseInfo, setHouse } from "@gcMobile/store/Houses";
+import instalaciones from "@gcMobile/screens/HouseScreen/conts/instalaciones.json";
+import { IHouseManagement } from "../HouseScreen/conts";
 
 interface INavigationProps {
 	navigation: any;
@@ -82,7 +85,6 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					customerCode,
 					authenticate
 				);
-
 				const tokenData: { [key: string]: string } = {
 					access_token: authData.access_token,
 					userName: authData.name,
@@ -94,11 +96,17 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				dispatch(
 					setUserData({
 						access_token: tokenData.access_token,
-						id_instalacion: authData.id_instalacion,
+						id_instalacion: "3,13",
 						name: authData.name,
 						id: authData.id,
-						currentInstalacion: "3",
-						currentManaza: "A",
+					})
+				);
+				dispatch(setHouse(instalaciones as unknown as IHouseManagement[]));
+				dispatch(
+					setCurrentHouseInfo({
+						currentHouseId: 3,
+						currentHouseInstalacion: "3",
+						currentHouseManzana: "A",
 					})
 				);
 				setLoading(false);

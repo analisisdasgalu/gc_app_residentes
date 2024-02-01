@@ -6,8 +6,6 @@ const initialState: UserData = {
 	id_instalacion: "",
 	name: "",
 	id: "",
-	currentInstalacion: "3",
-	currentManaza: "A",
 };
 
 const userSlice = createSlice({
@@ -19,8 +17,6 @@ const userSlice = createSlice({
 			state.id_instalacion = action.payload.id_instalacion;
 			state.name = action.payload.name;
 			state.id = action.payload.id;
-			state.currentInstalacion = action.payload.currentInstalacion;
-			state.currentManaza = action.payload.currentManaza;
 		},
 	},
 });
