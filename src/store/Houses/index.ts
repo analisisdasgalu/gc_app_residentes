@@ -4,6 +4,7 @@ import { HousesSlice } from "./types";
 
 const initialState: HousesSlice = {
 	houses: [],
+	currentResidence: "",
 	currentHouseId: 0,
 	currentHouseInstalacion: "",
 	currentHouseManzana: "",
@@ -20,10 +21,12 @@ const houseSlice = createSlice({
 			state,
 			action: PayloadAction<{
 				currentHouseId: number;
+				currentResidence: string;
 				currentHouseInstalacion: string;
 				currentHouseManzana: string;
 			}>
 		) => {
+			state.currentResidence = action.payload.currentResidence;
 			state.currentHouseId = action.payload.currentHouseId;
 			state.currentHouseInstalacion = action.payload.currentHouseInstalacion;
 			state.currentHouseManzana = action.payload.currentHouseManzana;

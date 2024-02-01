@@ -124,65 +124,26 @@ const alignItemsCenter: ViewStyle = {
 };
 
 export const loginScreenStyles = StyleSheet.create({
-	marginTop20: {
-		...marginTop20,
-	},
-	marginBottom20: {
-		...marginBottom20,
-	},
-	backgroundImage: {
+	container: {
 		flex: 1,
-	},
-	passwordContainer: {
-		marginTop: 15,
-	},
-	overlay: {
-		...StyleSheet.absoluteFillObject,
 		backgroundColor: colors.white,
 	},
-	img: {
-		height: 126.5,
-		marginTop: 87,
+	rowImage: {
+		flex: 0.16,
+		backgroundColor: colors.white,
+		justifyContent: "center",
+		flexDirection: "row",
+		marginBottom: "20%",
 	},
-	linkContainer: {
-		marginTop: 35,
-	},
-	forgotPasswordContainer: {
-		marginBottom: 31,
-		marginLeft: 227,
-	},
-	signupContainer: {
-		marginTop: 100,
+	row: {
+		flex: 0.16,
+		backgroundColor: colors.white,
+		justifyContent: "center",
 		flexDirection: "row",
 	},
-	termsContainer: {
-		marginTop: 10,
-		width: 199,
-	},
-	signupText: {
+	label: {
+		fontSize: 12,
 		color: colors.gray,
-		fontSize: fonts.bodyText1,
-	},
-	signupStyle: {
-		color: colors.blue,
-		fontSize: fonts.bodyText1,
-	},
-	termsText: {
-		color: colors.gray,
-		fontSize: fonts.bodyText3,
 		textAlign: "center",
-	},
-	singupRefText: {
-		color: colors.green,
-		fontSize: fonts.bodyText1,
-	},
-	safeAreaViewStyle: {
-		flex: 1,
-	},
-	alignItemsCenter: alignItemsCenter,
-	justifyContentCenter: justifyContentCenter,
-	loaderStyle: {
-		...justifyContentCenter,
-		flex: 1,
 	},
 });

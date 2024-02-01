@@ -25,7 +25,7 @@ import { useDispatch } from "react-redux";
 import { setUserData } from "@gcMobile/store/User";
 import { setCurrentHouseInfo, setHouse } from "@gcMobile/store/Houses";
 // import instalaciones from "@gcMobile/screens/HouseScreen/conts/instalaciones.json";
-import { IHouseManagement } from "../HouseScreen/conts";
+import { IHouseManagement, styles } from "../HouseScreen/conts";
 
 interface INavigationProps {
 	navigation: any;
@@ -113,6 +113,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					dispatch(
 						setCurrentHouseInfo({
 							currentHouseId: defaultHouse.id,
+							currentResidence: defaultHouse.residencial,
 							currentHouseInstalacion: defaultHouse.num_int,
 							currentHouseManzana: defaultHouse.manzana,
 						})
@@ -120,6 +121,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				} else {
 					setCurrentHouseInfo({
 						currentHouseId: 0,
+						currentResidence: "",
 						currentHouseInstalacion: "",
 						currentHouseManzana: "",
 					});
@@ -140,19 +142,12 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 
 	return (
 		<AlertNotificationRoot theme='light'>
-			<SafeAreaView style={loginScreenStyles.safeAreaViewStyle}>
-				<View
-					style={[
-						loginScreenStyles.overlay,
-						loginScreenStyles.alignItemsCenter,
-						loginScreenStyles.justifyContentCenter,
-						{ overflow: "scroll" },
-					]}>
-					<Image
-						style={loginScreenStyles.img}
-						source={require("@gcMobile/images/logoGcMobile.jpeg")}
-					/>
-					<View style={{ marginTop: 50 }}>
+			<SafeAreaView style={loginScreenStyles.container}>
+				<View style={[loginScreenStyles.container]}>
+					<View style={loginScreenStyles.rowImage}>
+						<Image source={require("@gcMobile/images/logoGcMobile.jpeg")} />
+					</View>
+					<View style={loginScreenStyles.row}>
 						<InputComponent
 							textInput='Email Adress'
 							styles={emailStyles.email}
@@ -164,7 +159,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							textInputValue={getInputValue}
 						/>
 					</View>
-					<View style={loginScreenStyles.passwordContainer}>
+					<View style={loginScreenStyles.row}>
 						<InputPassword
 							textInput='Password'
 							styles={passwordStyles.password}
@@ -176,7 +171,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							regularExpression={/\S+/}
 						/>
 					</View>
-					<View style={{ marginTop: 10 }}>
+					<View style={loginScreenStyles.row}>
 						<InputComponent
 							textInput='Code'
 							styles={colors.gray}
@@ -184,22 +179,22 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							textInputValue={(value: string) => setCustomerCode(value)}
 						/>
 					</View>
-					<View style={loginScreenStyles.linkContainer}>
+					<View style={loginScreenStyles.row}>
 						<Button
 							styles={buttonComponentStyles.button}
 							textButton='Sign In'
 							onPress={handleSubmit}
 						/>
 					</View>
-					<View style={{ marginTop: 15, flexDirection: "row" }}>
-						<Text style={loginScreenStyles.signupText}>New user? </Text>
+					<View style={loginScreenStyles.row}>
+						<Text style={loginScreenStyles.label}>New user? </Text>
 						<TouchableOpacity onPress={() => navigation.navigate("Register")}>
-							<Text style={loginScreenStyles.signupStyle}>Sign up</Text>
+							<Text style={loginScreenStyles.label}>Sign up</Text>
 						</TouchableOpacity>
-						<Text style={loginScreenStyles.signupText}> here</Text>
+						<Text style={loginScreenStyles.label}> here</Text>
 					</View>
-					<View style={loginScreenStyles.termsContainer}>
-						<Text style={loginScreenStyles.termsText}>
+					<View style={loginScreenStyles.row}>
+						<Text style={loginScreenStyles.label}>
 							By creating an account, you agree to our Terms of Service and
 							Privacy Policy
 						</Text>
@@ -207,7 +202,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				</View>
 
 				{loading && (
-					<View style={loginScreenStyles.loaderStyle}>
+					<View style={{ justifyContent: "center" }}>
 						<Loader />
 					</View>
 				)}
