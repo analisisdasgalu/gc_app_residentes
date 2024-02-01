@@ -32,7 +32,7 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
 	return (
 		<View style={styles.container}>
 			{/** Title row */}
-			<View style={styles.tenthHeight}>
+			<View style={styles.residenceContainer}>
 				<View style={{ flexDirection: "row" }}>
 					<FontAwesome name='user-circle-o' style={styles.iconStyles} />
 					<View style={{ flexDirection: "column" }}>

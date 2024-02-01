@@ -16,6 +16,7 @@ import {
 	authenticate,
 	saveToken,
 	InitializeConnection,
+	getIsntalaciones,
 } from "./constants";
 import Loader from "../../components/Loader";
 import { buttonComponentStyles } from "@gcMobile/components/Button/constants";
@@ -23,7 +24,7 @@ import { colors } from "@gcMobile/theme/default.styles";
 import { useDispatch } from "react-redux";
 import { setUserData } from "@gcMobile/store/User";
 import { setCurrentHouseInfo, setHouse } from "@gcMobile/store/Houses";
-import instalaciones from "@gcMobile/screens/HouseScreen/conts/instalaciones.json";
+// import instalaciones from "@gcMobile/screens/HouseScreen/conts/instalaciones.json";
 import { IHouseManagement } from "../HouseScreen/conts";
 
 interface INavigationProps {
@@ -85,6 +86,8 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					customerCode,
 					authenticate
 				);
+				const instalaciones = await getIsntalaciones(authData.instalaciones);
+
 				const tokenData: { [key: string]: string } = {
 					access_token: authData.access_token,
 					userName: authData.name,
@@ -96,19 +99,31 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				dispatch(
 					setUserData({
 						access_token: tokenData.access_token,
-						id_instalacion: "3,13",
+						id_instalacion: authData.instalaciones,
 						name: authData.name,
 						id: authData.id,
 					})
 				);
 				dispatch(setHouse(instalaciones as unknown as IHouseManagement[]));
-				dispatch(
-					setCurrentHouseInfo({
-						currentHouseId: 3,
-						currentHouseInstalacion: "3",
-						currentHouseManzana: "A",
-					})
+				const _house = authData.instalaciones.split(",")[0];
+				const defaultHouse = instalaciones.find(
+					(inst: IHouseManagement) => inst.id === _house
 				);
+				if (defaultHouse) {
+					dispatch(
+						setCurrentHouseInfo({
+							currentHouseId: defaultHouse.id,
+							currentHouseInstalacion: defaultHouse.num_int,
+							currentHouseManzana: defaultHouse.manzana,
+						})
+					);
+				} else {
+					setCurrentHouseInfo({
+						currentHouseId: 0,
+						currentHouseInstalacion: "",
+						currentHouseManzana: "",
+					});
+				}
 				setLoading(false);
 				navigation.dispatch(StackActions.replace("Visits", tokenData));
 			} catch (error) {

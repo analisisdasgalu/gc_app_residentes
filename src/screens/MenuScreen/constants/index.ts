@@ -10,10 +10,16 @@ export const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "column",
 	},
+	residenceContainer: {
+		flex: 0.1,
+		backgroundColor: colors.white,
+		padding: 5,
+		paddingBottom: 15,
+	},
 	tenthHeight: {
 		flex: 0.1,
 		backgroundColor: colors.white,
-		padding: 10,
+		padding: 5,
 	},
 	sixthHeight: {
 		flex: 0.6,

@@ -16,6 +16,17 @@ export const saveToken = async (tokenData: string) => {
 	}
 };
 
+export const getIsntalaciones = async (instalaciones: string) => {
+	const url = `${base_url}/instalaciones/getAll/index.php?ids="${instalaciones}"`;
+	try {
+		const res = await fetch(url);
+		const data = await res.json();
+		return data;
+	} catch (error) {
+		throw new Error(error as string);
+	}
+};
+
 export const handleLinkPress = () => {
 	console.log("Enlace ");
 };
