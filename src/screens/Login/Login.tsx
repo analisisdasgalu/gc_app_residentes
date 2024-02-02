@@ -16,6 +16,7 @@ import {
 	authenticate,
 	saveToken,
 	InitializeConnection,
+	getIsntalaciones,
 } from "./constants";
 import Loader from "../../components/Loader";
 import { buttonComponentStyles } from "@gcMobile/components/Button/constants";
@@ -23,8 +24,8 @@ import { colors } from "@gcMobile/theme/default.styles";
 import { useDispatch } from "react-redux";
 import { setUserData } from "@gcMobile/store/User";
 import { setCurrentHouseInfo, setHouse } from "@gcMobile/store/Houses";
-import instalaciones from "@gcMobile/screens/HouseScreen/conts/instalaciones.json";
-import { IHouseManagement } from "../HouseScreen/conts";
+// import instalaciones from "@gcMobile/screens/HouseScreen/conts/instalaciones.json";
+import { IHouseManagement, styles } from "../HouseScreen/conts";
 
 interface INavigationProps {
 	navigation: any;
@@ -85,6 +86,9 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					customerCode,
 					authenticate
 				);
+				setLoading(true);
+				const instalaciones = await getIsntalaciones(authData.instalaciones);
+
 				const tokenData: { [key: string]: string } = {
 					access_token: authData.access_token,
 					userName: authData.name,
@@ -96,19 +100,34 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				dispatch(
 					setUserData({
 						access_token: tokenData.access_token,
-						id_instalacion: "3,13",
+						id_instalacion: authData.instalaciones,
 						name: authData.name,
 						id: authData.id,
 					})
 				);
 				dispatch(setHouse(instalaciones as unknown as IHouseManagement[]));
-				dispatch(
-					setCurrentHouseInfo({
-						currentHouseId: 3,
-						currentHouseInstalacion: "3",
-						currentHouseManzana: "A",
-					})
+				const _house = authData.instalaciones.split(",")[0];
+				const defaultHouse = instalaciones.find(
+					(inst: IHouseManagement) => inst.id === _house
 				);
+				if (defaultHouse) {
+					setLoading(false);
+					dispatch(
+						setCurrentHouseInfo({
+							currentHouseId: defaultHouse.id,
+							currentResidence: defaultHouse.residencial,
+							currentHouseInstalacion: defaultHouse.num_int,
+							currentHouseManzana: defaultHouse.manzana,
+						})
+					);
+				} else {
+					setCurrentHouseInfo({
+						currentHouseId: 0,
+						currentResidence: "",
+						currentHouseInstalacion: "",
+						currentHouseManzana: "",
+					});
+				}
 				setLoading(false);
 				navigation.dispatch(StackActions.replace("Visits", tokenData));
 			} catch (error) {
@@ -125,19 +144,16 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 
 	return (
 		<AlertNotificationRoot theme='light'>
-			<SafeAreaView style={loginScreenStyles.safeAreaViewStyle}>
-				<View
-					style={[
-						loginScreenStyles.overlay,
-						loginScreenStyles.alignItemsCenter,
-						loginScreenStyles.justifyContentCenter,
-						{ overflow: "scroll" },
-					]}>
-					<Image
-						style={loginScreenStyles.img}
-						source={require("@gcMobile/images/logoGcMobile.jpeg")}
-					/>
-					<View style={{ marginTop: 50 }}>
+			<SafeAreaView style={styles.container}>
+				{loading && <Loader />}
+				<View style={[loginScreenStyles.container]}>
+					<View style={loginScreenStyles.rowImage}>
+						<Image
+							source={require("@gcMobile/images/logoGcMobile.jpeg")}
+							style={loginScreenStyles.imageStyles}
+						/>
+					</View>
+					<View style={loginScreenStyles.row}>
 						<InputComponent
 							textInput='Email Adress'
 							styles={emailStyles.email}
@@ -149,7 +165,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							textInputValue={getInputValue}
 						/>
 					</View>
-					<View style={loginScreenStyles.passwordContainer}>
+					<View style={loginScreenStyles.row}>
 						<InputPassword
 							textInput='Password'
 							styles={passwordStyles.password}
@@ -161,41 +177,35 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							regularExpression={/\S+/}
 						/>
 					</View>
-					<View style={{ marginTop: 10 }}>
-						<InputComponent
+					<View style={loginScreenStyles.row}>
+						<InputPassword
 							textInput='Code'
 							styles={colors.gray}
 							isClicked={clicked}
-							textInputValue={(value: string) => setCustomerCode(value)}
+							passwordValue={(value: string) => setCustomerCode(value)}
 						/>
 					</View>
-					<View style={loginScreenStyles.linkContainer}>
+					<View style={loginScreenStyles.row}>
 						<Button
 							styles={buttonComponentStyles.button}
 							textButton='Sign In'
 							onPress={handleSubmit}
 						/>
 					</View>
-					<View style={{ marginTop: 15, flexDirection: "row" }}>
-						<Text style={loginScreenStyles.signupText}>New user? </Text>
+					<View style={loginScreenStyles.rowText}>
+						<Text style={loginScreenStyles.label}>New user? </Text>
 						<TouchableOpacity onPress={() => navigation.navigate("Register")}>
-							<Text style={loginScreenStyles.signupStyle}>Sign up</Text>
+							<Text style={loginScreenStyles.label}>Sign up</Text>
 						</TouchableOpacity>
-						<Text style={loginScreenStyles.signupText}> here</Text>
+						<Text style={loginScreenStyles.label}> here</Text>
 					</View>
-					<View style={loginScreenStyles.termsContainer}>
-						<Text style={loginScreenStyles.termsText}>
+					<View style={loginScreenStyles.rowText}>
+						<Text style={loginScreenStyles.label}>
 							By creating an account, you agree to our Terms of Service and
 							Privacy Policy
 						</Text>
 					</View>
 				</View>
-
-				{loading && (
-					<View style={loginScreenStyles.loaderStyle}>
-						<Loader />
-					</View>
-				)}
 			</SafeAreaView>
 		</AlertNotificationRoot>
 	);

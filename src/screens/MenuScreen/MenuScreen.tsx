@@ -10,9 +10,8 @@ import { RootState } from "@gcMobile/store";
 import { setUserData } from "@gcMobile/store/User";
 
 export const MenuScreen = ({ navigation }: MenuProps) => {
-	const { currentHouseInstalacion, currentHouseManzana } = useSelector(
-		(state: RootState) => state.houseReducer
-	);
+	const { currentHouseInstalacion, currentHouseManzana, currentResidence } =
+		useSelector((state: RootState) => state.houseReducer);
 
 	const dispatch = useDispatch();
 
@@ -32,12 +31,12 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
 	return (
 		<View style={styles.container}>
 			{/** Title row */}
-			<View style={styles.tenthHeight}>
+			<View style={styles.residenceContainer}>
 				<View style={{ flexDirection: "row" }}>
 					<FontAwesome name='user-circle-o' style={styles.iconStyles} />
 					<View style={{ flexDirection: "column" }}>
 						<Text style={styles.textStyles}>
-							Asociacion de condominos Puerta Real II Las Baixas A.C.
+							Asociacion de condominos - {currentResidence}
 						</Text>
 						<View style={{ flexDirection: "row" }}>
 							<Text

@@ -47,7 +47,7 @@ export const useInputState = () => {
 
 	const animateTextUp = () => {
 		Animated.timing(translateYValue, {
-			toValue: -20,
+			toValue: -10,
 			duration: 200,
 			useNativeDriver: true,
 		}).start();
@@ -86,10 +86,10 @@ export const inputPasswordStyles = StyleSheet.create({
 	input: {
 		color: colors.gray,
 		fontSize: fonts.typingText,
-		paddingBottom: 13,
+		paddingBottom: 0,
 	},
 	text: {
-		fontSize: fonts.bodyText2,
+		fontSize: 10,
 		fontWeight: "normal",
 		color: colors.white,
 		textAlign: "left",

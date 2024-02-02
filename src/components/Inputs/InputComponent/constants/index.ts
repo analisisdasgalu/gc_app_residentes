@@ -32,7 +32,7 @@ export const useInputState = () => {
 
 	const animateTextUp = () => {
 		Animated.timing(translateYValue, {
-			toValue: -20,
+			toValue: -10,
 			duration: 200,
 			useNativeDriver: true,
 		}).start();
@@ -72,7 +72,7 @@ export const inputComponentStyles = StyleSheet.create({
 		fontSize: fonts.typingText,
 	},
 	text: {
-		fontSize: fonts.bodyText2,
+		fontSize: 10,
 		fontWeight: "normal",
 		textAlign: "left",
 		lineHeight: 14,

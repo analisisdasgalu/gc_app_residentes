@@ -16,6 +16,17 @@ export const saveToken = async (tokenData: string) => {
 	}
 };
 
+export const getIsntalaciones = async (instalaciones: string) => {
+	const url = `${base_url}/instalaciones/getAll/index.php?ids="${instalaciones}"`;
+	try {
+		const res = await fetch(url);
+		const data = await res.json();
+		return data;
+	} catch (error) {
+		throw new Error(error as string);
+	}
+};
+
 export const handleLinkPress = () => {
 	console.log("Enlace ");
 };
@@ -113,65 +124,41 @@ const alignItemsCenter: ViewStyle = {
 };
 
 export const loginScreenStyles = StyleSheet.create({
-	marginTop20: {
-		...marginTop20,
-	},
-	marginBottom20: {
-		...marginBottom20,
-	},
-	backgroundImage: {
+	container: {
 		flex: 1,
-	},
-	passwordContainer: {
-		marginTop: 15,
-	},
-	overlay: {
-		...StyleSheet.absoluteFillObject,
 		backgroundColor: colors.white,
 	},
-	img: {
-		height: 126.5,
-		marginTop: 87,
+	rowImage: {
+		flex: 0.1,
+		backgroundColor: colors.white,
+		justifyContent: "center",
+		flexDirection: "row",
+		marginBottom: "20%",
+		paddingTop: "5%",
 	},
-	linkContainer: {
-		marginTop: 35,
+	imageStyles: {
+		width: 100,
+		height: 100,
+		borderRadius: 50,
+		borderWidth: 1,
+		borderColor: colors.gray,
 	},
-	forgotPasswordContainer: {
-		marginBottom: 31,
-		marginLeft: 227,
-	},
-	signupContainer: {
-		marginTop: 100,
+
+	row: {
+		flex: 0.18,
+		backgroundColor: colors.white,
+		justifyContent: "center",
 		flexDirection: "row",
 	},
-	termsContainer: {
-		marginTop: 10,
-		width: 199,
+	rowText: {
+		flex: 0.05,
+		backgroundColor: colors.white,
+		justifyContent: "center",
+		flexDirection: "row",
 	},
-	signupText: {
+	label: {
+		fontSize: 12,
 		color: colors.gray,
-		fontSize: fonts.bodyText1,
-	},
-	signupStyle: {
-		color: colors.blue,
-		fontSize: fonts.bodyText1,
-	},
-	termsText: {
-		color: colors.gray,
-		fontSize: fonts.bodyText3,
 		textAlign: "center",
-	},
-	singupRefText: {
-		color: colors.green,
-		fontSize: fonts.bodyText1,
-	},
-	safeAreaViewStyle: {
-		flex: 1,
-	},
-	alignItemsCenter: alignItemsCenter,
-	justifyContentCenter: justifyContentCenter,
-	loaderStyle: {
-		...justifyContentCenter,
-		flex: 1,
 	},
 });

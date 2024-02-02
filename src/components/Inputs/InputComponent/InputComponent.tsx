@@ -65,7 +65,6 @@ const InputComponent = ({
 					{
 						color: colors.gray,
 						fontSize: fonts.typingText,
-						paddingBottom: 10,
 						borderBottomColor: inputColor,
 						borderBottomWidth:
 							isFocused || inputValue ? line.thickLine : line.thinLine,

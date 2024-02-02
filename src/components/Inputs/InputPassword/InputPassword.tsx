@@ -57,6 +57,7 @@ const InputPassword = ({
 						inputPasswordStyles.text,
 						{
 							color: inputColor,
+							bottom: 0,
 							transform: [{ translateY: translateYValue }],
 						},
 					]}>

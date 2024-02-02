@@ -23,6 +23,10 @@ export default function App() {
 							justifyContent: "space-around",
 							height: 100,
 						}}
+						centerComponent={{
+							text: "Gestion y Control",
+							style: { color: "#fff", marginTop: "25%", fontWeight: "bold" },
+						}}
 					/>
 					<NavigationStack />
 				</NavigationContainer>

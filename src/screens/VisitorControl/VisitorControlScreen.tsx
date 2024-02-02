@@ -18,27 +18,6 @@ export default function VisitorControlScreen({ navigation }: any) {
 				</View>
 				<Card />
 			</View>
-			<View>
-				<Button
-					styles={{
-						backgroundColor: colors.red,
-						width: 150,
-						height: 46.5,
-						borderRadius: 2,
-						margin: "auto",
-						position: "relative",
-						bottom: 0,
-						marginTop: 350,
-						marginLeft: 235,
-						filter: colors.dropShadow,
-					}}
-					textButton='Salir'
-					onPress={async () => {
-						const value = await logout();
-						if (value) navigation.navigate("Login");
-					}}
-				/>
-			</View>
 		</View>
 	);
 }

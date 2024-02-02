@@ -13,9 +13,7 @@ export const HouseManagement = () => {
 	const { houses, currentHouseId } = useSelector(
 		(state: RootState) => state.houseReducer
 	);
-	const { id_instalacion, name } = useSelector(
-		(state: RootState) => state.userReducer
-	);
+	const { name } = useSelector((state: RootState) => state.userReducer);
 
 	const [selectedHouse, setSelectedHouse] = useState<string>(
 		currentHouseId ? `${currentHouseId}` : ""
@@ -49,6 +47,7 @@ export const HouseManagement = () => {
 							dispatch(
 								setCurrentHouseInfo({
 									currentHouseId: house.id,
+									currentResidence: house.residencial,
 									currentHouseInstalacion: house.num_int,
 									currentHouseManzana: house.manzana,
 								})
