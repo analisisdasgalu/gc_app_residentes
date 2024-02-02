@@ -18,6 +18,7 @@ export const loaderStyles = StyleSheet.create({
 	},
 	background: {
 		backgroundColor: colors.rgbOpacityGray,
+		zIndex: 1,
 		...StyleSheet.absoluteFillObject,
 	},
 });

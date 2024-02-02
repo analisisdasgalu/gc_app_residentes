@@ -86,6 +86,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					customerCode,
 					authenticate
 				);
+				setLoading(true);
 				const instalaciones = await getIsntalaciones(authData.instalaciones);
 
 				const tokenData: { [key: string]: string } = {
@@ -110,6 +111,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					(inst: IHouseManagement) => inst.id === _house
 				);
 				if (defaultHouse) {
+					setLoading(false);
 					dispatch(
 						setCurrentHouseInfo({
 							currentHouseId: defaultHouse.id,
@@ -142,10 +144,14 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 
 	return (
 		<AlertNotificationRoot theme='light'>
-			<SafeAreaView style={loginScreenStyles.container}>
+			<SafeAreaView style={styles.container}>
+				{loading && <Loader />}
 				<View style={[loginScreenStyles.container]}>
 					<View style={loginScreenStyles.rowImage}>
-						<Image source={require("@gcMobile/images/logoGcMobile.jpeg")} />
+						<Image
+							source={require("@gcMobile/images/logoGcMobile.jpeg")}
+							style={loginScreenStyles.imageStyles}
+						/>
 					</View>
 					<View style={loginScreenStyles.row}>
 						<InputComponent
@@ -172,11 +178,11 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 						/>
 					</View>
 					<View style={loginScreenStyles.row}>
-						<InputComponent
+						<InputPassword
 							textInput='Code'
 							styles={colors.gray}
 							isClicked={clicked}
-							textInputValue={(value: string) => setCustomerCode(value)}
+							passwordValue={(value: string) => setCustomerCode(value)}
 						/>
 					</View>
 					<View style={loginScreenStyles.row}>
@@ -186,26 +192,20 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 							onPress={handleSubmit}
 						/>
 					</View>
-					<View style={loginScreenStyles.row}>
+					<View style={loginScreenStyles.rowText}>
 						<Text style={loginScreenStyles.label}>New user? </Text>
 						<TouchableOpacity onPress={() => navigation.navigate("Register")}>
 							<Text style={loginScreenStyles.label}>Sign up</Text>
 						</TouchableOpacity>
 						<Text style={loginScreenStyles.label}> here</Text>
 					</View>
-					<View style={loginScreenStyles.row}>
+					<View style={loginScreenStyles.rowText}>
 						<Text style={loginScreenStyles.label}>
 							By creating an account, you agree to our Terms of Service and
 							Privacy Policy
 						</Text>
 					</View>
 				</View>
-
-				{loading && (
-					<View style={{ justifyContent: "center" }}>
-						<Loader />
-					</View>
-				)}
 			</SafeAreaView>
 		</AlertNotificationRoot>
 	);

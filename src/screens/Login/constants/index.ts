@@ -129,14 +129,29 @@ export const loginScreenStyles = StyleSheet.create({
 		backgroundColor: colors.white,
 	},
 	rowImage: {
-		flex: 0.16,
+		flex: 0.1,
 		backgroundColor: colors.white,
 		justifyContent: "center",
 		flexDirection: "row",
 		marginBottom: "20%",
+		paddingTop: "5%",
 	},
+	imageStyles: {
+		width: 100,
+		height: 100,
+		borderRadius: 50,
+		borderWidth: 1,
+		borderColor: colors.gray,
+	},
+
 	row: {
-		flex: 0.16,
+		flex: 0.18,
+		backgroundColor: colors.white,
+		justifyContent: "center",
+		flexDirection: "row",
+	},
+	rowText: {
+		flex: 0.05,
 		backgroundColor: colors.white,
 		justifyContent: "center",
 		flexDirection: "row",
