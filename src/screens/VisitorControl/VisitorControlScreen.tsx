@@ -9,15 +9,15 @@ import Button from "@gcMobile/components/Button";
 import { logout } from "../Login/constants";
 
 export default function VisitorControlScreen({ navigation }: any) {
-	return (
-		<View>
-			<View style={visitorControlStyles.container}>
-				<Filter />
-				<View style={visitorControlStyles.addButton}>
-					<CircularButton window={"Form"} />
-				</View>
-				<Card />
-			</View>
-		</View>
-	);
+  return (
+    <View>
+      <View style={visitorControlStyles.container}>
+        <Filter />
+        <View style={visitorControlStyles.addButton}>
+          <CircularButton window={"Form"} icon="plus" />
+        </View>
+        <Card />
+      </View>
+    </View>
+  );
 }
