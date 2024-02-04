@@ -15,7 +15,7 @@ export default function VisitorControlScreen({ navigation }: any) {
       <View style={visitorControlStyles.container}>
         <Filter />
         <View style={visitorControlStyles.addButton}>
-          <CircularButton window={"Form"} />
+        <CircularButton window={"Form"} icon="plus" />
         </View>
         <Card jsonData={visitorControlData} />
       </View>
