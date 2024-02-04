@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { colors } from "@gcMobile/theme/default.styles";
+import { filterPalette } from "@gcMobile/theme/default.styles";
 export const FilterStyles = StyleSheet.create({
   container: {
     flexDirection: "row",
@@ -26,14 +27,14 @@ export const FilterStyles = StyleSheet.create({
     color: colors.white,
   },
 
-  buttonAqua: {
-    backgroundColor: colors.aqua,
+  buttonBlue: {
+    backgroundColor: filterPalette.blue,
   },
-  buttonGreen: {
-    backgroundColor: colors.green,
+  buttonOrange: {
+    backgroundColor: filterPalette.orange,
   },
   buttonBrown: {
-    backgroundColor: colors.brown,
+    backgroundColor: filterPalette.brown,
   },
   tabNotSelected: {
     backgroundColor: colors.lightGray2,

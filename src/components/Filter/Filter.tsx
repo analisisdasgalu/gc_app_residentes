@@ -20,7 +20,7 @@ const Filter = () => {
         style={[
           FilterStyles.button,
           FilterStyles.tabNotSelected,
-          selectedTabs.includes("Visit") && FilterStyles.buttonAqua,
+          selectedTabs.includes("Visit") && FilterStyles.buttonBlue,
         ]}
         onPress={() => toggleTab("Visit")}
       >
@@ -30,7 +30,7 @@ const Filter = () => {
         style={[
           FilterStyles.button,
           FilterStyles.tabNotSelected,
-          selectedTabs.includes("Service") && FilterStyles.buttonGreen,
+          selectedTabs.includes("Service") && FilterStyles.buttonOrange,
         ]}
         onPress={() => toggleTab("Service")}
       >

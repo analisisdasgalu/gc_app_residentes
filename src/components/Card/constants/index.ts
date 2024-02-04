@@ -2,9 +2,11 @@ import { StyleSheet, Dimensions } from "react-native";
 import { colors } from "@gcMobile/theme/default.styles";
 
 export const cardStyles = StyleSheet.create({
+  padding: {
+    padding: "3%",
+  },
   container: {
     backgroundColor: colors.lightGray,
-    padding: "3%",
     borderRadius: 10,
     width: "94%",
     shadowColor: colors.black,
@@ -25,7 +27,8 @@ export const cardStyles = StyleSheet.create({
   },
   typeContainer: {
     borderRightWidth: 1,
-    height: "100%",
+    width: "15%",
+    alignItems: "center",
   },
   textType: {
     fontWeight: "bold",
@@ -33,19 +36,19 @@ export const cardStyles = StyleSheet.create({
   },
   dataText: {
     color: colors.black,
-    marginBottom: "3%",
     fontWeight: "400",
+    padding: "1%",
   },
   descriptionText: {
     color: colors.gray,
-    marginBottom: "4%",
+    padding: "1%",
   },
   typeIcon: {
-    backgroundColor: colors.aqua,
     width: 30,
     height: 30,
     borderRadius: 15,
-    marginLeft: "5%",
   },
-  column: {},
+  column: {
+    flexDirection: "column",
+  },
 });
