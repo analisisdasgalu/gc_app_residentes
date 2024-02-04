@@ -12,13 +12,18 @@ const VisitsScreen = ({ navigation }: any) => {
 	};
 
 	return (
-		<View>
+		<View style={{ flex: 1 }}>
 			<Tab selectedTab={getSelectedValue} />
-			<View style={selectedTab === "VisitHistory" && visitsStyle.hidden}>
+			<View
+				style={{
+					...(selectedTab === "VisitHistory" && visitsStyle.hidden),
+					flex: 1,
+				}}>
 				<VisitorControlScreen navigation={navigation} />
 			</View>
 			<View
 				style={
+					// -- TODO: Fix this to match the above
 					!selectedTab || selectedTab === "VisitorControl"
 						? visitsStyle.hidden
 						: undefined

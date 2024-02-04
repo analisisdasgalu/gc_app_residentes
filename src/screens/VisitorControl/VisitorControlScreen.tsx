@@ -8,17 +8,30 @@ import { colors } from "@gcMobile/theme/default.styles";
 import Button from "@gcMobile/components/Button";
 import { logout } from "../Login/constants";
 import visitorControlData from "./constants/visitorControlData.json";
+import { circularBtnStyles } from "@gcMobile/components/CircularButton/constants";
 
 export default function VisitorControlScreen({ navigation }: any) {
-  return (
-    <View>
-      <View style={visitorControlStyles.container}>
-        <Filter />
-        <View style={visitorControlStyles.addButton}>
-        <CircularButton window={"Form"} icon="plus" />
-        </View>
-        <Card jsonData={visitorControlData} />
-      </View>
-    </View>
-  );
+	return (
+		<View style={{ flex: 1, flexDirection: "column" }}>
+			<View style={{ flex: 0.1, backgroundColor: "blue" }}>
+				<Filter />
+			</View>
+			<View
+				style={{
+					flex: 0.1,
+					flexDirection: "row-reverse",
+					backgroundColor: "green",
+				}}>
+				<CircularButton
+					styles={circularBtnStyles.container}
+					window={"Form"}
+					icon='plus'
+				/>
+			</View>
+			<View style={{ flex: 0.8, alignItems: "center" }}>
+				{/* Scroll para las cards */}
+				<Card jsonData={visitorControlData} />
+			</View>
+		</View>
+	);
 }
