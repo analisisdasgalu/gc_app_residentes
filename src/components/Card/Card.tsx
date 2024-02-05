@@ -1,8 +1,10 @@
-import { View, Text } from "react-native";
-import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import React from "react";
 import { cardStyles } from "./constants";
-import { colors, filterPalette } from "@gcMobile/theme/default.styles";
+import { colors } from "@gcMobile/theme/default.styles";
 import { getTipoVisitaIcon } from "@gcMobile/util";
+import { useNavigation } from "@react-navigation/native";
+import { Entypo } from "@expo/vector-icons";
 
 interface ICardProps {
 	nombre: string;
@@ -31,6 +33,7 @@ export default function Card({
 	estado,
 	index,
 }: ICardProps) {
+	const navigation = useNavigation<any>();
 	return (
 		<View style={[cardStyles.container]}>
 			<View style={cardStyles.row}>
@@ -89,6 +92,12 @@ export default function Card({
 								<Text style={{ color: colors.darkGray, fontSize: 10 }}>
 									{nombre}
 								</Text>
+								<TouchableOpacity
+									onPress={() => {
+										navigation.navigate("QRDetails", { uniqueID });
+									}}>
+									<Entypo name='dots-three-vertical' size={24} color='black' />
+								</TouchableOpacity>
 							</View>
 						</View>
 					</View>
