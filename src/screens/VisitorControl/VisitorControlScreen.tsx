@@ -6,12 +6,21 @@ import CircularButton from "@gcMobile/components/CircularButton";
 import visitorControlData from "./constants/visitorControlData.json";
 import { circularBtnStyles } from "@gcMobile/components/CircularButton/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { TipoVisita } from "@gcMobile/store/TipoVisitas/types";
 
-export default function VisitorControlScreen({ navigation }: any) {
+type VisitorControlScreenProps = {
+	navigation: any;
+	filters: TipoVisita[];
+};
+
+export default function VisitorControlScreen({
+	navigation,
+	filters,
+}: VisitorControlScreenProps) {
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
 			<View style={{ flex: 0.1 }}>
-				<Filter />
+				<Filter filters={filters} />
 			</View>
 			<View
 				style={{

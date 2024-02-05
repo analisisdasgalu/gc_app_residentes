@@ -2,19 +2,16 @@
 	{
 		"descripcion": "Vista a casa",
 		"id": "1",
-		"tipo_visita": "Visita",
-		"color": "#5FA8D3"
+		"tipo_visita": "Visita"
 	},
 	{
 		"descripcion": "Servicios de limpieza en general",
 		"id": "2",
-		"tipo_visita": "Servicio domestico",
-		"color": "#62B6CB"
+		"tipo_visita": "Servicio domestico"
 	},
 	{
 		"descripcion": "Provedor de servicios, cable, mant, etc.",
 		"id": "3",
-		"tipo_visita": "Provedor",
-		"color": "#1B4965"
+		"tipo_visita": "Provedor"
 	}
 ]

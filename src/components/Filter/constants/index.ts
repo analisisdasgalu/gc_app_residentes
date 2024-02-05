@@ -40,3 +40,5 @@ export const FilterStyles = StyleSheet.create({
 		backgroundColor: colors.lightGray2,
 	},
 });
+
+export const colorFilters = ["#5FA8D3", "#62B6CB", "#1B4965"];

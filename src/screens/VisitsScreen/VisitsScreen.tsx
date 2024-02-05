@@ -32,7 +32,10 @@ const VisitsScreen = ({ navigation }: any) => {
 					...(selectedTab === "VisitHistory" && visitsStyle.hidden),
 					flex: 1,
 				}}>
-				<VisitorControlScreen navigation={navigation} />
+				<VisitorControlScreen
+					navigation={navigation}
+					filters={catalogVisitas || []}
+				/>
 			</View>
 			<View
 				style={

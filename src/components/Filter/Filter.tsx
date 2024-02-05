@@ -1,7 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import { FilterStyles } from "./constants";
+import React, { useEffect, useState } from "react";
+import { FilterStyles, colorFilters } from "./constants";
 import { TipoVisita } from "@gcMobile/store/TipoVisitas/types";
+import { colors } from "@gcMobile/theme/default.styles";
 
 type FilterProps = {
 	filters: TipoVisita[];
@@ -21,15 +22,18 @@ const Filter = ({ filters }: FilterProps) => {
 	return (
 		<View style={FilterStyles.container}>
 			<Text style={FilterStyles.mainText}>Filter:</Text>
-			{filters.map((filter: TipoVisita) => (
+			{filters?.map((filter: TipoVisita, index: number) => (
 				<TouchableOpacity
-					style={[
-						FilterStyles.button,
-						FilterStyles.tabNotSelected,
-						selectedTabs.includes(`${filter.id}`) && {
-							backgroundColor: filter.color,
-						},
-					]}
+					key={filter.id}
+					style={{
+						height: 40,
+						borderRadius: 30,
+						paddingHorizontal: 10,
+						marginHorizontal: 1,
+						backgroundColor: selectedTabs.includes(`${filter.id}`)
+							? colorFilters[index]
+							: colors.gray,
+					}}
 					onPress={() => toggleTab(`${filter.id}`)}>
 					<Text style={FilterStyles.buttonText}>{filter.tipo_visita}</Text>
 				</TouchableOpacity>
