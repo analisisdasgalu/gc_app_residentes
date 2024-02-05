@@ -24,8 +24,6 @@ const VisitsScreen = ({ navigation }: any) => {
 			dispatch(getCatalogTipoVisitas() as unknown as any);
 	}, [catalogVisitas]);
 
-	console.log(catalogVisitas);
-
 	return (
 		<View style={{ flex: 1 }}>
 			<Tab selectedTab={getSelectedValue} />

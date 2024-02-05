@@ -1,8 +1,13 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { FilterStyles } from "./constants";
+import { TipoVisita } from "@gcMobile/store/TipoVisitas/types";
 
-const Filter = () => {
+type FilterProps = {
+	filters: TipoVisita[];
+};
+
+const Filter = ({ filters }: FilterProps) => {
 	const [selectedTabs, setSelectedTabs] = useState<string[]>([]);
 
 	const toggleTab = (tabName: string) => {
@@ -16,33 +21,19 @@ const Filter = () => {
 	return (
 		<View style={FilterStyles.container}>
 			<Text style={FilterStyles.mainText}>Filter:</Text>
-			<TouchableOpacity
-				style={[
-					FilterStyles.button,
-					FilterStyles.tabNotSelected,
-					selectedTabs.includes("Visit") && FilterStyles.columbiaBlue,
-				]}
-				onPress={() => toggleTab("Visit")}>
-				<Text style={FilterStyles.buttonText}>Visita</Text>
-			</TouchableOpacity>
-			<TouchableOpacity
-				style={[
-					FilterStyles.button,
-					FilterStyles.tabNotSelected,
-					selectedTabs.includes("Service") && FilterStyles.indigoBlue,
-				]}
-				onPress={() => toggleTab("Service")}>
-				<Text style={FilterStyles.buttonText}>Serv. doméstico</Text>
-			</TouchableOpacity>
-			<TouchableOpacity
-				style={[
-					FilterStyles.button,
-					FilterStyles.tabNotSelected,
-					selectedTabs.includes("Provider") && FilterStyles.moonstoneBlue,
-				]}
-				onPress={() => toggleTab("Provider")}>
-				<Text style={FilterStyles.buttonText}>Proveedor</Text>
-			</TouchableOpacity>
+			{filters.map((filter: TipoVisita) => (
+				<TouchableOpacity
+					style={[
+						FilterStyles.button,
+						FilterStyles.tabNotSelected,
+						selectedTabs.includes(`${filter.id}`) && {
+							backgroundColor: filter.color,
+						},
+					]}
+					onPress={() => toggleTab(`${filter.id}`)}>
+					<Text style={FilterStyles.buttonText}>{filter.tipo_visita}</Text>
+				</TouchableOpacity>
+			))}
 		</View>
 	);
 };

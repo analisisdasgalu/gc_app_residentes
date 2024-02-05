@@ -3,6 +3,7 @@ import { ENDPOINTS } from "@gcMobile/util/urls";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import { setTipoVisita } from "..";
 import { TipoVisita } from "../types";
+import fakeApi from "./fakeApi.json";
 
 export const getCatalogTipoVisitas = () => (dispatch: any) => {
 	const url = `${base_url}${ENDPOINTS.CATALOG_TIPO_VISITAS}`;
@@ -11,7 +12,8 @@ export const getCatalogTipoVisitas = () => (dispatch: any) => {
 			response
 				.json()
 				.then((data: TipoVisita[]) => {
-					dispatch(setTipoVisita(data));
+					console.log("data", data);
+					dispatch(setTipoVisita(fakeApi));
 				})
 				.catch((error: any) => {
 					Toast.show({
