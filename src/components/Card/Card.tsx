@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 import React, { useState, useEffect } from "react";
 import { cardStyles } from "./constants";
 import { colors, filterPalette } from "@gcMobile/theme/default.styles";
+import { getTipoVisitaIcon } from "@gcMobile/util";
 
 interface ICardProps {
 	nombre: string;
@@ -45,8 +46,17 @@ export default function Card({
 						style={{
 							flexDirection: "column",
 							flex: 0.4,
+							alignItems: "center",
 						}}>
-						<Text>Icono</Text>
+						<View
+							style={{
+								width: "35%",
+								minWidth: "20%",
+								borderRadius: 50,
+								backgroundColor: getTipoVisitaIcon(tipo_visita),
+							}}>
+							<Text>&nbsp;</Text>
+						</View>
 					</View>
 					<View
 						style={{
@@ -183,7 +193,7 @@ export default function Card({
 								width: "22%",
 							}}>
 							<Text style={{ color: colors.darkGray, fontSize: 10 }}>
-								{acceso}
+								{acceso ? `Unico` : `Multiple`}
 							</Text>
 						</View>
 					</View>
@@ -205,7 +215,7 @@ export default function Card({
 								width: "30%",
 							}}>
 							<Text style={{ color: colors.darkGray, fontSize: 10 }}>
-								{avisos}
+								{avisos ? `Si` : `No`}
 							</Text>
 						</View>
 						<View
@@ -219,7 +229,7 @@ export default function Card({
 								width: "22%",
 							}}>
 							<Text style={{ color: colors.darkGray, fontSize: 10 }}>
-								{estado}
+								{estado ? `Activo` : `Vencido`}
 							</Text>
 						</View>
 					</View>
