@@ -82,21 +82,38 @@ export default function Card({
 							style={{
 								width: "100%",
 							}}>
-							<View style={{ flex: 1, flexDirection: "row" }}>
+							<View
+								style={{
+									flex: 1,
+									flexDirection: "row",
+									justifyContent: "space-between",
+								}}>
 								<Text
 									style={{
 										color: colors.gray,
 										marginRight: "5%",
 										fontSize: 9,
 									}}>{`${index + 1})`}</Text>
-								<Text style={{ color: colors.darkGray, fontSize: 10 }}>
+								<Text
+									style={{
+										color: colors.darkGray,
+										fontSize: 10,
+										textAlign: "left",
+										width: "70%",
+									}}>
 									{nombre}
 								</Text>
 								<TouchableOpacity
+									style={{
+										right: 0,
+									}}
 									onPress={() => {
 										navigation.navigate("QRDetails", { uniqueID });
 									}}>
-									<Entypo name='dots-three-vertical' size={24} color='black' />
+									<Entypo
+										name='dots-three-vertical'
+										style={{ fontSize: 12, color: colors.gray }}
+									/>
 								</TouchableOpacity>
 							</View>
 						</View>
