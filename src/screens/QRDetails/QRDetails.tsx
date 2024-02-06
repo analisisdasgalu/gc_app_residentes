@@ -2,10 +2,12 @@ import React from "react";
 import { TouchableOpacity, View, Text, Image } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
+import ViewShot, { captureRef } from "react-native-view-shot";
 import { base_url } from "@gcMobile/components/Auth/constants";
 import { colors } from "@gcMobile/theme/default.styles";
 import { useSelector } from "react-redux";
 import { RootState } from "@gcMobile/store";
+import Share from "react-native-share";
 
 type QRDetailsProps = {
 	navigation: any;
@@ -13,10 +15,25 @@ type QRDetailsProps = {
 };
 
 export const QRDetails = ({ route, navigation }: QRDetailsProps) => {
+	const ref = React.useRef<any>();
 	const { uniqueID } = route.params;
 	const { currentResidence, currentHouseInstalacion, currentHouseManzana } =
 		useSelector((state: RootState) => state.houseReducer);
 	const url = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${base_url}/visita/read-qr/${uniqueID}`;
+
+	const onShare = async () => {
+		try {
+			const uri = await captureRef(ref, {
+				format: "png",
+				quality: 0.7,
+			});
+			console.log("uri", uri);
+			await Share.open({ url: uri });
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
 	return (
 		<View style={{ flex: 1 }}>
 			<View style={{ flex: 0.4, alignItems: "center", paddingTop: "10%" }}>
@@ -29,12 +46,14 @@ export const QRDetails = ({ route, navigation }: QRDetailsProps) => {
 						padding: "5%",
 						borderRadius: 10,
 					}}>
-					<Image
-						style={{ width: 150, height: 150, margin: "auto" }}
-						source={{
-							uri: url,
-						}}
-					/>
+					<ViewShot ref={ref}>
+						<Image
+							style={{ width: 150, height: 150, margin: "auto" }}
+							source={{
+								uri: url,
+							}}
+						/>
+					</ViewShot>
 				</View>
 				<View style={{ marginTop: "5%" }}>
 					<Text>{currentResidence}</Text>
@@ -74,7 +93,8 @@ export const QRDetails = ({ route, navigation }: QRDetailsProps) => {
 							width: "10%",
 							margin: "auto",
 							alignItems: "center",
-						}}>
+						}}
+						onPress={() => onShare()}>
 						<FontAwesome name='share-alt' size={24} color='black' />
 					</TouchableOpacity>
 					<TouchableOpacity
