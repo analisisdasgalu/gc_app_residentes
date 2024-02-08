@@ -1,53 +1,45 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
-import { FilterStyles } from "./constants";
+import { FilterStyles, colorFilters } from "./constants";
+import { TipoVisita } from "@gcMobile/store/TipoVisitas/types";
+import { colors } from "@gcMobile/theme/default.styles";
 
-const Filter = () => {
-  const [selectedTabs, setSelectedTabs] = useState<string[]>([]);
+type FilterProps = {
+	filters: TipoVisita[];
+};
 
-  const toggleTab = (tabName: string) => {
-    if (selectedTabs.includes(tabName)) {
-      setSelectedTabs(selectedTabs.filter((tab) => tab !== tabName));
-    } else {
-      setSelectedTabs([...selectedTabs, tabName]);
-    }
-  };
+const Filter = ({ filters }: FilterProps) => {
+	const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
 
-  return (
-    <View style={FilterStyles.container}>
-      <Text style={FilterStyles.mainText}>Filter:</Text>
-      <TouchableOpacity
-        style={[
-          FilterStyles.button,
-          FilterStyles.tabNotSelected,
-          selectedTabs.includes("Visit") && FilterStyles.buttonAqua,
-        ]}
-        onPress={() => toggleTab("Visit")}
-      >
-        <Text style={FilterStyles.buttonText}>Visita</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[
-          FilterStyles.button,
-          FilterStyles.tabNotSelected,
-          selectedTabs.includes("Service") && FilterStyles.buttonGreen,
-        ]}
-        onPress={() => toggleTab("Service")}
-      >
-        <Text style={FilterStyles.buttonText}>Serv. doméstico</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[
-          FilterStyles.button,
-          FilterStyles.tabNotSelected,
-          selectedTabs.includes("Provider") && FilterStyles.buttonBrown,
-        ]}
-        onPress={() => toggleTab("Provider")}
-      >
-        <Text style={FilterStyles.buttonText}>Proveedor</Text>
-      </TouchableOpacity>
-    </View>
-  );
+	const toggleFilter = (filter: string) => {
+		if (selectedFilter.includes(filter)) {
+			setSelectedFilter(selectedFilter.filter((item) => item !== filter));
+		} else {
+			setSelectedFilter((prev) => [...prev, filter]);
+		}
+	};
+
+	return (
+		<View style={FilterStyles.container}>
+			<Text style={FilterStyles.mainText}>Filter:</Text>
+			{filters?.map((filter: TipoVisita, index: number) => (
+				<TouchableOpacity
+					key={filter.id}
+					style={{
+						height: 40,
+						borderRadius: 30,
+						paddingHorizontal: 10,
+						marginHorizontal: 1,
+						backgroundColor: selectedFilter.includes(`${filter.id}`)
+							? colorFilters[index]
+							: colors.gray,
+					}}
+					onPress={() => toggleFilter(`${filter.id}`)}>
+					<Text style={FilterStyles.buttonText}>{filter.tipo_visita}</Text>
+				</TouchableOpacity>
+			))}
+		</View>
+	);
 };
 
 export default Filter;
