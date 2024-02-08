@@ -6,7 +6,7 @@ import { getTipoVisitaIcon } from "@gcMobile/util";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo } from "@expo/vector-icons";
 
-interface ICardProps {
+export interface ICardProps {
 	nombre: string;
 	desde: string;
 	hasta: string;
@@ -35,7 +35,7 @@ export default function Card({
 }: ICardProps) {
 	const navigation = useNavigation<any>();
 	return (
-		<View style={[cardStyles.container]}>
+		<View style={cardStyles.container}>
 			<View style={cardStyles.row}>
 				<View
 					style={{
