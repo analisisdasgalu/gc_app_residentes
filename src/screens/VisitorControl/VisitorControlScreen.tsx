@@ -72,7 +72,7 @@ export default function VisitorControlScreen({
 					alignItems: "center",
 					width: "100%",
 				}}>
-				<ScrollView style={{ flex: 1, marginHorizontal: 20, width: "100%" }}>
+				<ScrollView style={{ flex: 1, marginHorizontal: 20, width: "95%" }}>
 					{visitas.map((data: any, index: number) => (
 						<Card {...data} key={data?.uniqueID} index={index} />
 					))}

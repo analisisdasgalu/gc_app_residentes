@@ -14,3 +14,8 @@ export const getTipoVisitaIcon = (tipo_visita: string) => {
 	}
 	return "green";
 };
+
+export const stringTemplateParser = (cadena: string, object: any) => {
+	const regex = /{([^{}]*)}/g;
+	return cadena.replace(regex, (match, submatch) => object[submatch]);
+};

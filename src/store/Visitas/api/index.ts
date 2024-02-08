@@ -1,10 +1,15 @@
 import { base_url } from "@gcMobile/components/Auth/constants";
 import { setVisitas } from "../index";
+import { ENDPOINTS } from "@gcMobile/util/urls";
+import { stringTemplateParser } from "@gcMobile/util";
 
 export const getVisitas =
 	(email: string, instalacion: number) => async (dispatch: any) => {
 		fetch(
-			`${base_url}/visita/consulta/GetAllByInstalacion/index.php?email=${email}&idInstalacion=${instalacion}`
+			stringTemplateParser(`${base_url}/${ENDPOINTS.VISITAS.BY_INSTALACION}`, {
+				email,
+				instalacion,
+			})
 		)
 			.then((res) =>
 				res
@@ -18,15 +23,12 @@ export const getVisitas =
 export const getVisistaByFilter =
 	(email: string, instalacion: number, filters: string[]) =>
 	async (dispatch: any) => {
-		console.log(
-			`${base_url}/visita/consulta/GetAllByType/index.php?email=${email}&idInstalacion=${instalacion}&idTipoVisita=${filters.join(
-				","
-			)}`
-		);
 		fetch(
-			`${base_url}/visita/consulta/GetAllByType/index.php?email=${email}&idInstalacion=${instalacion}&idTipoVisita=${filters.join(
-				","
-			)}`
+			stringTemplateParser(`${base_url}/${ENDPOINTS.VISITAS.BY_TYPE}`, {
+				email,
+				instalacion,
+				filters: filters.join(","),
+			})
 		)
 			.then((res) =>
 				res
