@@ -1,19 +1,32 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import { formStyles } from "./constants";
 import { Icon } from "react-native-elements";
 import Button from "@gcMobile/components/Button";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@gcMobile/theme/default.styles";
 import { logout } from "@gcMobile/screens/Login/constants";
+import { useSelector } from "react-redux";
+import { RootState } from "@gcMobile/store";
+import RadioGroup from "@gcMobile/components/RadioGroup/";
+
+export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
+	Visita: <FontAwesome name='user' size={24} color={colors.darkGray} />,
+	Provedor: <FontAwesome name='truck' size={24} color={colors.darkGray} />,
+	["Servicio domestico"]: (
+		<FontAwesome name='wrench' size={24} color={colors.darkGray} />
+	),
+};
 
 export default function Form({ navigation }: any) {
-	const [selectedOption, setSelectedOption] = useState("");
+	const { catalogVisitas } = useSelector(
+		(state: RootState) => state.tipoVisitas
+	);
+	const [selectedType, setSelectedType] = useState<string>("");
 	const [selectedAccessType, setSelectedAccessType] = useState("");
 	const [selectedTypeNumber, setSelectedTypeNumber] = useState(0);
-	const selectOption = (option: string) => {
-		setSelectedOption(option);
-	};
+
 	const selectAccessType = (option: string) => {
 		setSelectedAccessType(option);
 	};
@@ -25,124 +38,17 @@ export default function Form({ navigation }: any) {
 
 	return (
 		<SafeAreaView style={formStyles.container}>
-			<View style={formStyles.row}>
-				<TouchableOpacity
-					onPress={() => selectOption("visit")}
-					style={
-						selectedOption == "visit"
-							? [formStyles.radioButtonsContainer, ,]
-							: formStyles.radioButtonsContainer2
-					}>
-					<View style={formStyles.descPosition}>
-						<Icon
-							name='people'
-							type='material'
-							color={selectedOption === "visit" ? colorBlack : colorGray}
-							size={30}
-						/>
-						<Text
-							style={
-								selectedOption === "visit"
-									? [formStyles.text1]
-									: formStyles.text2
-							}>
-							Visita
-						</Text>
-					</View>
-					<View style={formStyles.radioBtnPosition}>
-						<View
-							style={
-								selectedOption == "visit"
-									? [formStyles.radioButton, ,]
-									: formStyles.radioButton2
-							}>
-							{selectedOption == "visit" && (
-								<View style={formStyles.radioButtonSelected} />
-							)}
-						</View>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={() => selectOption("service")}
-					style={
-						selectedOption == "service"
-							? [formStyles.radioButtonsContainer, ,]
-							: formStyles.radioButtonsContainer2
-					}>
-					<View style={formStyles.descPosition}>
-						<Icon
-							name='shopping-cart'
-							type='material'
-							color={selectedOption === "service" ? colorBlack : colorGray}
-							size={30}
-						/>
-						<Text
-							style={
-								selectedOption === "service"
-									? [formStyles.text1]
-									: formStyles.text2
-							}>
-							Servicio
-						</Text>
-						<Text
-							style={
-								selectedOption === "service"
-									? [formStyles.text1]
-									: formStyles.text2
-							}>
-							Doméstico
-						</Text>
-					</View>
-					<View style={formStyles.radioBtnPosition}>
-						<View
-							style={
-								selectedOption == "service"
-									? [formStyles.radioButton, ,]
-									: formStyles.radioButton2
-							}>
-							{selectedOption == "service" && (
-								<View style={formStyles.radioButtonSelected} />
-							)}
-						</View>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity
-					onPress={() => selectOption("provider")}
-					style={
-						selectedOption == "provider"
-							? [formStyles.radioButtonsContainer, ,]
-							: formStyles.radioButtonsContainer2
-					}>
-					<View style={formStyles.descPosition}>
-						<Icon
-							name='build'
-							type='material'
-							color={selectedOption === "provider" ? colorBlack : colorGray}
-							size={30}
-						/>
-						<Text
-							style={
-								selectedOption === "provider"
-									? [formStyles.text1]
-									: formStyles.text2
-							}>
-							Proveedor
-						</Text>
-					</View>
-					<View style={formStyles.radioBtnPosition}>
-						<View
-							style={
-								selectedOption == "provider"
-									? [formStyles.radioButton, ,]
-									: formStyles.radioButton2
-							}>
-							{selectedOption == "provider" && (
-								<View style={formStyles.radioButtonSelected} />
-							)}
-						</View>
-					</View>
-				</TouchableOpacity>
-			</View>
+			<RadioGroup
+				options={catalogVisitas.map((catalog) => ({
+					id: catalog.id,
+					label: catalog.tipo_visita,
+					icon: TipoVisitasIcon[
+						catalog.tipo_visita
+					] as unknown as React.ReactNode,
+				}))}
+				handleChange={setSelectedType}
+			/>
+			{/** Tipo de servicios */}
 			<View style={formStyles.nameContainer}>
 				<Text style={formStyles.name}>Fernanda Madrigal</Text>
 			</View>
