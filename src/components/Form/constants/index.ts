@@ -5,7 +5,8 @@ export const formStyles = StyleSheet.create({
 	row: {
 		flexDirection: "row",
 		flex: 0.16,
-		backgroundColor: colors.red,
+		marginBottom: "3%",
+		alignItems: "center",
 	},
 	container: {
 		flex: 1,
@@ -22,6 +23,7 @@ export const formStyles = StyleSheet.create({
 		height: 100,
 		borderRadius: 5,
 		marginVertical: 3,
+		margin: "2%",
 	},
 	radioButton: {
 		height: 20,

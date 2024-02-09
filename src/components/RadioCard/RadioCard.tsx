@@ -17,8 +17,6 @@ export const RadioCard = ({
 	selected,
 	handleChange,
 }: RadioCardProps) => {
-	console.log(icon);
-
 	return (
 		<TouchableOpacity
 			onPress={() => handleChange(id)}

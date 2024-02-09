@@ -19,7 +19,9 @@ export const RadioGroup = (props: RadioGroupProps) => {
 			style={{
 				flexDirection: props.orientation === "horizontal" ? "row" : "column",
 				flex: 1,
-				marginTop: 10,
+				justifyContent: "space-around",
+				width: "90%",
+				margin: "auto",
 			}}>
 			{props.options.map((option) => (
 				<RadioCard
