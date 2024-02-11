@@ -9,7 +9,6 @@ import { TipoVisita } from "@gcMobile/store/TipoVisitas/types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@gcMobile/store";
 import { getVisistaByFilter, getVisitas } from "@gcMobile/store/Visitas/api";
-import { colors } from "@gcMobile/theme/default.styles";
 
 type VisitorControlScreenProps = {
 	navigation: any;
@@ -46,7 +45,6 @@ export default function VisitorControlScreen({
 			dispatch(getVisitas(email, Number.parseInt(id_instalacion, 10)) as any);
 		}
 	}, [selectedFilters]);
-
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
 			<View style={{ flex: 0.1 }}>

@@ -4,6 +4,7 @@ import { ENDPOINTS } from "@gcMobile/util/urls";
 import { stringTemplateParser } from "@gcMobile/util";
 import { visitasPayload } from "../types";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { setLoading, setOperationSuccess } from "@gcMobile/store/UI";
 
 export const getVisitas =
 	(email: string, instalacion: number) => async (dispatch: any) => {
@@ -41,7 +42,7 @@ export const getVisistaByFilter =
 			.catch((err) => console.log(err));
 	};
 
-export const createVisita = (data: visitasPayload) => {
+export const createVisita = (data: visitasPayload) => async (dispatch: any) => {
 	var formdata = new FormData();
 	formdata.append("idUsuario", data.idUsuario.toString());
 	formdata.append("tipoVisita", data.tipoVisita.toString());
@@ -52,22 +53,25 @@ export const createVisita = (data: visitasPayload) => {
 	formdata.append("notificacion", data.notificacion.toString());
 	formdata.append("nombre", data.nombre);
 	formdata.append("idInstalacion", data.idInstalacion.toString());
+	dispatch(setLoading(true));
 	fetch(`${base_url}/${ENDPOINTS.VISITAS.CREATE}`, {
 		method: "POST",
 		body: formdata,
 	})
 		.then((res) => {
 			res.json().then((data) => {
-				console.log(data);
 				Toast.show({
 					type: ALERT_TYPE.SUCCESS,
 					title: "Visita",
 					textBody: "Visita creada con éxito",
 				});
 			});
+			dispatch(setLoading(false));
+			dispatch(setOperationSuccess(true));
 		})
 		.catch((err) => {
 			console.log(err);
+			dispatch(setLoading(false));
 			Toast.show({
 				type: ALERT_TYPE.DANGER,
 				title: "Visita",

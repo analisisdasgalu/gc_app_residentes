@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import { store, persistor } from "@gcMobile/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { AlertNotificationRoot } from "react-native-alert-notification";
+import Loader from "@gcMobile/components/Loader";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -30,7 +31,9 @@ export default function App() {
 						}}
 					/>
 					<AlertNotificationRoot theme='light'>
-						<NavigationStack />
+						<Loader>
+							<NavigationStack />
+						</Loader>
 					</AlertNotificationRoot>
 				</NavigationContainer>
 			</PersistGate>

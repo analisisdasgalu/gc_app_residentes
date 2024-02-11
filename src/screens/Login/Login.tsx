@@ -5,11 +5,7 @@ import InputPassword from "../../components/Inputs/InputPassword";
 import Button from "../../components/Button";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StackActions } from "@react-navigation/native";
-import {
-	ALERT_TYPE,
-	AlertNotificationRoot,
-	Toast,
-} from "react-native-alert-notification";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import {
 	loginScreenStyles,
 	useStyles,
@@ -18,7 +14,6 @@ import {
 	InitializeConnection,
 	getIsntalaciones,
 } from "./constants";
-import Loader from "../../components/Loader";
 import { buttonComponentStyles } from "@gcMobile/components/Button/constants";
 import { colors } from "@gcMobile/theme/default.styles";
 import { useDispatch } from "react-redux";
@@ -26,6 +21,7 @@ import { setUserData } from "@gcMobile/store/User";
 import { setCurrentHouseInfo, setHouse } from "@gcMobile/store/Houses";
 // import instalaciones from "@gcMobile/screens/HouseScreen/conts/instalaciones.json";
 import { IHouseManagement, styles } from "../HouseScreen/conts";
+import { setLoading } from "@gcMobile/store/UI";
 
 interface INavigationProps {
 	navigation: any;
@@ -47,7 +43,6 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 	//user data
 	const [emailValue, setEmailValue] = useState("");
 	const [passwordValue, setPasswordValue] = useState("");
-	const [loading, setLoading] = useState(false);
 	const [customerCode, setCustomerCode] = useState<string>("");
 
 	const getInputValue = (value?: string) => {
@@ -61,9 +56,9 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 	const handleSubmit = async () => {
 		// -- Should remove: navigation.navigate("Visits");
 		setClicked(true);
-		setLoading(true);
+		dispatch(setLoading(true));
 		if (!emailStyles.regexState) {
-			setLoading(false);
+			dispatch(setLoading(false));
 			Toast.show({
 				type: ALERT_TYPE.DANGER,
 				title: "Invalid email format",
@@ -71,7 +66,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 			});
 		} else if (passwordStyles.regexState) {
 			if (customerCode === "") {
-				setLoading(false);
+				dispatch(setLoading(false));
 				Toast.show({
 					type: ALERT_TYPE.DANGER,
 					title: "Empty code",
@@ -86,7 +81,6 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					customerCode,
 					authenticate
 				);
-				setLoading(true);
 				const instalaciones = await getIsntalaciones(authData.instalaciones);
 
 				const tokenData: { [key: string]: string } = {
@@ -112,7 +106,6 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					(inst: IHouseManagement) => inst.id === _house
 				);
 				if (defaultHouse) {
-					setLoading(false);
 					dispatch(
 						setCurrentHouseInfo({
 							currentHouseId: defaultHouse.id,
@@ -129,10 +122,10 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 						currentHouseManzana: "",
 					});
 				}
-				setLoading(false);
+				dispatch(setLoading(false));
 				navigation.dispatch(StackActions.replace("Visits", tokenData));
 			} catch (error) {
-				setLoading(false);
+				dispatch(setLoading(false));
 				saveToken("");
 				Toast.show({
 					type: ALERT_TYPE.DANGER,
@@ -145,7 +138,6 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			{loading && <Loader />}
 			<View style={[loginScreenStyles.container]}>
 				<ScrollView>
 					<View style={loginScreenStyles.rowImage}>

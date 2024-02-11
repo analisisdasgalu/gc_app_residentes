@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	View,
 	Text,
 	TouchableOpacity,
 	TextInput,
 	Modal,
-	Alert,
 	ScrollView,
 	Switch,
 } from "react-native";
@@ -22,9 +21,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@gcMobile/store";
 import RadioGroup from "@gcMobile/components/RadioGroup/";
 import { Calendar } from "react-native-calendars";
-import { Picker } from "@react-native-picker/picker";
 import { ModalHour } from "../ModalHour/ModalHour";
 import { createVisita } from "@gcMobile/store/Visitas/api";
+import { setOperationSuccess } from "@gcMobile/store/UI";
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 	Visita: <FontAwesome name='user' size={24} color={colors.darkGray} />,
@@ -53,6 +52,9 @@ export default function Form({ navigation }: any) {
 		(state: RootState) => state.houseReducer
 	);
 	const { id } = useSelector((state: RootState) => state.userReducer);
+	const { operationSuccess } = useSelector(
+		(state: RootState) => state.uiReducer
+	);
 
 	const [formValues, setFormValues] = useState<{
 		[key: string]: string | number;
@@ -70,19 +72,27 @@ export default function Form({ navigation }: any) {
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
 
 	const handleSubmit = () => {
-		console.log("form values", formValues);
-		createVisita({
-			idUsuario: id,
-			tipoVisita: formValues.tipo_visita.toString(),
-			tipoIngreso: formValues.tipo_ingreso.toString(),
-			fechaIngreso: formValues.fromDate.toString(),
-			fechaSalida: formValues.toDate.toString(),
-			multEntry: formValues.acceso.toString(),
-			notificacion: formValues.notificaciones.toString(),
-			nombre: formValues.visitaNombre.toString(),
-			idInstalacion: currentHouseId.toString(),
-		});
+		dispatch(
+			createVisita({
+				idUsuario: id,
+				tipoVisita: formValues.tipo_visita.toString(),
+				tipoIngreso: formValues.tipo_ingreso.toString(),
+				fechaIngreso: formValues.fromDate.toString(),
+				fechaSalida: formValues.toDate.toString(),
+				multEntry: formValues.acceso.toString(),
+				notificacion: formValues.notificaciones.toString(),
+				nombre: formValues.visitaNombre.toString(),
+				idInstalacion: currentHouseId.toString(),
+			}) as any
+		);
 	};
+
+	useEffect(() => {
+		if (operationSuccess) {
+			dispatch(setOperationSuccess(false));
+			navigation.navigate("Visits");
+		}
+	}, [operationSuccess]);
 
 	return (
 		<SafeAreaView style={formStyles.container}>
