@@ -24,6 +24,7 @@ import { Calendar } from "react-native-calendars";
 import { ModalHour } from "../ModalHour/ModalHour";
 import { createVisita } from "@gcMobile/store/Visitas/api";
 import { setOperationSuccess } from "@gcMobile/store/UI";
+import { VIEWS } from "@gcMobile/navigation/constants";
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 	Visita: <FontAwesome name='user' size={24} color={colors.darkGray} />,
@@ -90,7 +91,7 @@ export default function Form({ navigation }: any) {
 	useEffect(() => {
 		if (operationSuccess) {
 			dispatch(setOperationSuccess(false));
-			navigation.navigate("Visits");
+			navigation.navigate(VIEWS.VISITAS);
 		}
 	}, [operationSuccess]);
 
@@ -285,7 +286,7 @@ export default function Form({ navigation }: any) {
 							}}
 							textButton='Cancelar'
 							onPress={() => {
-								navigation.navigate("Visits");
+								navigation.navigate(VIEWS.VISITAS);
 							}}
 						/>
 						<Button

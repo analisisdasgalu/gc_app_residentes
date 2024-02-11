@@ -20,10 +20,17 @@ const userSlice = createSlice({
 			state.name = action.payload.name;
 			state.id = action.payload.id;
 		},
+		cleanUserData: (state) => {
+			state.access_token = "";
+			state.id_instalacion = "";
+			state.email = "";
+			state.name = "";
+			state.id = "";
+		},
 	},
 });
 
-export const { setUserData } = userSlice.actions;
+export const { setUserData, cleanUserData } = userSlice.actions;
 export default userSlice.reducer;
 
 // ...

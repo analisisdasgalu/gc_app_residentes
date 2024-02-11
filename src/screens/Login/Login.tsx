@@ -22,6 +22,7 @@ import { setCurrentHouseInfo, setHouse } from "@gcMobile/store/Houses";
 // import instalaciones from "@gcMobile/screens/HouseScreen/conts/instalaciones.json";
 import { IHouseManagement, styles } from "../HouseScreen/conts";
 import { setLoading } from "@gcMobile/store/UI";
+import { VIEWS } from "@gcMobile/navigation/constants";
 
 interface INavigationProps {
 	navigation: any;
@@ -54,7 +55,6 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 	};
 
 	const handleSubmit = async () => {
-		// -- Should remove: navigation.navigate("Visits");
 		setClicked(true);
 		dispatch(setLoading(true));
 		if (!emailStyles.regexState) {
@@ -123,7 +123,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 					});
 				}
 				dispatch(setLoading(false));
-				navigation.dispatch(StackActions.replace("Visits", tokenData));
+				navigation.dispatch(StackActions.replace(VIEWS.VISITAS, tokenData));
 			} catch (error) {
 				dispatch(setLoading(false));
 				saveToken("");
