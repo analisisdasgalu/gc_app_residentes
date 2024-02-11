@@ -3,5 +3,6 @@ export const ENDPOINTS = {
 	VISITAS: {
 		BY_INSTALACION: `/visita/consulta/GetAllByInstalacion/index.php?email={email}&idInstalacion={instalacion}`,
 		BY_TYPE: `visita/consulta/GetAllByType/index.php?email={email}&idInstalacion={instalacion}&idTipoVisita={filters}`,
+		CREATE: "/visita/crear/index.php",
 	},
 };

@@ -144,72 +144,70 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 	};
 
 	return (
-		<AlertNotificationRoot theme='light'>
-			<SafeAreaView style={styles.container}>
-				{loading && <Loader />}
-				<View style={[loginScreenStyles.container]}>
-					<ScrollView>
-						<View style={loginScreenStyles.rowImage}>
-							<Image
-								source={require("@gcMobile/images/logoGcMobile.jpeg")}
-								style={loginScreenStyles.imageStyles}
-							/>
-						</View>
-						<View style={loginScreenStyles.row}>
-							<InputComponent
-								textInput='Email Adress'
-								styles={emailStyles.email}
-								regularExpression={/^[^\s@]+@[^\s@]+\.[^\s@]+$/}
-								regexValidation={(value) =>
-									setEmailStyles({ ...emailStyles, regexState: value })
-								}
-								isClicked={clicked}
-								textInputValue={getInputValue}
-							/>
-						</View>
-						<View style={loginScreenStyles.row}>
-							<InputPassword
-								textInput='Password'
-								styles={passwordStyles.password}
-								regexValidation={(value) =>
-									setPasswordStyles({ ...passwordStyles, regexState: value })
-								}
-								isClicked={clicked}
-								passwordValue={getPasswordValue}
-								regularExpression={/\S+/}
-							/>
-						</View>
-						<View style={loginScreenStyles.row}>
-							<InputPassword
-								textInput='Code'
-								styles={colors.gray}
-								isClicked={clicked}
-								passwordValue={(value: string) => setCustomerCode(value)}
-							/>
-						</View>
-						<View style={loginScreenStyles.row}>
-							<Button
-								styles={buttonComponentStyles.button}
-								textButton='Sign In'
-								onPress={handleSubmit}
-							/>
-						</View>
-						<View style={loginScreenStyles.rowText}>
-							<Text style={loginScreenStyles.label}>New user? </Text>
-							<TouchableOpacity onPress={() => navigation.navigate("Register")}>
-								<Text style={loginScreenStyles.label}>Sign up</Text>
-							</TouchableOpacity>
-							<Text style={loginScreenStyles.label}> here</Text>
-						</View>
-						<View style={loginScreenStyles.rowText}>
-							<Text style={loginScreenStyles.label}>
-								By creating an account, you agree to our Terms of Service and
-								Privacy Policy
-							</Text>
-						</View>
-					</ScrollView>
-				</View>
-			</SafeAreaView>
-		</AlertNotificationRoot>
+		<SafeAreaView style={styles.container}>
+			{loading && <Loader />}
+			<View style={[loginScreenStyles.container]}>
+				<ScrollView>
+					<View style={loginScreenStyles.rowImage}>
+						<Image
+							source={require("@gcMobile/images/logoGcMobile.jpeg")}
+							style={loginScreenStyles.imageStyles}
+						/>
+					</View>
+					<View style={loginScreenStyles.row}>
+						<InputComponent
+							textInput='Email Adress'
+							styles={emailStyles.email}
+							regularExpression={/^[^\s@]+@[^\s@]+\.[^\s@]+$/}
+							regexValidation={(value) =>
+								setEmailStyles({ ...emailStyles, regexState: value })
+							}
+							isClicked={clicked}
+							textInputValue={getInputValue}
+						/>
+					</View>
+					<View style={loginScreenStyles.row}>
+						<InputPassword
+							textInput='Password'
+							styles={passwordStyles.password}
+							regexValidation={(value) =>
+								setPasswordStyles({ ...passwordStyles, regexState: value })
+							}
+							isClicked={clicked}
+							passwordValue={getPasswordValue}
+							regularExpression={/\S+/}
+						/>
+					</View>
+					<View style={loginScreenStyles.row}>
+						<InputPassword
+							textInput='Code'
+							styles={colors.gray}
+							isClicked={clicked}
+							passwordValue={(value: string) => setCustomerCode(value)}
+						/>
+					</View>
+					<View style={loginScreenStyles.row}>
+						<Button
+							styles={buttonComponentStyles.button}
+							textButton='Sign In'
+							onPress={handleSubmit}
+						/>
+					</View>
+					<View style={loginScreenStyles.rowText}>
+						<Text style={loginScreenStyles.label}>New user? </Text>
+						<TouchableOpacity onPress={() => navigation.navigate("Register")}>
+							<Text style={loginScreenStyles.label}>Sign up</Text>
+						</TouchableOpacity>
+						<Text style={loginScreenStyles.label}> here</Text>
+					</View>
+					<View style={loginScreenStyles.rowText}>
+						<Text style={loginScreenStyles.label}>
+							By creating an account, you agree to our Terms of Service and
+							Privacy Policy
+						</Text>
+					</View>
+				</ScrollView>
+			</View>
+		</SafeAreaView>
 	);
 }

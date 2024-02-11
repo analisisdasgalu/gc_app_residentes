@@ -18,12 +18,13 @@ import { formStyles } from "./constants";
 import Button from "@gcMobile/components/Button";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@gcMobile/theme/default.styles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@gcMobile/store";
 import RadioGroup from "@gcMobile/components/RadioGroup/";
 import { Calendar } from "react-native-calendars";
 import { Picker } from "@react-native-picker/picker";
 import { ModalHour } from "../ModalHour/ModalHour";
+import { createVisita } from "@gcMobile/store/Visitas/api";
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 	Visita: <FontAwesome name='user' size={24} color={colors.darkGray} />,
@@ -44,27 +45,49 @@ export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 };
 
 export default function Form({ navigation }: any) {
+	const dispatch = useDispatch();
 	const { catalogVisitas } = useSelector(
 		(state: RootState) => state.tipoVisitas
 	);
+	const { currentHouseId } = useSelector(
+		(state: RootState) => state.houseReducer
+	);
+	const { id } = useSelector((state: RootState) => state.userReducer);
 
 	const [formValues, setFormValues] = useState<{
 		[key: string]: string | number;
 	}>({
+		tipo_visita: "",
+		tipo_ingreso: "",
 		fromDate: new Date().toISOString(),
 		toDate: new Date().toISOString(),
 		fromHour: new Date().toLocaleString().split(" ")[1].split(":")[0],
 		toHour: new Date().toLocaleString().split(" ")[1].split(":")[0],
 		notificaciones: 1,
+		acceso: 0,
 	});
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
+
+	const handleSubmit = () => {
+		console.log("form values", formValues);
+		createVisita({
+			idUsuario: id,
+			tipoVisita: formValues.tipo_visita.toString(),
+			tipoIngreso: formValues.tipo_ingreso.toString(),
+			fechaIngreso: formValues.fromDate.toString(),
+			fechaSalida: formValues.toDate.toString(),
+			multEntry: formValues.acceso.toString(),
+			notificacion: formValues.notificaciones.toString(),
+			nombre: formValues.visitaNombre.toString(),
+			idInstalacion: currentHouseId.toString(),
+		});
+	};
 
 	return (
 		<SafeAreaView style={formStyles.container}>
 			<ScrollView
 				contentContainerStyle={{
-					flex: 1,
 					alignItems: "center",
 					paddingTop: "5%",
 				}}>
@@ -78,9 +101,9 @@ export default function Form({ navigation }: any) {
 								catalog.tipo_visita
 							] as unknown as React.ReactNode,
 						}))}
-						handleChange={(value: string) =>
-							setFormValues({ ...formValues, tipo_visita: value })
-						}
+						handleChange={(value: string) => {
+							setFormValues((prev) => ({ ...prev, tipo_visita: value }));
+						}}
 					/>
 				</View>
 				<View style={{ flex: 0.16, alignItems: "center" }}>
@@ -164,7 +187,7 @@ export default function Form({ navigation }: any) {
 						<Text style={{ paddingVertical: 5 }}>CST</Text>
 					</View>
 				</View>
-				<View style={{ flex: 0.16, marginBottom: "20%" }}>
+				<View style={{ flex: 0.16, marginBottom: "5%" }}>
 					<RadioGroup
 						options={[
 							{ id: "1", label: "Vehículo" },
@@ -177,7 +200,7 @@ export default function Form({ navigation }: any) {
 							] as unknown as React.ReactNode,
 						}))}
 						handleChange={(value: string) =>
-							setFormValues({ ...formValues, tipo_ingreso: value })
+							setFormValues((prev) => ({ ...prev, tipo_ingreso: value }))
 						}
 					/>
 				</View>
@@ -194,7 +217,7 @@ export default function Form({ navigation }: any) {
 							] as unknown as React.ReactNode,
 						}))}
 						handleChange={(value: string) =>
-							setFormValues({ ...formValues, tipo_ingreso: value })
+							setFormValues((prev) => ({ ...prev, acceso: value }))
 						}
 					/>
 				</View>
@@ -265,73 +288,71 @@ export default function Form({ navigation }: any) {
 								filter: colors.dropShadow,
 							}}
 							textButton='Aceptar'
-							onPress={() => {
-								// navigation.navigate("Visit");
-							}}
+							onPress={handleSubmit}
 						/>
 					</View>
 				</View>
-				<ModalHour
-					showModal={showModalTime}
-					setShowModal={setShowModalTime}
-					handleHourChange={(hour: string) => {
-						switch (formValues["hourType"]) {
-							case "from":
-								setFormValues((prev) => ({ ...prev, fromHour: hour }));
-								break;
-							case "to":
-								setFormValues((prev) => ({ ...prev, toHour: hour }));
-								break;
-							default:
-								break;
-						}
-					}}
-				/>
-				<Modal
-					animationType='fade'
-					transparent={true}
-					visible={showModal}
-					style={{ width: "50%" }}>
-					<View style={{ flex: 1, marginTop: "40%", alignItems: "center" }}>
-						<View style={{ flex: 1, width: "90%" }}>
-							<Calendar
-								markedDates={{
-									[formValues["fromDate"].toString().split("T")[0]]: {
-										selected: true,
-										selectedColor: colors.blue,
-									},
-									[formValues["toDate"].toString().split("T")[0]]: {
-										selected: true,
-										selectedColor: colors.cherry,
-									},
-								}}
-								style={{ width: "100%" }}
-								onDayPress={(day) => {
-									console.log(day.dateString);
-									switch (formValues["dateType"]) {
-										case "from":
-											setFormValues((prev) => ({
-												...prev,
-												fromDate: `${day.dateString}T23:59:00.000Z`,
-											}));
-											break;
-										case "to":
-											setFormValues((prev) => ({
-												...prev,
-												toDate: `${day.dateString}T23:59:00.000Z`,
-											}));
-											break;
-										default:
-											break;
-									}
-									setShowModal(false);
-								}}
-								shouldRasterizeIOS={true}
-							/>
-						</View>
-					</View>
-				</Modal>
 			</ScrollView>
+			<ModalHour
+				showModal={showModalTime}
+				setShowModal={setShowModalTime}
+				handleHourChange={(hour: string) => {
+					switch (formValues["hourType"]) {
+						case "from":
+							setFormValues((prev) => ({ ...prev, fromHour: hour }));
+							break;
+						case "to":
+							setFormValues((prev) => ({ ...prev, toHour: hour }));
+							break;
+						default:
+							break;
+					}
+				}}
+			/>
+			<Modal
+				animationType='fade'
+				transparent={true}
+				visible={showModal}
+				style={{ width: "50%" }}>
+				<View style={{ flex: 1, marginTop: "40%", alignItems: "center" }}>
+					<View style={{ flex: 1, width: "90%" }}>
+						<Calendar
+							markedDates={{
+								[formValues["fromDate"].toString().split("T")[0]]: {
+									selected: true,
+									selectedColor: colors.blue,
+								},
+								[formValues["toDate"].toString().split("T")[0]]: {
+									selected: true,
+									selectedColor: colors.cherry,
+								},
+							}}
+							style={{ width: "100%" }}
+							onDayPress={(day) => {
+								console.log(day.dateString);
+								switch (formValues["dateType"]) {
+									case "from":
+										setFormValues((prev) => ({
+											...prev,
+											fromDate: `${day.dateString}T23:59:00.000Z`,
+										}));
+										break;
+									case "to":
+										setFormValues((prev) => ({
+											...prev,
+											toDate: `${day.dateString}T23:59:00.000Z`,
+										}));
+										break;
+									default:
+										break;
+								}
+								setShowModal(false);
+							}}
+							shouldRasterizeIOS={true}
+						/>
+					</View>
+				</View>
+			</Modal>
 		</SafeAreaView>
 	);
 }

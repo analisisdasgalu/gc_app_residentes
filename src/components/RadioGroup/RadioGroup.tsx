@@ -30,7 +30,10 @@ export const RadioGroup = (props: RadioGroupProps) => {
 					id={option.id}
 					icon={option.icon}
 					selected={selectedOption === option.id}
-					handleChange={setSelectedOption}
+					handleChange={() => {
+						setSelectedOption(option.id);
+						props.handleChange(option.id);
+					}}
 				/>
 			))}
 		</View>

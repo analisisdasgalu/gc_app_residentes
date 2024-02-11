@@ -9,6 +9,7 @@ import Menu from "@gcMobile/components/Menu";
 import { Provider } from "react-redux";
 import { store, persistor } from "@gcMobile/store";
 import { PersistGate } from "redux-persist/integration/react";
+import { AlertNotificationRoot } from "react-native-alert-notification";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -28,7 +29,9 @@ export default function App() {
 							style: { color: "#fff", marginTop: "25%", fontWeight: "bold" },
 						}}
 					/>
-					<NavigationStack />
+					<AlertNotificationRoot theme='light'>
+						<NavigationStack />
+					</AlertNotificationRoot>
 				</NavigationContainer>
 			</PersistGate>
 		</Provider>
