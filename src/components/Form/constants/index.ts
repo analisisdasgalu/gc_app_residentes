@@ -109,3 +109,9 @@ export const formStyles = StyleSheet.create({
 		marginTop: "5%",
 	},
 });
+
+export const formatDateToPayload = (date: string, hour: string) => {
+	const resDate = date.split("T")[0];
+	const payload = `${resDate}T${hour}:00:00`;
+	return payload;
+};

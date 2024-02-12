@@ -9,6 +9,7 @@ import { TipoVisita } from "@gcMobile/store/TipoVisitas/types";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@gcMobile/store";
 import { getVisistaByFilter, getVisitas } from "@gcMobile/store/Visitas/api";
+import { setVisitas } from "@gcMobile/store/Visitas";
 
 type VisitorControlScreenProps = {
 	navigation: any;
@@ -24,12 +25,18 @@ export default function VisitorControlScreen({
 		(state: RootState) => state.userReducer
 	);
 	const { visitas } = useSelector((state: RootState) => state.visitasReducer);
+	const { newVisistaQR } = useSelector(
+		(state: RootState) => state.visitasReducer
+	);
 	const [selectedFilters, setFilters] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (visitas.length === 0) {
 			dispatch(getVisitas(email, Number.parseInt(id_instalacion, 10)) as any);
 		}
+		return () => {
+			dispatch(setVisitas([]));
+		};
 	}, []);
 
 	useEffect(() => {
@@ -44,7 +51,7 @@ export default function VisitorControlScreen({
 		} else {
 			dispatch(getVisitas(email, Number.parseInt(id_instalacion, 10)) as any);
 		}
-	}, [selectedFilters]);
+	}, [selectedFilters, newVisistaQR]);
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
 			<View style={{ flex: 0.1 }}>

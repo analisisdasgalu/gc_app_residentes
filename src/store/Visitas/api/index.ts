@@ -1,5 +1,5 @@
 import { base_url } from "@gcMobile/components/Auth/constants";
-import { setVisitas } from "../index";
+import { setNewVisitaQR, setVisitas } from "../index";
 import { ENDPOINTS } from "@gcMobile/util/urls";
 import { stringTemplateParser } from "@gcMobile/util";
 import { visitasPayload } from "../types";
@@ -8,6 +8,7 @@ import { setLoading, setOperationSuccess } from "@gcMobile/store/UI";
 
 export const getVisitas =
 	(email: string, instalacion: number) => async (dispatch: any) => {
+		dispatch(setLoading(true));
 		fetch(
 			stringTemplateParser(`${base_url}/${ENDPOINTS.VISITAS.BY_INSTALACION}`, {
 				email,
@@ -17,15 +18,25 @@ export const getVisitas =
 			.then((res) =>
 				res
 					.json()
-					.then((data) => dispatch(setVisitas(data)))
-					.catch((err) => console.log(err))
+					.then((data) => {
+						dispatch(setVisitas(data));
+						dispatch(setLoading(false));
+					})
+					.catch((err) => {
+						console.log(err);
+						dispatch(setLoading(false));
+					})
 			)
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				console.log(err);
+				dispatch(setLoading(false));
+			});
 	};
 
 export const getVisistaByFilter =
 	(email: string, instalacion: number, filters: string[]) =>
 	async (dispatch: any) => {
+		dispatch(setLoading(true));
 		fetch(
 			stringTemplateParser(`${base_url}/${ENDPOINTS.VISITAS.BY_TYPE}`, {
 				email,
@@ -36,14 +47,23 @@ export const getVisistaByFilter =
 			.then((res) =>
 				res
 					.json()
-					.then((data) => dispatch(setVisitas(data)))
-					.catch((err) => console.log(err))
+					.then((data) => {
+						dispatch(setVisitas(data));
+						dispatch(setLoading(false));
+					})
+					.catch((err) => {
+						console.log(err);
+						dispatch(setLoading(false));
+					})
 			)
-			.catch((err) => console.log(err));
+			.catch((err) => {
+				console.log(err);
+				dispatch(setLoading(false));
+			});
 	};
 
 export const createVisita = (data: visitasPayload) => async (dispatch: any) => {
-	var formdata = new FormData();
+	const formdata = new FormData();
 	formdata.append("idUsuario", data.idUsuario.toString());
 	formdata.append("tipoVisita", data.tipoVisita.toString());
 	formdata.append("tipoIngreso", data.tipoIngreso.toString());
@@ -59,15 +79,18 @@ export const createVisita = (data: visitasPayload) => async (dispatch: any) => {
 		body: formdata,
 	})
 		.then((res) => {
-			res.json().then((data) => {
+			res.json().then((response: any) => {
 				Toast.show({
 					type: ALERT_TYPE.SUCCESS,
 					title: "Visita",
 					textBody: "Visita creada con éxito",
 				});
+				// const { uniqueID } = response;
+				console.log(response);
+				dispatch(setNewVisitaQR(`${new Date().getTime()}`));
+				dispatch(setLoading(false));
+				dispatch(setOperationSuccess(true));
 			});
-			dispatch(setLoading(false));
-			dispatch(setOperationSuccess(true));
 		})
 		.catch((err) => {
 			console.log(err);

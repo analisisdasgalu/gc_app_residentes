@@ -13,7 +13,7 @@ import {
 	FontAwesome5,
 	MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { formStyles } from "./constants";
+import { formStyles, formatDateToPayload } from "./constants";
 import Button from "@gcMobile/components/Button";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "@gcMobile/theme/default.styles";
@@ -56,6 +56,9 @@ export default function Form({ navigation }: any) {
 	const { operationSuccess } = useSelector(
 		(state: RootState) => state.uiReducer
 	);
+	const { newVisistaQR } = useSelector(
+		(state: RootState) => state.visitasReducer
+	);
 
 	const [formValues, setFormValues] = useState<{
 		[key: string]: string | number;
@@ -73,13 +76,20 @@ export default function Form({ navigation }: any) {
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
 
 	const handleSubmit = () => {
+		console.log(formValues);
 		dispatch(
 			createVisita({
 				idUsuario: id,
 				tipoVisita: formValues.tipo_visita.toString(),
 				tipoIngreso: formValues.tipo_ingreso.toString(),
-				fechaIngreso: formValues.fromDate.toString(),
-				fechaSalida: formValues.toDate.toString(),
+				fechaIngreso: formatDateToPayload(
+					formValues.fromDate.toString(),
+					formValues.fromHour.toString()
+				),
+				fechaSalida: formatDateToPayload(
+					formValues.toDate.toString(),
+					formValues.toHour.toString()
+				),
 				multEntry: formValues.acceso.toString(),
 				notificacion: formValues.notificaciones.toString(),
 				nombre: formValues.visitaNombre.toString(),
@@ -91,7 +101,7 @@ export default function Form({ navigation }: any) {
 	useEffect(() => {
 		if (operationSuccess) {
 			dispatch(setOperationSuccess(false));
-			navigation.navigate(VIEWS.VISITAS);
+			navigation.navigate(VIEWS.QR_DETAILS, { uniqueID: newVisistaQR });
 		}
 	}, [operationSuccess]);
 
