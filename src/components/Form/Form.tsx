@@ -76,7 +76,7 @@ export default function Form({ navigation }: any) {
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
 
 	const handleSubmit = () => {
-		console.log(formValues);
+		console.log({ ...formValues, idInstalacion: currentHouseId.toString() });
 		dispatch(
 			createVisita({
 				idUsuario: id,
@@ -142,6 +142,7 @@ export default function Form({ navigation }: any) {
 								setFormValues({ ...formValues, visitaNombre: text })
 							}
 							autoCapitalize='none'
+							maxLength={50}
 						/>
 					</View>
 				</View>

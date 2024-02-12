@@ -21,18 +21,19 @@ export default function VisitorControlScreen({
 	filters,
 }: VisitorControlScreenProps) {
 	const dispatch = useDispatch();
-	const { email, id_instalacion } = useSelector(
-		(state: RootState) => state.userReducer
-	);
+	const { email } = useSelector((state: RootState) => state.userReducer);
 	const { visitas } = useSelector((state: RootState) => state.visitasReducer);
 	const { newVisistaQR } = useSelector(
 		(state: RootState) => state.visitasReducer
+	);
+	const { currentHouseId } = useSelector(
+		(state: RootState) => state.houseReducer
 	);
 	const [selectedFilters, setFilters] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (visitas.length === 0) {
-			dispatch(getVisitas(email, Number.parseInt(id_instalacion, 10)) as any);
+			dispatch(getVisitas(email, currentHouseId) as any);
 		}
 		return () => {
 			dispatch(setVisitas([]));
@@ -42,16 +43,12 @@ export default function VisitorControlScreen({
 	useEffect(() => {
 		if (selectedFilters.length > 0) {
 			dispatch(
-				getVisistaByFilter(
-					email,
-					Number.parseInt(id_instalacion, 10),
-					selectedFilters
-				) as any
+				getVisistaByFilter(email, currentHouseId, selectedFilters) as any
 			);
 		} else {
-			dispatch(getVisitas(email, Number.parseInt(id_instalacion, 10)) as any);
+			dispatch(getVisitas(email, currentHouseId) as any);
 		}
-	}, [selectedFilters, newVisistaQR]);
+	}, [selectedFilters, newVisistaQR, currentHouseId]);
 	return (
 		<View style={{ flex: 1, flexDirection: "column" }}>
 			<View style={{ flex: 0.1 }}>
