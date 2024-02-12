@@ -7,18 +7,11 @@ export const loaderStyles = StyleSheet.create({
 		justifyContent: "center",
 		flex: 1,
 	},
-	loader: {
-		width: 48,
-		height: 48,
-		borderWidth: 5,
-		borderColor: "#FFF",
-		borderBottomColor: "transparent",
-		borderRadius: 24,
-		boxSizing: "border-box",
-	},
-	background: {
-		backgroundColor: colors.rgbOpacityGray,
-		zIndex: 1,
-		...StyleSheet.absoluteFillObject,
+	loaderCard: {
+		flex: 0.2,
+		width: "50%",
+		justifyContent: "center",
+		borderRadius: 10,
+		backgroundColor: "rgba(128, 128, 128, 0.2)",
 	},
 });

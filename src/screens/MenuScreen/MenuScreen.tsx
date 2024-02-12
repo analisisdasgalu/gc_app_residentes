@@ -7,7 +7,8 @@ import { MenuProps, styles } from "./constants";
 import { logout } from "../Login/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@gcMobile/store";
-import { setUserData } from "@gcMobile/store/User";
+import { cleanUserData, setUserData } from "@gcMobile/store/User";
+import { VIEWS } from "@gcMobile/navigation/constants";
 
 export const MenuScreen = ({ navigation }: MenuProps) => {
 	const { currentHouseInstalacion, currentHouseManzana, currentResidence } =
@@ -17,15 +18,8 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
 
 	const handleLogout = async () => {
 		const value = await logout();
-		dispatch(
-			setUserData({
-				access_token: "",
-				id_instalacion: "",
-				name: "",
-				id: "",
-			})
-		);
-		if (value) navigation.navigate("Login" as never);
+		dispatch(cleanUserData());
+		if (value) navigation.navigate(VIEWS.LOGIN as never);
 	};
 
 	return (
@@ -56,7 +50,7 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
 				<TouchableOpacity
 					style={{ flexDirection: "row" }}
 					onPress={() => {
-						navigation.navigate("HouseManagement" as never);
+						navigation.navigate(VIEWS.HOUSE_MANAGEMENT as never);
 					}}>
 					<FontAwesome name='building-o' style={styles.iconStyles} />
 					<Text style={styles.textStyles}>Consultar otra casa</Text>
@@ -84,7 +78,7 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
 			<View style={styles.sixthHeight}>
 				<TouchableOpacity
 					style={{ flexDirection: "row", justifyContent: "center" }}
-					onPress={() => navigation.navigate("Visits" as never)}>
+					onPress={() => navigation.navigate(VIEWS.VISITAS as never)}>
 					<MaterialCommunityIcons
 						name='home-circle-outline'
 						size={32}

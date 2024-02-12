@@ -6,12 +6,12 @@ import { visitorHistoryStyles } from "./constants";
 import HistoricCard from "@gcMobile/components/HistoricCard";
 
 export default function VisitHistoryScreen() {
-  return (
-    <View style={visitorHistoryStyles.background}>
-      <Filter />
-      <SafeAreaView style={visitorHistoryStyles.container}>
-        <HistoricCard />
-      </SafeAreaView>
-    </View>
-  );
+	return (
+		<View style={visitorHistoryStyles.background}>
+			<Filter filters={[]} handleFilters={() => {}} />
+			<SafeAreaView style={visitorHistoryStyles.container}>
+				<HistoricCard />
+			</SafeAreaView>
+		</View>
+	);
 }

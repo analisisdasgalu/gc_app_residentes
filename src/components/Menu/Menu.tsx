@@ -5,6 +5,7 @@ import { colors } from "@gcMobile/theme/default.styles";
 import { useSelector } from "react-redux";
 import { RootState } from "@gcMobile/store";
 import { useNavigation } from "@react-navigation/native";
+import { VIEWS } from "@gcMobile/navigation/constants";
 
 const styles = StyleSheet.create({
 	container: {
@@ -29,7 +30,7 @@ export const Menu = () => {
 	const { access_token } = useSelector((state: RootState) => state.userReducer);
 
 	const onPress = () => {
-		navigation.navigate("Menu" as never);
+		navigation.navigate(VIEWS.MENU as never);
 	};
 
 	return (

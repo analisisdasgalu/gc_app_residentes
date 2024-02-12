@@ -1,14 +1,15 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FilterStyles, colorFilters } from "./constants";
 import { TipoVisita } from "@gcMobile/store/TipoVisitas/types";
 import { colors } from "@gcMobile/theme/default.styles";
 
 type FilterProps = {
 	filters: TipoVisita[];
+	handleFilters: (filters: string[]) => void;
 };
 
-const Filter = ({ filters }: FilterProps) => {
+const Filter = ({ filters, handleFilters }: FilterProps) => {
 	const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
 
 	const toggleFilter = (filter: string) => {
@@ -18,6 +19,10 @@ const Filter = ({ filters }: FilterProps) => {
 			setSelectedFilter((prev) => [...prev, filter]);
 		}
 	};
+
+	useEffect(() => {
+		handleFilters(selectedFilter);
+	}, [selectedFilter]);
 
 	return (
 		<View style={FilterStyles.container}>

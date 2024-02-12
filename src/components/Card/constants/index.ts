@@ -6,7 +6,8 @@ export const cardStyles = StyleSheet.create({
 		padding: "2%",
 	},
 	container: {
-		height: "12%",
+		height: 100,
+		minHeight: 100,
 		backgroundColor: colors.lightGray,
 		borderRadius: 10,
 		width: "90%",

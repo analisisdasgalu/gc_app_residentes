@@ -5,17 +5,18 @@ import VisitsScreen from "@gcMobile/screens/VisitsScreen";
 import { MenuScreen } from "@gcMobile/screens/MenuScreen/MenuScreen";
 import { HouseManagement } from "@gcMobile/screens/HouseScreen/HouseManagement";
 import { QRDetails } from "@gcMobile/screens/QRDetails/QRDetails";
+import { VIEWS } from "@gcMobile/navigation/constants";
 
 const Stack = createNativeStackNavigator();
 const NavigationStack = () => {
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: false }}>
-			<Stack.Screen name='Login' component={LoginScreen} />
-			<Stack.Screen name='Form' component={Form} />
-			<Stack.Screen name='Visits' component={VisitsScreen} />
-			<Stack.Screen name='QRDetails' component={QRDetails} />
-			<Stack.Screen name='Menu' component={MenuScreen} />
-			<Stack.Screen name='HouseManagement' component={HouseManagement} />
+			<Stack.Screen name={VIEWS.LOGIN} component={LoginScreen} />
+			<Stack.Screen name={VIEWS.CREATE_VISITA} component={Form} />
+			<Stack.Screen name={VIEWS.VISITAS} component={VisitsScreen} />
+			<Stack.Screen name={VIEWS.QR_DETAILS} component={QRDetails} />
+			<Stack.Screen name={VIEWS.MENU} component={MenuScreen} />
+			<Stack.Screen name={VIEWS.HOUSE_MANAGEMENT} component={HouseManagement} />
 		</Stack.Navigator>
 	);
 };

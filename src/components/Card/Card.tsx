@@ -5,8 +5,9 @@ import { colors } from "@gcMobile/theme/default.styles";
 import { getTipoVisitaIcon } from "@gcMobile/util";
 import { useNavigation } from "@react-navigation/native";
 import { Entypo } from "@expo/vector-icons";
+import { VIEWS } from "@gcMobile/navigation/constants";
 
-interface ICardProps {
+export interface ICardProps {
 	nombre: string;
 	desde: string;
 	hasta: string;
@@ -35,7 +36,7 @@ export default function Card({
 }: ICardProps) {
 	const navigation = useNavigation<any>();
 	return (
-		<View style={[cardStyles.container]}>
+		<View style={cardStyles.container}>
 			<View style={cardStyles.row}>
 				<View
 					style={{
@@ -108,7 +109,7 @@ export default function Card({
 										right: 0,
 									}}
 									onPress={() => {
-										navigation.navigate("QRDetails", { uniqueID });
+										navigation.navigate(VIEWS.QR_DETAILS, { uniqueID });
 									}}>
 									<Entypo
 										name='dots-three-vertical'
