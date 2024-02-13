@@ -76,7 +76,6 @@ export default function Form({ navigation }: any) {
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
 
 	const handleSubmit = () => {
-		console.log({ ...formValues, idInstalacion: currentHouseId.toString() });
 		dispatch(
 			createVisita({
 				idUsuario: id,
