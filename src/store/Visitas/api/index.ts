@@ -19,7 +19,6 @@ export const getVisitas =
 				res
 					.json()
 					.then((data) => {
-						console.log(data);
 						dispatch(setVisitas(data));
 						dispatch(setLoading(false));
 					})
