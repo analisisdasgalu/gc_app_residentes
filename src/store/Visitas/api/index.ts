@@ -85,9 +85,8 @@ export const createVisita = (data: visitasPayload) => async (dispatch: any) => {
 					title: "Visita",
 					textBody: "Visita creada con éxito",
 				});
-				// const { uniqueID } = response;
-				console.log(response);
-				dispatch(setNewVisitaQR(`${new Date().getTime()}`));
+				const { uniqueID } = response;
+				dispatch(setNewVisitaQR(uniqueID));
 				dispatch(setLoading(false));
 				dispatch(setOperationSuccess(true));
 			});

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import _ from "lodash";
 import {
 	View,
 	Text,
@@ -25,6 +26,7 @@ import { ModalHour } from "../ModalHour/ModalHour";
 import { createVisita } from "@gcMobile/store/Visitas/api";
 import { setOperationSuccess } from "@gcMobile/store/UI";
 import { VIEWS } from "@gcMobile/navigation/constants";
+import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 	Visita: <FontAwesome name='user' size={24} color={colors.darkGray} />,
@@ -76,6 +78,25 @@ export default function Form({ navigation }: any) {
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
 
 	const handleSubmit = () => {
+		let flagEmpty = false;
+		Object.keys(formValues).forEach((key) => {
+			if (_.isEmpty(formValues[key]) && typeof formValues[key] !== "number") {
+				console.log("====================================");
+				console.log(key, formValues[key]);
+				console.log("====================================");
+				flagEmpty = true;
+			}
+		});
+
+		if (flagEmpty) {
+			Toast.show({
+				type: ALERT_TYPE.DANGER,
+				title: "Visita",
+				textBody: "Favor de llenar todos los campos",
+			});
+			return;
+		}
+
 		dispatch(
 			createVisita({
 				idUsuario: id,
