@@ -14,7 +14,7 @@ export interface ICardProps {
 	tipo: string;
 	acceso: string;
 	avisos: string;
-	email: string;
+	emailAutor: string;
 	tipo_visita: string;
 	uniqueID: string;
 	estado: string;
@@ -28,7 +28,7 @@ export default function Card({
 	tipo,
 	acceso,
 	avisos,
-	email,
+	emailAutor,
 	tipo_visita,
 	uniqueID,
 	estado,
@@ -276,7 +276,7 @@ export default function Card({
 								width: "75%",
 							}}>
 							<Text style={{ color: colors.darkGray, fontSize: 10 }}>
-								{email}
+								{emailAutor}
 							</Text>
 						</View>
 					</View>
