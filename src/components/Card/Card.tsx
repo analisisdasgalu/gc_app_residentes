@@ -65,7 +65,7 @@ export default function Card({
 					<View
 						style={{
 							flexDirection: "column",
-							flex: 0.2,
+							flex: 0.25,
 						}}>
 						<Text style={{ fontSize: 9, color: colors.darkGray }}>
 							{tipo_visita}
