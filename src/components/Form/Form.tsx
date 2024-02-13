@@ -81,9 +81,6 @@ export default function Form({ navigation }: any) {
 		let flagEmpty = false;
 		Object.keys(formValues).forEach((key) => {
 			if (_.isEmpty(formValues[key]) && typeof formValues[key] !== "number") {
-				console.log("====================================");
-				console.log(key, formValues[key]);
-				console.log("====================================");
 				flagEmpty = true;
 			}
 		});
