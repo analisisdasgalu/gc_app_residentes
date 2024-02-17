@@ -78,18 +78,17 @@ export const createVisita = (data: visitasPayload) => async (dispatch: any) => {
 		method: "POST",
 		body: formdata,
 	})
-		.then((res) => {
-			res.json().then((response: any) => {
-				Toast.show({
-					type: ALERT_TYPE.SUCCESS,
-					title: "Visita",
-					textBody: "Visita creada con éxito",
-				});
-				const { uniqueID } = response;
-				dispatch(setNewVisitaQR(uniqueID));
-				dispatch(setLoading(false));
-				dispatch(setOperationSuccess(true));
+		.then((res) => res.json())
+		.then((response: any) => {
+			Toast.show({
+				type: ALERT_TYPE.SUCCESS,
+				title: "Visita",
+				textBody: "Visita creada con éxito",
 			});
+			const { uniqueID } = response;
+			dispatch(setNewVisitaQR(uniqueID));
+			dispatch(setLoading(false));
+			dispatch(setOperationSuccess(true));
 		})
 		.catch((err) => {
 			console.log(err);

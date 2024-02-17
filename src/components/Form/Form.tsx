@@ -69,6 +69,7 @@ export default function Form({ navigation }: any) {
 	const [formValues, setFormValues] = useState<{
 		[key: string]: string | number;
 	}>({
+		visitaNombre: "",
 		tipo_visita: "",
 		tipo_ingreso: "",
 		fromDate: new Date().toISOString(),
@@ -82,6 +83,7 @@ export default function Form({ navigation }: any) {
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
 
 	const handleSubmit = () => {
+		console.log("Form payload", formValues);
 		let flagEmpty = false;
 		Object.keys(formValues).forEach((key) => {
 			if (_.isEmpty(formValues[key]) && typeof formValues[key] !== "number") {
@@ -137,6 +139,7 @@ export default function Form({ navigation }: any) {
 				contentContainerStyle={{
 					alignItems: "center",
 					paddingTop: "5%",
+					paddingBottom: "5%",
 				}}>
 				{/** Tipo de servicios */}
 				<View style={{ flex: 0.16, marginBottom: "10%" }}>
@@ -249,6 +252,68 @@ export default function Form({ navigation }: any) {
 						}}
 					/>
 				</View>
+				{formValues.tipo_ingreso === "1" && (
+					<View
+						style={{
+							flex: 0.2,
+							alignItems: "center",
+							backgroundColor: "#dddddd",
+							width: "95%",
+							marginBottom: "5%",
+							borderRadius: 5,
+							paddingTop: "2%",
+							paddingBottom: "5%",
+						}}>
+						<TextInput
+							style={{
+								width: "80%",
+								height: 40,
+								borderBottomColor: "gray",
+								borderBottomWidth: 1,
+							}}
+							onFocus={() => {}}
+							onBlur={() => {}}
+							onChangeText={(text) =>
+								setFormValues({ ...formValues, vehicle_model: text })
+							}
+							autoCapitalize='none'
+							maxLength={50}
+							placeholder='Modelo del Vehiculo'
+						/>
+						<TextInput
+							style={{
+								width: "80%",
+								height: 40,
+								borderBottomColor: "gray",
+								borderBottomWidth: 1,
+							}}
+							onFocus={() => {}}
+							onBlur={() => {}}
+							onChangeText={(text) =>
+								setFormValues({ ...formValues, vehicle_color: text })
+							}
+							autoCapitalize='none'
+							maxLength={50}
+							placeholder='Color vehiculo'
+						/>
+						<TextInput
+							style={{
+								width: "80%",
+								height: 40,
+								borderBottomColor: "gray",
+								borderBottomWidth: 1,
+							}}
+							onFocus={() => {}}
+							onBlur={() => {}}
+							onChangeText={(text) =>
+								setFormValues({ ...formValues, vehicle_plate: text })
+							}
+							autoCapitalize='none'
+							maxLength={50}
+							placeholder='Placas'
+						/>
+					</View>
+				)}
 				<View style={{ flex: 0.16, marginBottom: "5%" }}>
 					<RadioGroup
 						options={[
@@ -294,7 +359,7 @@ export default function Form({ navigation }: any) {
 							onValueChange={() =>
 								setFormValues((prev) => ({
 									...prev,
-									notificaciones: prev["notificaciones"] === 0 ? 1 : 0,
+									notificaciones: prev["notificaciones"] === "0" ? "1" : "0",
 								}))
 							}
 							value={formValues["notificaciones"] === 1 ? true : false}
