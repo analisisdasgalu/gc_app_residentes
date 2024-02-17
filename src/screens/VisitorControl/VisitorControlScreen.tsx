@@ -77,8 +77,6 @@ export default function VisitorControlScreen({
 				style={{
 					flex: 1,
 					flexDirection: "row",
-					alignItems: "center",
-					justifyContent: "center",
 					width: "100%",
 				}}>
 				<ScrollView
