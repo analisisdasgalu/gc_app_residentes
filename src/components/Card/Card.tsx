@@ -65,6 +65,7 @@ export default function Card({
 					<View
 						style={{
 							flexDirection: "column",
+							alignItems: "center",
 							flex: 0.25,
 						}}>
 						<Text style={{ fontSize: 9, color: colors.darkGray }}>

@@ -50,7 +50,12 @@ export default function VisitorControlScreen({
 		}
 	}, [selectedFilters, newVisistaQR, currentHouseId]);
 	return (
-		<View style={{ flex: 1, flexDirection: "column" }}>
+		<View
+			style={{
+				flex: 1,
+				flexDirection: "column",
+				width: "100%",
+			}}>
 			<View style={{ flex: 0.1 }}>
 				<Filter
 					filters={filters}
@@ -71,12 +76,20 @@ export default function VisitorControlScreen({
 			<SafeAreaView
 				style={{
 					flex: 1,
+					flexDirection: "row",
 					alignItems: "center",
+					justifyContent: "center",
 					width: "100%",
 				}}>
-				<ScrollView style={{ flex: 1, marginHorizontal: 20, width: "95%" }}>
+				<ScrollView
+					contentContainerStyle={{
+						width: "100%",
+						padding: "2%",
+					}}>
 					{visitas.map((data: any, index: number) => (
-						<Card {...data} key={data?.uniqueID} index={index} />
+						<View style={{ width: "100%" }}>
+							<Card {...data} key={data?.uniqueID} index={index} />
+						</View>
 					))}
 				</ScrollView>
 			</SafeAreaView>
