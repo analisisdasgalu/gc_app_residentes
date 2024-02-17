@@ -27,6 +27,7 @@ import { createVisita } from "@gcMobile/store/Visitas/api";
 import { setOperationSuccess } from "@gcMobile/store/UI";
 import { VIEWS } from "@gcMobile/navigation/constants";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { getCatalogTipoIngreso } from "@gcMobile/store/TipoIngreso/api";
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 	Visita: <FontAwesome name='user' size={24} color={colors.darkGray} />,
@@ -50,6 +51,9 @@ export default function Form({ navigation }: any) {
 	const dispatch = useDispatch();
 	const { catalogVisitas } = useSelector(
 		(state: RootState) => state.tipoVisitas
+	);
+	const { catalogIngreso } = useSelector(
+		(state: RootState) => state.tipoIngresoReducer
 	);
 	const { currentHouseId } = useSelector(
 		(state: RootState) => state.houseReducer
@@ -114,6 +118,11 @@ export default function Form({ navigation }: any) {
 			}) as any
 		);
 	};
+
+	useEffect(() => {
+		if (catalogIngreso.length === 0 || catalogIngreso === undefined)
+			dispatch(getCatalogTipoIngreso() as unknown as any);
+	}, []);
 
 	useEffect(() => {
 		if (operationSuccess) {
@@ -228,19 +237,16 @@ export default function Form({ navigation }: any) {
 				</View>
 				<View style={{ flex: 0.16, marginBottom: "5%" }}>
 					<RadioGroup
-						options={[
-							{ id: "1", label: "Vehículo" },
-							{ id: "2", label: "Peatonal" },
-						].map((catalog) => ({
+						options={catalogIngreso.map((catalog) => ({
 							id: catalog.id,
-							label: catalog.label,
+							label: catalog.tipo_ingreso,
 							icon: TipoVisitasIcon[
-								catalog.label
+								catalog.tipo_ingreso
 							] as unknown as React.ReactNode,
 						}))}
-						handleChange={(value: string) =>
-							setFormValues((prev) => ({ ...prev, tipo_ingreso: value }))
-						}
+						handleChange={(value: string) => {
+							setFormValues((prev) => ({ ...prev, tipo_ingreso: value }));
+						}}
 					/>
 				</View>
 				<View style={{ flex: 0.16, marginBottom: "5%" }}>
