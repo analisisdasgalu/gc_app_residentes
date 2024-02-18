@@ -86,7 +86,11 @@ export default function Form({ navigation }: any) {
 		console.log("Form payload", formValues);
 		let flagEmpty = false;
 		Object.keys(formValues).forEach((key) => {
-			if (_.isEmpty(formValues[key]) && typeof formValues[key] !== "number") {
+			if (
+				_.isEmpty(formValues[key]) &&
+				typeof formValues[key] !== "number" &&
+				!["vehicle_model", "vehicle_color", "vehicle_plate"].includes(key)
+			) {
 				flagEmpty = true;
 			}
 		});
@@ -117,6 +121,15 @@ export default function Form({ navigation }: any) {
 				notificacion: formValues.notificaciones.toString(),
 				nombre: formValues.visitaNombre.toString(),
 				idInstalacion: currentHouseId.toString(),
+				vehicle_color: formValues.vehicle_color
+					? formValues.vehicle_color.toString()
+					: "",
+				vehicle_model: formValues.vehicle_model
+					? formValues.vehicle_model.toString()
+					: "",
+				vehicle_plate: formValues.vehicle_plate
+					? formValues.vehicle_plate.toString()
+					: "",
 			}) as any
 		);
 	};

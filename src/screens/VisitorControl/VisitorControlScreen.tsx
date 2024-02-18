@@ -85,8 +85,8 @@ export default function VisitorControlScreen({
 						padding: "2%",
 					}}>
 					{visitas.map((data: any, index: number) => (
-						<View style={{ width: "100%" }}>
-							<Card {...data} key={data?.uniqueID} index={index} />
+						<View style={{ width: "100%" }} key={data?.uniqueID}>
+							<Card {...data} index={index} />
 						</View>
 					))}
 				</ScrollView>
