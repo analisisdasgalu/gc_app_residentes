@@ -23,7 +23,7 @@ export default function App() {
 						containerStyle={{
 							backgroundColor: colors.blue,
 							justifyContent: "space-around",
-							height: 100,
+							height: 120,
 						}}
 						centerComponent={{
 							text: "Gestion y Control",

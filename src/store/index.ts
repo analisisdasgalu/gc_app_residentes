@@ -6,6 +6,7 @@ import houseReducer from "./Houses";
 import tipoVisitas from "./TipoVisitas";
 import visitasReducer from "./Visitas";
 import uiReducer from "./UI";
+import tipoIngresoReducer from "./TipoIngreso";
 
 const persistConfig = {
 	storage: AsyncStorage,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
 	tipoVisitas,
 	visitasReducer,
 	uiReducer,
+	tipoIngresoReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -27,6 +27,7 @@ import { createVisita } from "@gcMobile/store/Visitas/api";
 import { setOperationSuccess } from "@gcMobile/store/UI";
 import { VIEWS } from "@gcMobile/navigation/constants";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
+import { getCatalogTipoIngreso } from "@gcMobile/store/TipoIngreso/api";
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 	Visita: <FontAwesome name='user' size={24} color={colors.darkGray} />,
@@ -51,6 +52,9 @@ export default function Form({ navigation }: any) {
 	const { catalogVisitas } = useSelector(
 		(state: RootState) => state.tipoVisitas
 	);
+	const { catalogIngreso } = useSelector(
+		(state: RootState) => state.tipoIngresoReducer
+	);
 	const { currentHouseId } = useSelector(
 		(state: RootState) => state.houseReducer
 	);
@@ -65,6 +69,7 @@ export default function Form({ navigation }: any) {
 	const [formValues, setFormValues] = useState<{
 		[key: string]: string | number;
 	}>({
+		visitaNombre: "",
 		tipo_visita: "",
 		tipo_ingreso: "",
 		fromDate: new Date().toISOString(),
@@ -78,9 +83,14 @@ export default function Form({ navigation }: any) {
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
 
 	const handleSubmit = () => {
+		console.log("Form payload", formValues);
 		let flagEmpty = false;
 		Object.keys(formValues).forEach((key) => {
-			if (_.isEmpty(formValues[key]) && typeof formValues[key] !== "number") {
+			if (
+				_.isEmpty(formValues[key]) &&
+				typeof formValues[key] !== "number" &&
+				!["vehicle_model", "vehicle_color", "vehicle_plate"].includes(key)
+			) {
 				flagEmpty = true;
 			}
 		});
@@ -111,9 +121,23 @@ export default function Form({ navigation }: any) {
 				notificacion: formValues.notificaciones.toString(),
 				nombre: formValues.visitaNombre.toString(),
 				idInstalacion: currentHouseId.toString(),
+				vehicle_color: formValues.vehicle_color
+					? formValues.vehicle_color.toString()
+					: "",
+				vehicle_model: formValues.vehicle_model
+					? formValues.vehicle_model.toString()
+					: "",
+				vehicle_plate: formValues.vehicle_plate
+					? formValues.vehicle_plate.toString()
+					: "",
 			}) as any
 		);
 	};
+
+	useEffect(() => {
+		if (catalogIngreso.length === 0 || catalogIngreso === undefined)
+			dispatch(getCatalogTipoIngreso() as unknown as any);
+	}, []);
 
 	useEffect(() => {
 		if (operationSuccess) {
@@ -128,6 +152,7 @@ export default function Form({ navigation }: any) {
 				contentContainerStyle={{
 					alignItems: "center",
 					paddingTop: "5%",
+					paddingBottom: "5%",
 				}}>
 				{/** Tipo de servicios */}
 				<View style={{ flex: 0.16, marginBottom: "10%" }}>
@@ -228,21 +253,80 @@ export default function Form({ navigation }: any) {
 				</View>
 				<View style={{ flex: 0.16, marginBottom: "5%" }}>
 					<RadioGroup
-						options={[
-							{ id: "1", label: "Vehículo" },
-							{ id: "2", label: "Peatonal" },
-						].map((catalog) => ({
+						options={catalogIngreso.map((catalog) => ({
 							id: catalog.id,
-							label: catalog.label,
+							label: catalog.tipo_ingreso,
 							icon: TipoVisitasIcon[
-								catalog.label
+								catalog.tipo_ingreso
 							] as unknown as React.ReactNode,
 						}))}
-						handleChange={(value: string) =>
-							setFormValues((prev) => ({ ...prev, tipo_ingreso: value }))
-						}
+						handleChange={(value: string) => {
+							setFormValues((prev) => ({ ...prev, tipo_ingreso: value }));
+						}}
 					/>
 				</View>
+				{formValues.tipo_ingreso === "1" && (
+					<View
+						style={{
+							flex: 0.2,
+							alignItems: "center",
+							backgroundColor: "#dddddd",
+							width: "95%",
+							marginBottom: "5%",
+							borderRadius: 5,
+							paddingTop: "2%",
+							paddingBottom: "5%",
+						}}>
+						<TextInput
+							style={{
+								width: "80%",
+								height: 40,
+								borderBottomColor: "gray",
+								borderBottomWidth: 1,
+							}}
+							onFocus={() => {}}
+							onBlur={() => {}}
+							onChangeText={(text) =>
+								setFormValues({ ...formValues, vehicle_model: text })
+							}
+							autoCapitalize='none'
+							maxLength={50}
+							placeholder='Modelo del Vehiculo'
+						/>
+						<TextInput
+							style={{
+								width: "80%",
+								height: 40,
+								borderBottomColor: "gray",
+								borderBottomWidth: 1,
+							}}
+							onFocus={() => {}}
+							onBlur={() => {}}
+							onChangeText={(text) =>
+								setFormValues({ ...formValues, vehicle_color: text })
+							}
+							autoCapitalize='none'
+							maxLength={50}
+							placeholder='Color vehiculo'
+						/>
+						<TextInput
+							style={{
+								width: "80%",
+								height: 40,
+								borderBottomColor: "gray",
+								borderBottomWidth: 1,
+							}}
+							onFocus={() => {}}
+							onBlur={() => {}}
+							onChangeText={(text) =>
+								setFormValues({ ...formValues, vehicle_plate: text })
+							}
+							autoCapitalize='none'
+							maxLength={50}
+							placeholder='Placas'
+						/>
+					</View>
+				)}
 				<View style={{ flex: 0.16, marginBottom: "5%" }}>
 					<RadioGroup
 						options={[
@@ -288,7 +372,7 @@ export default function Form({ navigation }: any) {
 							onValueChange={() =>
 								setFormValues((prev) => ({
 									...prev,
-									notificaciones: prev["notificaciones"] === 0 ? 1 : 0,
+									notificaciones: prev["notificaciones"] === "0" ? "1" : "0",
 								}))
 							}
 							value={formValues["notificaciones"] === 1 ? true : false}

@@ -10,7 +10,7 @@ export const cardStyles = StyleSheet.create({
 		minHeight: 100,
 		backgroundColor: colors.lightGray,
 		borderRadius: 10,
-		width: "90%",
+		width: "100%",
 		margin: "auto",
 		shadowColor: colors.black,
 		shadowOffset: {
