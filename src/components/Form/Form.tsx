@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import _ from "lodash";
+import _, { set } from "lodash";
 import {
 	View,
 	Text,
@@ -28,6 +28,10 @@ import { setOperationSuccess } from "@gcMobile/store/UI";
 import { VIEWS } from "@gcMobile/navigation/constants";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import { getCatalogTipoIngreso } from "@gcMobile/store/TipoIngreso/api";
+import { Container } from "../Container/Container";
+import { VehicleInformation } from "../VehicleInformation/VehicleInformation";
+import { HeaderActionButton } from "../HeaderActionButton/HeaderActionButton";
+import { VehicleInformationState } from "../VehicleInformation/types";
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 	Visita: <FontAwesome name='user' size={24} color={colors.darkGray} />,
@@ -81,6 +85,16 @@ export default function Form({ navigation }: any) {
 	});
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
+	const [totalVehicles, setTotalVehicles] = useState<number>(1);
+	const [vehicleData, setVehicleData] = useState<VehicleInformationState[]>([
+		{
+			brand: "",
+			model: "",
+			year: "",
+			color: "",
+			plate: "",
+		},
+	]);
 
 	const handleSubmit = () => {
 		console.log("Form payload", formValues);
@@ -145,6 +159,37 @@ export default function Form({ navigation }: any) {
 			navigation.navigate(VIEWS.QR_DETAILS, { uniqueID: newVisistaQR });
 		}
 	}, [operationSuccess]);
+
+	const handleAddVehicle = () => {
+		setTotalVehicles((prev) => prev + 1);
+		setVehicleData((prev) => [
+			...prev,
+			{
+				brand: "",
+				model: "",
+				year: "",
+				color: "",
+				plate: "",
+			},
+		]);
+	};
+
+	const handleRemoveVehicle = (index: number) => {
+		setTotalVehicles((prev) => prev - 1);
+		setVehicleData((prev) => {
+			let temp = [...prev];
+			temp.splice(index, 1);
+			return temp;
+		});
+	};
+
+	const handleVehicleOnChange = (index: number, key: string, value: string) => {
+		setVehicleData((prev) => {
+			let temp = [...prev];
+			temp[index][key] = value;
+			return temp;
+		});
+	};
 
 	return (
 		<SafeAreaView style={formStyles.container}>
@@ -266,66 +311,21 @@ export default function Form({ navigation }: any) {
 					/>
 				</View>
 				{formValues.tipo_ingreso === "1" && (
-					<View
-						style={{
-							flex: 0.2,
-							alignItems: "center",
-							backgroundColor: "#dddddd",
-							width: "95%",
-							marginBottom: "5%",
-							borderRadius: 5,
-							paddingTop: "2%",
-							paddingBottom: "5%",
-						}}>
-						<TextInput
-							style={{
-								width: "80%",
-								height: 40,
-								borderBottomColor: "gray",
-								borderBottomWidth: 1,
-							}}
-							onFocus={() => {}}
-							onBlur={() => {}}
-							onChangeText={(text) =>
-								setFormValues({ ...formValues, vehicle_model: text })
-							}
-							autoCapitalize='none'
-							maxLength={50}
-							placeholder='Modelo del Vehiculo'
+					<Container
+						title='Informacion del vehiculo'
+						actionButton={
+							<HeaderActionButton
+								icon='plus-circle'
+								onPress={handleAddVehicle}
+							/>
+						}>
+						<VehicleInformation
+							numberOfVehicles={totalVehicles}
+							vehicleData={vehicleData}
+							removeVehicle={handleRemoveVehicle}
+							handleOnChange={handleVehicleOnChange}
 						/>
-						<TextInput
-							style={{
-								width: "80%",
-								height: 40,
-								borderBottomColor: "gray",
-								borderBottomWidth: 1,
-							}}
-							onFocus={() => {}}
-							onBlur={() => {}}
-							onChangeText={(text) =>
-								setFormValues({ ...formValues, vehicle_color: text })
-							}
-							autoCapitalize='none'
-							maxLength={50}
-							placeholder='Color vehiculo'
-						/>
-						<TextInput
-							style={{
-								width: "80%",
-								height: 40,
-								borderBottomColor: "gray",
-								borderBottomWidth: 1,
-							}}
-							onFocus={() => {}}
-							onBlur={() => {}}
-							onChangeText={(text) =>
-								setFormValues({ ...formValues, vehicle_plate: text })
-							}
-							autoCapitalize='none'
-							maxLength={50}
-							placeholder='Placas'
-						/>
-					</View>
+					</Container>
 				)}
 				<View style={{ flex: 0.16, marginBottom: "5%" }}>
 					<RadioGroup

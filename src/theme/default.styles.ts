@@ -14,9 +14,14 @@ export const colors = {
 	aqua: "#05ACAF",
 	brown: "#995D4A",
 	yellow: "#F2A71B",
-	lightGray2: "#c9c7c9",
+	lightGray2: "#cecdd4",
 	cherry: "#FF004D",
 	limeGreen: "#32cd32",
+	primary: "",
+	secondary: "",
+	thid_body_elements: "#dad873",
+	text_subtitle_color: "#8594A7",
+	neutral_color: "#454d66",
 };
 export const filterPalette = {
 	orange: "#FF7D00",
@@ -29,6 +34,7 @@ export const fonts = {
 	bodyText1: 14,
 	bodyText2: 14,
 	bodyText3: 12,
+	text_subtitle: 18,
 };
 
 export const line = {
