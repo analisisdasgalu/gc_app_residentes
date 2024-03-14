@@ -78,7 +78,14 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				.then((data) => {
 					data
 						.json()
-						.then(() => {
+						.then((initData) => {
+							if (
+								data.status === 400 ||
+								data.status === 401 ||
+								data.status === 500
+							) {
+								throw new Error(initData.message);
+							}
 							authenticate(emailValue, passwordValue)
 								.then((loginRaw) => {
 									loginRaw
@@ -257,10 +264,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 						<Text style={loginScreenStyles.label}> here</Text>
 					</View>
 					<View style={loginScreenStyles.rowText}>
-						<Text style={loginScreenStyles.label}>
-							By creating an account, you agree to our Terms of Service and
-							Privacy Policy
-						</Text>
+						<Text style={loginScreenStyles.label}>V1.1</Text>
 					</View>
 				</ScrollView>
 			</View>
