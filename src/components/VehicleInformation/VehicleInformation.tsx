@@ -33,7 +33,7 @@ export const VehicleInformation = (props: VehicleInformationProps) => {
 									props.handleOnChange(index, "brand", brand)
 								}
 								value={props.vehicleData[index]["brand"]}
-								placeholder='Marca del vehiculo'
+								placeholder='Marca del vehículo'
 							/>
 							<TextInput
 								style={inputStyles}
@@ -41,7 +41,7 @@ export const VehicleInformation = (props: VehicleInformationProps) => {
 									props.handleOnChange(index, "model", model)
 								}
 								value={props.vehicleData[index]["model"]}
-								placeholder='Modelo del vehiculo'
+								placeholder='Modelo del vehículo'
 							/>
 							<TextInput
 								style={inputStyles}
@@ -49,7 +49,8 @@ export const VehicleInformation = (props: VehicleInformationProps) => {
 									props.handleOnChange(index, "year", year)
 								}
 								value={props.vehicleData[index]["year"]}
-								placeholder='Anio del vehiculo'
+								placeholder='Año del vehículo'
+								keyboardType='numeric'
 							/>
 							<TextInput
 								style={inputStyles}
@@ -57,15 +58,15 @@ export const VehicleInformation = (props: VehicleInformationProps) => {
 									props.handleOnChange(index, "color", color)
 								}
 								value={props.vehicleData[index]["color"]}
-								placeholder='Color del vehiculo'
+								placeholder='Color del vehículo'
 							/>
 							<TextInput
 								style={inputStyles}
 								onChangeText={(plate: string) =>
-									props.handleOnChange(index, "plate", plate)
+									props.handleOnChange(index, "plates", plate)
 								}
 								value={props.vehicleData[index]["plate"]}
-								placeholder='Matricula del vehiculo'
+								placeholder='Matrícula del vehículo'
 							/>
 						</View>
 						{index + 1 !== props.numberOfVehicles && <Separator />}

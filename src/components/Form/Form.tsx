@@ -92,12 +92,11 @@ export default function Form({ navigation }: any) {
 			model: "",
 			year: "",
 			color: "",
-			plate: "",
+			plates: "",
 		},
 	]);
 
 	const handleSubmit = () => {
-		console.log("Form payload", formValues);
 		let flagEmpty = false;
 		Object.keys(formValues).forEach((key) => {
 			if (
@@ -135,15 +134,7 @@ export default function Form({ navigation }: any) {
 				notificacion: formValues.notificaciones.toString(),
 				nombre: formValues.visitaNombre.toString(),
 				idInstalacion: currentHouseId.toString(),
-				vehicle_color: formValues.vehicle_color
-					? formValues.vehicle_color.toString()
-					: "",
-				vehicle_model: formValues.vehicle_model
-					? formValues.vehicle_model.toString()
-					: "",
-				vehicle_plate: formValues.vehicle_plate
-					? formValues.vehicle_plate.toString()
-					: "",
+				vehicle: JSON.stringify(vehicleData),
 			}) as any
 		);
 	};
@@ -169,7 +160,7 @@ export default function Form({ navigation }: any) {
 				model: "",
 				year: "",
 				color: "",
-				plate: "",
+				plates: "",
 			},
 		]);
 	};
