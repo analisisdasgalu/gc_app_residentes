@@ -74,65 +74,129 @@ export default function LoginScreen({ navigation }: INavigationProps) {
 				});
 				return;
 			}
-			try {
-				const authData = await InitializeConnection(
-					emailValue,
-					passwordValue,
-					customerCode,
-					authenticate
-				);
-				const instalaciones = await getIsntalaciones(authData.instalaciones);
-
-				const tokenData: { [key: string]: string } = {
-					access_token: authData.access_token,
-					userName: authData.name,
-					userResidence: authData.residence,
-					userEmail: emailValue,
-					userId: authData.id,
-				};
-				saveToken(tokenData.access_token);
-				dispatch(
-					setUserData({
-						access_token: tokenData.access_token,
-						id_instalacion: authData.instalaciones,
-						email: emailValue,
-						name: authData.name,
-						id: authData.id,
-					})
-				);
-				dispatch(setHouse(instalaciones as unknown as IHouseManagement[]));
-				const _house = authData.instalaciones.split(",")[0];
-				const defaultHouse = instalaciones.find(
-					(inst: IHouseManagement) => inst.id === _house
-				);
-				if (defaultHouse) {
-					dispatch(
-						setCurrentHouseInfo({
-							currentHouseId: defaultHouse.id,
-							currentResidence: defaultHouse.residencial,
-							currentHouseInstalacion: defaultHouse.num_int,
-							currentHouseManzana: defaultHouse.manzana,
+			InitializeConnection(customerCode)
+				.then((data) => {
+					data
+						.json()
+						.then(() => {
+							authenticate(emailValue, passwordValue)
+								.then((loginRaw) => {
+									loginRaw
+										.json()
+										.then((authData) => {
+											if (authData.code === "400") {
+												throw new Error(authData.message);
+											}
+											getIsntalaciones(authData.instalaciones)
+												.then((dataInstalaciones) => {
+													dataInstalaciones
+														.json()
+														.then((instalaciones: any) => {
+															console.log("instalaciones", instalaciones);
+															dispatch(
+																setHouse(
+																	instalaciones as unknown as IHouseManagement[]
+																)
+															);
+															const _house =
+																authData.instalaciones.split(",")[0];
+															const defaultHouse = instalaciones.find(
+																(inst: IHouseManagement) => inst.id === _house
+															);
+															if (defaultHouse) {
+																dispatch(
+																	setCurrentHouseInfo({
+																		currentHouseId: defaultHouse.id,
+																		currentResidence: defaultHouse.residencial,
+																		currentHouseInstalacion:
+																			defaultHouse.num_int,
+																		currentHouseManzana: defaultHouse.manzana,
+																	})
+																);
+															} else {
+																setCurrentHouseInfo({
+																	currentHouseId: 0,
+																	currentResidence: "",
+																	currentHouseInstalacion: "",
+																	currentHouseManzana: "",
+																});
+															}
+															dispatch(setLoading(false));
+															navigation.dispatch(
+																StackActions.replace(VIEWS.VISITAS, tokenData)
+															);
+														})
+														.catch((error: ErrorResponse) => {
+															dispatch(setLoading(false));
+															Toast.show({
+																type: ALERT_TYPE.DANGER,
+																title:
+																	"Error al procesar json de instalaciones",
+																textBody: `${error}`,
+															});
+														});
+												})
+												.catch((error: ErrorResponse) => {
+													dispatch(setLoading(false));
+													Toast.show({
+														type: ALERT_TYPE.DANGER,
+														title: "Error al obtener instalaciones",
+														textBody: `${error}`,
+													});
+												});
+											const tokenData: { [key: string]: string } = {
+												access_token: authData.access_token,
+												userName: authData.name,
+												userResidence: authData.residence,
+												userEmail: emailValue,
+												userId: authData.id,
+											};
+											saveToken(tokenData.access_token);
+											dispatch(
+												setUserData({
+													access_token: tokenData.access_token,
+													id_instalacion: authData.instalaciones,
+													email: emailValue,
+													name: authData.name,
+													id: authData.id,
+												})
+											);
+										})
+										.catch((error: ErrorResponse) => {
+											dispatch(setLoading(false));
+											Toast.show({
+												type: ALERT_TYPE.DANGER,
+												title: "Error al procesar Json de login",
+												textBody: `${error}`,
+											});
+										});
+								})
+								.catch((error: ErrorResponse) => {
+									dispatch(setLoading(false));
+									Toast.show({
+										type: ALERT_TYPE.DANGER,
+										title: "Error al iniciar sesion",
+										textBody: `${error}`,
+									});
+								});
 						})
-					);
-				} else {
-					setCurrentHouseInfo({
-						currentHouseId: 0,
-						currentResidence: "",
-						currentHouseInstalacion: "",
-						currentHouseManzana: "",
+						.catch((error: ErrorResponse) => {
+							dispatch(setLoading(false));
+							Toast.show({
+								type: ALERT_TYPE.DANGER,
+								title: "Error al procesar json de conexion",
+								textBody: `${error}`,
+							});
+						});
+				})
+				.catch((error: ErrorResponse) => {
+					dispatch(setLoading(false));
+					Toast.show({
+						type: ALERT_TYPE.DANGER,
+						title: "Error al iniciar conexion",
+						textBody: `${error}`,
 					});
-				}
-				dispatch(setLoading(false));
-				navigation.dispatch(StackActions.replace(VIEWS.VISITAS, tokenData));
-			} catch (error) {
-				dispatch(setLoading(false));
-				saveToken("");
-				Toast.show({
-					type: ALERT_TYPE.DANGER,
-					title: "Login Error",
-					textBody: `${error}`,
 				});
-			}
 		}
 	};
 
