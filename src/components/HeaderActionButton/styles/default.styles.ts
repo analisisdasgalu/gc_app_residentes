@@ -6,6 +6,5 @@ export const headerActionStyles: ViewStyle = {
 	padding: 5,
 	flexDirection: "row",
 	justifyContent: "center",
-	backgroundColor: colors.thid_body_elements,
 	borderRadius: 5,
 };

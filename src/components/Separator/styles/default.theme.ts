@@ -5,7 +5,8 @@ export const separatorStyles: ViewStyle = {
 	flex: 1,
 	flexDirection: "row",
 	width: "100%",
-	marginBottom: "15%",
+	marginTop: "5%",
+	marginBottom: "5%",
 };
 
 export const separatorBadgeStyles: ViewStyle = {

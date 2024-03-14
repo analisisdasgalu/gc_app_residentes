@@ -6,6 +6,13 @@ export const defaultContainer: ViewStyle = {
 	width: "100%",
 	height: "100%",
 	justifyContent: "center",
+	marginBottom: "5%",
+};
+
+export const headerContainer: ViewStyle = {
+	flex: 1,
+	flexDirection: "row",
+	justifyContent: "flex-end",
 	marginBottom: "10%",
 };
 

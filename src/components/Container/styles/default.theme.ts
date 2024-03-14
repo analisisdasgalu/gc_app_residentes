@@ -18,7 +18,7 @@ export const defaultRow: ViewStyle = {
 	width: "100%",
 	maxWidth: "100%",
 	minWidth: "10%",
-	marginBottom: "15%",
+	marginBottom: "10%",
 };
 
 export const defaultColumn: ViewStyle = {

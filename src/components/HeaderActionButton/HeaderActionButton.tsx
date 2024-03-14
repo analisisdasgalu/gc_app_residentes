@@ -7,7 +7,9 @@ import { colors, fonts } from "@gcMobile/theme/default.styles";
 
 export const HeaderActionButton = (props: HeaderActionButtonProps) => {
 	return (
-		<TouchableOpacity style={headerActionStyles} onPress={props.onPress}>
+		<TouchableOpacity
+			style={[headerActionStyles, { backgroundColor: props.color }]}
+			onPress={props.onPress}>
 			<View>
 				<FontAwesome5
 					name={props.icon}
@@ -17,4 +19,8 @@ export const HeaderActionButton = (props: HeaderActionButtonProps) => {
 			</View>
 		</TouchableOpacity>
 	);
+};
+
+HeaderActionButton.defaultProps = {
+	color: colors.thid_body_elements,
 };
