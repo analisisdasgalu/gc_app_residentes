@@ -73,10 +73,9 @@ export const createVisita = (data: visitasPayload) => async (dispatch: any) => {
 	formdata.append("notificacion", data.notificacion.toString());
 	formdata.append("nombre", data.nombre);
 	formdata.append("idInstalacion", data.idInstalacion.toString());
-	formdata.append("vehicle_color", data.vehicle_color || "");
-	formdata.append("vehicle_model", data.vehicle_model || "");
-	formdata.append("vehicle_plate", data.vehicle_plate || "");
+	formdata.append("vehicles", data.vehicle || "");
 	dispatch(setLoading(true));
+
 	fetch(`${base_url}/${ENDPOINTS.VISITAS.CREATE}`, {
 		method: "POST",
 		body: formdata,

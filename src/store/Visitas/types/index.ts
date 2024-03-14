@@ -15,7 +15,5 @@ export type visitasPayload = {
 	notificacion: string;
 	nombre: string;
 	idInstalacion: string;
-	vehicle_color?: string;
-	vehicle_model?: string;
-	vehicle_plate?: string;
+	vehicle?: string;
 };
