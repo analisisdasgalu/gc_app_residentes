@@ -28,6 +28,9 @@ import { setOperationSuccess } from "@gcMobile/store/UI";
 import { VIEWS } from "@gcMobile/navigation/constants";
 import { ALERT_TYPE, Toast } from "react-native-alert-notification";
 import { getCatalogTipoIngreso } from "@gcMobile/store/TipoIngreso/api";
+import { Container } from "../Container/Container";
+import { VehicleInformation } from "../VehicleInformation/VehicleInformation";
+import { HeaderActionButton } from "../HeaderActionButton/HeaderActionButton";
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 	Visita: <FontAwesome name='user' size={24} color={colors.darkGray} />,
@@ -81,6 +84,7 @@ export default function Form({ navigation }: any) {
 	});
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [showModalTime, setShowModalTime] = useState<boolean>(false);
+	const [totalVehicles, setTotalVehicles] = useState<number>(1);
 
 	const handleSubmit = () => {
 		console.log("Form payload", formValues);
@@ -266,66 +270,19 @@ export default function Form({ navigation }: any) {
 					/>
 				</View>
 				{formValues.tipo_ingreso === "1" && (
-					<View
-						style={{
-							flex: 0.2,
-							alignItems: "center",
-							backgroundColor: "#dddddd",
-							width: "95%",
-							marginBottom: "5%",
-							borderRadius: 5,
-							paddingTop: "2%",
-							paddingBottom: "5%",
-						}}>
-						<TextInput
-							style={{
-								width: "80%",
-								height: 40,
-								borderBottomColor: "gray",
-								borderBottomWidth: 1,
-							}}
-							onFocus={() => {}}
-							onBlur={() => {}}
-							onChangeText={(text) =>
-								setFormValues({ ...formValues, vehicle_model: text })
-							}
-							autoCapitalize='none'
-							maxLength={50}
-							placeholder='Modelo del Vehiculo'
+					<Container
+						title='Informacion del vehiculo'
+						actionButton={
+							<HeaderActionButton
+								icon='plus-circle'
+								onPress={() => setTotalVehicles((prev) => prev + 1)}
+							/>
+						}>
+						<VehicleInformation
+							numberOfVehicles={totalVehicles}
+							saveInformation={() => {}}
 						/>
-						<TextInput
-							style={{
-								width: "80%",
-								height: 40,
-								borderBottomColor: "gray",
-								borderBottomWidth: 1,
-							}}
-							onFocus={() => {}}
-							onBlur={() => {}}
-							onChangeText={(text) =>
-								setFormValues({ ...formValues, vehicle_color: text })
-							}
-							autoCapitalize='none'
-							maxLength={50}
-							placeholder='Color vehiculo'
-						/>
-						<TextInput
-							style={{
-								width: "80%",
-								height: 40,
-								borderBottomColor: "gray",
-								borderBottomWidth: 1,
-							}}
-							onFocus={() => {}}
-							onBlur={() => {}}
-							onChangeText={(text) =>
-								setFormValues({ ...formValues, vehicle_plate: text })
-							}
-							autoCapitalize='none'
-							maxLength={50}
-							placeholder='Placas'
-						/>
-					</View>
+					</Container>
 				)}
 				<View style={{ flex: 0.16, marginBottom: "5%" }}>
 					<RadioGroup
