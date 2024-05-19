@@ -52,5 +52,4 @@ export const text_style_small = {
   color: colors.darkGray,
   fontSize: 12,
   fontFamily: "Roboto",
-  textOverflow: "ellipsis",
 };
