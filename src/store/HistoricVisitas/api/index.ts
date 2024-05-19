@@ -16,7 +16,9 @@ export const getHistoricoVisitas =
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
-        dispatch(setHistoricVisitas(data as unknown as VisitaHistorica[]));
+        if (!Object.keys(data).includes("message")) {
+          dispatch(setHistoricVisitas(data as unknown as VisitaHistorica[]));
+        }
         dispatch(setLoading(false));
       })
       .catch((error) => {
