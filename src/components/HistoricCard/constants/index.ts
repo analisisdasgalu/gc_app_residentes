@@ -36,7 +36,7 @@ export const historicCardStyles = StyleSheet.create({
     marginTop: "-5%",
   },
   iconLogout: {
-    width: "33%",
+    width: "10%",
     backgroundColor: colors.blue,
     borderRadius: 100,
     height: 28,

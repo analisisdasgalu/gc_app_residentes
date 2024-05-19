@@ -21,7 +21,7 @@ export default function VisitHistoryScreen() {
     dispatch(
       getHistoricoVisitas({ idInstalacion: currentHouseId, email }) as any,
     );
-  }, []);
+  }, [currentHouseId]);
 
   return (
     <View style={visitorHistoryStyles.background}>
