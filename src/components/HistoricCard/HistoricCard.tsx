@@ -1,19 +1,28 @@
 import { View, Text } from "react-native";
-import React from "react";
-import { historicCardStyles } from "./constants";
-import { Icon } from "react-native-elements";
+import { historicCardStyles, plateContainer } from "./constants";
+import { Icon, colors } from "react-native-elements";
+import { HistoricCardProps } from "@gcMobile/components/HistoricCard/constants";
+import { formatDate, formatTime, plateFormat } from "@gcMobile/util";
+import { text_style, text_style_small } from "@gcMobile/theme/default.styles";
 
-export default function HistoricCard() {
+export default function HistoricCard({
+  fechaVisita,
+  horaVisita,
+  tipoVisita,
+  tipoIngreso,
+  vehiculos,
+  casa,
+}: HistoricCardProps) {
   return (
     <View style={historicCardStyles.container}>
-      <View style={historicCardStyles.head}>
+      <View style={historicCardStyles.cardHead}>
         <View style={historicCardStyles.nameContainer}>
-          <Text>Pablo Bermúdez</Text>
-          <Text>Visita - Registro manual</Text>
+          <Text style={text_style}>{tipoVisita}</Text>
+          <Text style={text_style}>{tipoIngreso}</Text>
         </View>
         <View style={historicCardStyles.nameContainer}>
-          <Text>04/11/23</Text>
-          <Text>12:39:48 CST</Text>
+          <Text style={text_style}>{formatDate(fechaVisita)}</Text>
+          <Text style={text_style}>{formatTime(horaVisita)} CST</Text>
         </View>
         <View style={historicCardStyles.iconLogout}>
           <Icon
@@ -30,24 +39,28 @@ export default function HistoricCard() {
         <View style={historicCardStyles.nameContainer}>
           <View style={historicCardStyles.iconContainer}>
             <Icon
-              name="directions-car"
+              name={
+                tipoIngreso === "Vehículo"
+                  ? "directions-car"
+                  : "directions-walk"
+              }
               type="material"
-              color="#000"
-              size={30}
+              color={colors.grey1}
+              size={25}
             />
           </View>
           <View style={historicCardStyles.body}>
-            <Text>Propiedad: </Text>
-            <Text>A033</Text>
+            <Text style={text_style}>Propiedad: </Text>
+            <Text style={text_style}>{casa}</Text>
           </View>
         </View>
-        <View style={{ marginLeft: "-25%" }}>
-          <Text>J99BEH</Text>
+        <View style={plateContainer}>
+          {vehiculos.map(({ placas }) => (
+            <View key={placas}>
+              <Text style={text_style_small}>{`- ${plateFormat(placas)}`}</Text>
+            </View>
+          ))}
         </View>
-        <View style={[{ marginLeft: "25%" }]}>
-          <Text>Tarjetón:</Text>
-        </View>
-        <Text>1</Text>
       </View>
     </View>
   );

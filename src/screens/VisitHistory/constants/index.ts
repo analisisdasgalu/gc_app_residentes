@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 import { colors } from "@gcMobile/theme/default.styles";
 export const visitorHistoryStyles = StyleSheet.create({
   container: {
-    alignContent: "center",
-    alignItems: "center",
+    width: "100%",
+    padding: 10,
   },
   background: {
     backgroundColor: colors.lightGray,
