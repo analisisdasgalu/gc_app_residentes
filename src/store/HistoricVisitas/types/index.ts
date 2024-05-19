@@ -1,4 +1,4 @@
-export type VisitaHistorica {
+export type VisitaHistorica = {
   idVisita: string;
   fechaVisita: string;
   horaVisita: string;
@@ -6,9 +6,9 @@ export type VisitaHistorica {
   tipoIngreso: string;
   emailAutor: string;
   casa: string;
-  vehiculos: string[];
-}
+  vehiculos: { placas: string }[];
+};
 
 export interface IHistoricoVisitas {
   visitas: VisitaHistorica[];
-} 
+}

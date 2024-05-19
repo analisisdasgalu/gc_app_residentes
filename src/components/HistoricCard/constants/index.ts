@@ -1,27 +1,24 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, ViewStyle } from "react-native";
 import { colors } from "@gcMobile/theme/default.styles";
 
 export const historicCardStyles = StyleSheet.create({
   container: {
+    width: "100%",
     backgroundColor: "#fff",
     borderRadius: 5,
     padding: 10,
     borderWidth: 0.4,
     borderColor: colors.gray,
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 2,
+    marginTop: "2%",
+    marginBottom: "2%",
   },
-  head: {
+  cardHead: {
     flexDirection: "row",
+    justifyContent: "space-between",
   },
   nameContainer: {
-    paddingRight: "8%",
+    width: "33%",
   },
   line: {
     marginTop: "2%",
@@ -39,12 +36,17 @@ export const historicCardStyles = StyleSheet.create({
     marginTop: "-5%",
   },
   iconLogout: {
+    width: "33%",
     backgroundColor: colors.blue,
     borderRadius: 100,
     height: 28,
-    width: 28,
   },
 });
+
+export const plateContainer: ViewStyle = {
+  width: "50%",
+  maxWidth: "50%",
+};
 
 export type VehicleCardProps = {
   vehicle_id: string;
@@ -55,14 +57,14 @@ export type VehicleCardProps = {
   year: string;
 };
 
-
 export type HistoricCardProps = {
-  casa : string;
-  nombreVisita : string;
-  fechaVisita : string;
-  horaVisita : string;
-  tipoVisita : string;
-  idVisita : string;
-  visitaUniqueId : string;
-  vehiculos : string[];
-}
+  casa: string;
+  nombreVisita: string;
+  fechaVisita: string;
+  horaVisita: string;
+  tipoVisita: string;
+  tipoIngreso: string;
+  idVisita: string;
+  visitaUniqueId: string;
+  vehiculos: { placas: string }[];
+};

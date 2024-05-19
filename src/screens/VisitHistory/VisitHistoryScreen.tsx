@@ -1,25 +1,47 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { View, Text } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Filter from "@gcMobile/components/Filter";
+import { RootState } from "@gcMobile/store";
 import HistoricCard from "@gcMobile/components/HistoricCard";
 import { getHistoricoVisitas } from "@gcMobile/store/HistoricVisitas/api";
 import { visitorHistoryStyles } from "./constants";
 
 export default function VisitHistoryScreen() {
   const dispatch = useDispatch();
+  const { email } = useSelector((state: RootState) => state.userReducer);
+  const { currentHouseId } = useSelector(
+    (state: RootState) => state.houseReducer,
+  );
+  const { visitas } = useSelector(
+    (state: RootState) => state.historicoVisitasReducer,
+  );
 
   useEffect(() => {
-    dispatch(getHistoricoVisitas({idInstalacion: 3, email: 'analisis@dasgalu.com.mx'}));
+    dispatch(
+      getHistoricoVisitas({ idInstalacion: currentHouseId, email }) as any,
+    );
   }, []);
 
-	return (
-		<View style={visitorHistoryStyles.background}>
-			<Filter filters={[]} handleFilters={() => {}} />
-			<SafeAreaView style={visitorHistoryStyles.container}>
-				<HistoricCard nombreVisita="Test" fechaVisita="18/05/2024" horaVisita="21:00" tipoVisita="Visita" vehiculos={['PBT-0518']} casa="A3" />
-			</SafeAreaView>
-		</View>
-	);
+  return (
+    <View style={visitorHistoryStyles.background}>
+      <SafeAreaView style={visitorHistoryStyles.container}>
+        <ScrollView>
+          {visitas?.map((visita) => (
+            <HistoricCard
+              idVisita={visita?.idVisita || ""}
+              visitaUniqueId={visita?.idVisita || ""}
+              nombreVisita={""}
+              fechaVisita={visita?.fechaVisita || ""}
+              horaVisita={visita?.horaVisita || ""}
+              tipoVisita={visita?.tipoVisita || ""}
+              tipoIngreso={visita?.tipoIngreso || ""}
+              vehiculos={visita?.vehiculos || []}
+              casa={visita?.casa || ""}
+            />
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    </View>
+  );
 }

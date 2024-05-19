@@ -1,27 +1,22 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IHistoricoVisitas, VisitaHistorica } from './types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IHistoricoVisitas, VisitaHistorica } from "./types";
 
-
-const initialState:IHistoricoVisitas = {
+const initialState: IHistoricoVisitas = {
   visitas: [],
 };
 
-
 const HistoricVisitasSlice = createSlice({
-  name: 'HistoricVisitas',
+  name: "HistoricVisitas",
   initialState,
   reducers: {
-    setHistoricVisitas: (state, action: PayloadAction<VisitaHistorica>) => {
-      state.visitas = action.payload.visitas;
+    setHistoricVisitas: (state, action: PayloadAction<VisitaHistorica[]>) => {
+      state.visitas = action.payload;
     },
     addVisita: (state, action: PayloadAction<VisitaHistorica>) => {
-      state.visitas.push(action.payload.visitas[0]);
+      state.visitas.push(action.payload);
     },
   },
-  }
-);
+});
 
 export const { setHistoricVisitas, addVisita } = HistoricVisitasSlice.actions;
 export default HistoricVisitasSlice.reducer;
-
-
