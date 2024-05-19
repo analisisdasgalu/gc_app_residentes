@@ -1,19 +1,22 @@
 import { View, Text } from "react-native";
-import React from "react";
 import { historicCardStyles } from "./constants";
 import { Icon } from "react-native-elements";
+import { HistoricCardProps } from "./types";
 
-export default function HistoricCard() {
+
+
+export default function HistoricCard({nombreVisita, fechaVisita, horaVisita, tipoVisita, vehiculos, casa}: HistoricCardProps) {
+
   return (
     <View style={historicCardStyles.container}>
       <View style={historicCardStyles.head}>
         <View style={historicCardStyles.nameContainer}>
-          <Text>Pablo Bermúdez</Text>
-          <Text>Visita - Registro manual</Text>
+          <Text>{nombreVisita}</Text>
+          <Text>Visita - {tipoVisita}</Text>
         </View>
         <View style={historicCardStyles.nameContainer}>
-          <Text>04/11/23</Text>
-          <Text>12:39:48 CST</Text>
+          <Text>{fechaVisita}</Text>
+          <Text>{horaVisita} CST</Text>
         </View>
         <View style={historicCardStyles.iconLogout}>
           <Icon
@@ -38,16 +41,16 @@ export default function HistoricCard() {
           </View>
           <View style={historicCardStyles.body}>
             <Text>Propiedad: </Text>
-            <Text>A033</Text>
+            <Text>{casa}</Text>
           </View>
         </View>
-        <View style={{ marginLeft: "-25%" }}>
-          <Text>J99BEH</Text>
-        </View>
-        <View style={[{ marginLeft: "25%" }]}>
-          <Text>Tarjetón:</Text>
-        </View>
-        <Text>1</Text>
+        {
+          vehiculos.map((vehiculo, index) => (
+            <View key={vehiculo} style={{ marginLeft: "-25%" }}>
+              <Text>{vehiculo}</Text>
+            </View>
+          ))
+        }
       </View>
     </View>
   );

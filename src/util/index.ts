@@ -19,3 +19,13 @@ export const stringTemplateParser = (cadena: string, object: any) => {
 	const regex = /{([^{}]*)}/g;
 	return cadena.replace(regex, (match, submatch) => object[submatch]);
 };
+
+export const stringTemplateAddQuery = (cadena: string, object: any) => {
+  cadena += "?";
+  Object.keys(object).forEach((key) => {
+    cadena +=  `${key}=${object[key]}&`;
+  });
+  cadena = cadena.slice(0, -1);
+  return cadena;
+};
+

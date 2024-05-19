@@ -45,3 +45,24 @@ export const historicCardStyles = StyleSheet.create({
     width: 28,
   },
 });
+
+export type VehicleCardProps = {
+  vehicle_id: string;
+  marca: string;
+  modelo: string;
+  placas: string;
+  color: string;
+  year: string;
+};
+
+
+export type HistoricCardProps = {
+  casa : string;
+  nombreVisita : string;
+  fechaVisita : string;
+  horaVisita : string;
+  tipoVisita : string;
+  idVisita : string;
+  visitaUniqueId : string;
+  vehiculos : string[];
+}
