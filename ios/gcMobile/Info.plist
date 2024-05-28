@@ -48,6 +48,10 @@
         </dict>
       </dict>
     </dict>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>La aplicacion requiere de salvar imagenes en tu dispositivo.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>La aplicacion requiere de salvar imagenes en tu dispositivo.</string>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
@@ -74,9 +78,5 @@
     <string>Light</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>La aplicacion requiere de salvar imagenes en tu dispositivo.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>La aplicacion requiere de salvar imagenes en tu dispositivo.</string>
   </dict>
 </plist>
