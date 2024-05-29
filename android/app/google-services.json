@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "383841318790",
+    "project_id": "gcmobile-5d55a",
+    "storage_bucket": "gcmobile-5d55a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383841318790:android:d3ceb8d484563b1b9a1e07",
+        "android_client_info": {
+          "package_name": "com.mfuentes1992.gcMobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjLvLVEePrj8e8cA-V6pgrognBScx8APU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
