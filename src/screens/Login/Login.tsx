@@ -3,6 +3,7 @@ import { Text, View, Image, TouchableOpacity, ScrollView } from 'react-native'
 import InputComponent from '../../components/Inputs/InputComponent'
 import InputPassword from '../../components/Inputs/InputPassword'
 import Button from '../../components/Button'
+import * as Notifications from 'expo-notifications'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StackActions } from '@react-navigation/native'
 import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
@@ -25,6 +26,8 @@ import { VIEWS } from '@gcMobile/navigation/constants'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { RootState } from '@gcMobile/store'
 import { LOCAL_STORAGE } from '@gcMobile/util/constants'
+import { registerDeviceId } from '@gcMobile/store/Notificaciones/api'
+import { registerForPushNotificationsAsync } from '@gcMobile/util/'
 
 interface INavigationProps {
     navigation: any
@@ -42,6 +45,7 @@ type LocalStoredData = {
     instalaciones: string
     password?: string
     customerCode?: string
+    recintoId?: string
 }
 
 export default function LoginScreen({ navigation }: INavigationProps) {
@@ -52,6 +56,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
     const [emailValue, setEmailValue] = useState('')
     const [passwordValue, setPasswordValue] = useState('')
     const [customerCode, setCustomerCode] = useState<string>('')
+    const [deviceId, setDevideId] = useState<string>('')
 
     useEffect(() => {
         AsyncStorage.getItem(LOCAL_STORAGE.USER_CREDENTIALS)
@@ -79,6 +84,21 @@ export default function LoginScreen({ navigation }: INavigationProps) {
     const saveIntoAsyncStorage = async (data: LocalStoredData) => {
         saveToken(data.access_token)
         await AsyncStorage.setItem(LOCAL_STORAGE.USER_CREDENTIALS, JSON.stringify({ ...data, email: data.userEmail }))
+        AsyncStorage.getItem(LOCAL_STORAGE.NOTIFICACIONES)
+            .then(async (deviceIdLs: any) => {
+                if (deviceIdLs === null) {
+                    registerForPushNotificationsAsync(Notifications).then(async (deviceId) => {
+                        const { estatus, message } = await registerDeviceId(deviceId || '', data.recintoId || '0')
+                        if (['200', '201'].includes(estatus)) {
+                            console.info({ estatus, message })
+                            AsyncStorage.setItem(LOCAL_STORAGE.NOTIFICACIONES, deviceId || '')
+                        }
+                    })
+                }
+            })
+            .catch((error: any) => {
+                console.error(error)
+            })
         dispatch(
             setUserData({
                 access_token: data.access_token,
@@ -97,6 +117,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
             dispatch(setHouse(instalaciones as unknown as IHouseManagement[]))
             const _house = instalaciones.split(',')[0]
             const defaultHouse = data.find((inst: IHouseManagement) => `${inst.id}` === _house)
+            dispatch(setHouse(data))
             dispatch(
                 setCurrentHouseInfo({
                     currentHouseId: defaultHouse.id || 0,
@@ -150,6 +171,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                 instalaciones,
                 customerCode: code,
                 password,
+                recintoId: '1', // -- should be retrieved from login response
             })
             dispatch(setLoading(false))
             navigation.dispatch(StackActions.replace(VIEWS.VISITAS))
