@@ -4,6 +4,7 @@ import { colors, fonts } from '../../../theme/default.styles'
 import { base_url } from '@gcMobile/components/Auth/constants'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { LOCAL_STORAGE } from '@gcMobile/util/constants'
 
 export const saveToken = async (tokenData: string) => {
     try {
@@ -23,7 +24,7 @@ export const handleLinkPress = () => {
 }
 export const logout = async () => {
     const response = await fetch(`${base_url}/?logout`, {})
-    AsyncStorage.removeItem('user_credentials')
+    AsyncStorage.removeItem(LOCAL_STORAGE.USER_CREDENTIALS)
     if (response.status === 200) {
         return true
     }
