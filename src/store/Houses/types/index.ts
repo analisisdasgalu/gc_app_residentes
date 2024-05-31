@@ -1,9 +1,10 @@
-import { IHouseManagement } from "@gcMobile/screens/HouseScreen/conts";
+import { IHouseManagement } from '@gcMobile/screens/HouseScreen/conts'
 
 export type HousesSlice = {
-	houses: IHouseManagement[];
-	currentResidence: string;
-	currentHouseId: number;
-	currentHouseInstalacion: string;
-	currentHouseManzana: string;
-};
+    houses: IHouseManagement[]
+    recintoId: number
+    currentResidence: string
+    currentHouseId: number
+    currentHouseInstalacion: string
+    currentHouseManzana: string
+}

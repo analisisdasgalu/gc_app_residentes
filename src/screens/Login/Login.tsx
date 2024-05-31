@@ -28,6 +28,7 @@ import { RootState } from '@gcMobile/store'
 import { LOCAL_STORAGE } from '@gcMobile/util/constants'
 import { registerDeviceId } from '@gcMobile/store/Notificaciones/api'
 import { registerForPushNotificationsAsync } from '@gcMobile/util/'
+import { getRecintoId } from '@gcMobile/store/Houses/api'
 
 interface INavigationProps {
     navigation: any
@@ -117,6 +118,8 @@ export default function LoginScreen({ navigation }: INavigationProps) {
             dispatch(setHouse(instalaciones as unknown as IHouseManagement[]))
             const _house = instalaciones.split(',')[0]
             const defaultHouse = data.find((inst: IHouseManagement) => `${inst.id}` === _house)
+            const rawRecinto = await getRecintoId(defaultHouse.id)
+            const { id_recinto } = await rawRecinto.json()
             dispatch(setHouse(data))
             dispatch(
                 setCurrentHouseInfo({
@@ -126,6 +129,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                     currentHouseManzana: defaultHouse.manzana || '',
                 })
             )
+            return id_recinto
         } catch (error) {
             console.error('Error Instalaciones ======>', error)
             Toast.show({
@@ -161,7 +165,8 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                 })
                 return
             }
-            await queryInstalaciones(instalaciones)
+            const recintoId = await queryInstalaciones(instalaciones)
+
             saveIntoAsyncStorage({
                 access_token,
                 userName: name,
@@ -171,7 +176,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                 instalaciones,
                 customerCode: code,
                 password,
-                recintoId: '1', // -- should be retrieved from login response
+                recintoId,
             })
             dispatch(setLoading(false))
             navigation.dispatch(StackActions.replace(VIEWS.VISITAS))
