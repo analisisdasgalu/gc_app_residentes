@@ -19,7 +19,7 @@ import { buttonComponentStyles } from '@gcMobile/components/Button/constants'
 import { colors } from '@gcMobile/theme/default.styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserData } from '@gcMobile/store/User'
-import { setCurrentHouseInfo, setHouse } from '@gcMobile/store/Houses'
+import { setCurrentHouseInfo, setHouse, setRecintoId } from '@gcMobile/store/Houses'
 import { IHouseManagement, styles } from '../HouseScreen/conts'
 import { setLoading } from '@gcMobile/store/UI'
 import { VIEWS } from '@gcMobile/navigation/constants'
@@ -109,6 +109,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                 id: data.userId,
             })
         )
+        dispatch(setRecintoId(Number.parseInt(data.recintoId || '0', 10)))
     }
 
     const queryInstalaciones = async (instalaciones: string) => {

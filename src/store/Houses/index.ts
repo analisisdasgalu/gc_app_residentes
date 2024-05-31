@@ -38,5 +38,5 @@ const houseSlice = createSlice({
     },
 })
 
-export const { setHouse, setCurrentHouseInfo } = houseSlice.actions
+export const { setHouse, setCurrentHouseInfo, setRecintoId } = houseSlice.actions
 export default houseSlice.reducer
