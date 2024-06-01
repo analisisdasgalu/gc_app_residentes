@@ -34,25 +34,25 @@ export default function App() {
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <NavigationContainer>
-                    <Header
-                        leftComponent={<Menu />}
-                        containerStyle={{
-                            backgroundColor: colors.blue,
-                            justifyContent: 'space-around',
-                            height: 120,
-                        }}
-                        centerComponent={{
-                            text: 'Gestion y Control',
-                            style: { color: '#fff', marginTop: '25%', fontWeight: 'bold' },
-                        }}
-                    />
-                    <AlertNotificationRoot theme="light">
-                        <Loader>
+                <AlertNotificationRoot theme="light">
+                    <Loader>
+                        <NavigationContainer>
+                            <Header
+                                leftComponent={<Menu />}
+                                containerStyle={{
+                                    backgroundColor: colors.blue,
+                                    justifyContent: 'space-around',
+                                    height: 90,
+                                }}
+                                centerComponent={{
+                                    text: 'GESTIÓN Y CONTROL',
+                                    style: { color: '#fff', marginTop: '3%', fontWeight: 'bold' },
+                                }}
+                            />
                             <NavigationStack />
-                        </Loader>
-                    </AlertNotificationRoot>
-                </NavigationContainer>
+                        </NavigationContainer>
+                    </Loader>
+                </AlertNotificationRoot>
             </PersistGate>
         </Provider>
     )

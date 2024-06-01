@@ -7534,7 +7534,7 @@ prompts@^2.3.2, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@*, prop-types@15.8.1, prop-types@^15.5.10:
+prop-types@*, prop-types@15.8.1, prop-types@^15.5.10, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -7675,6 +7675,13 @@ react-native-alert-notification@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/react-native-alert-notification/-/react-native-alert-notification-0.4.0.tgz#8acddab483b42d3e2addb1031128a2a3bf1dc649"
   integrity sha512-zzbzoAIFfyMD/IKTyD6W3RRuUUx2BBZsVPTASnAfJ10P++EEnCDhVa510BIOgqNepG+08VQ/xma0DNbGO189ww==
+
+react-native-animatable@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.4.0.tgz#05a259e1566081ce7d3f6fba1e92edc65f5c6160"
+  integrity sha512-DZwaDVWm2NBvBxf7I0wXKXLKb/TxDnkV53sWhCvei1pRyTX3MVFpkvdYBknNBqPrxYuAIlPxEp7gJOidIauUkw==
+  dependencies:
+    prop-types "^15.8.1"
 
 react-native-calendars@^1.1303.0:
   version "1.1305.0"
