@@ -51,14 +51,24 @@ const Filter = ({ filters, handleFilters }: FilterProps) => {
 
     return (
         <View style={FilterStyles.container}>
-            <View style={FilterStyles.filterControls}>
-                <TouchableOpacity onPress={handleDrawer}>
-                    {!drawerOpen && <AntDesign name="up" size={24} color="black" />}
-                    {drawerOpen && <AntDesign name="down" size={24} color="black" />}
-                </TouchableOpacity>
+            <View style={FilterStyles.filterHeaderContainer}>
+                <View style={{ width: '50%', justifyContent: 'center', flexDirection: 'row' }}>
+                    {selectedFilter.map((_, index) => (
+                        <View style={{ backgroundColor: colorFilters[index], width: 20, margin: 5, borderRadius: 50 }}>
+                            {''}
+                        </View>
+                    ))}
+                </View>
+                <View style={FilterStyles.filterControls}>
+                    <TouchableOpacity onPress={handleDrawer}>
+                        {!drawerOpen && <AntDesign name="up" size={24} color="black" />}
+                        {drawerOpen && <AntDesign name="down" size={24} color="black" />}
+                    </TouchableOpacity>
+                </View>
             </View>
             <Animatable.View
                 animation={drawerOpen ? drawerAnim : drawerAnimReverse}
+                duration={500}
                 style={[FilterStyles.filterContainer, { height: !drawerOpen ? 0 : 120, overflow: 'hidden' }]}
             >
                 {filters?.map((filter: TipoVisita, index: number) => (
@@ -68,6 +78,7 @@ const Filter = ({ filters, handleFilters }: FilterProps) => {
                             height: 40,
                             borderRadius: 30,
                             paddingHorizontal: 10,
+                            marginTop: 15,
                             marginHorizontal: 1,
                             backgroundColor: selectedFilter.includes(`${filter.id}`)
                                 ? colorFilters[index]

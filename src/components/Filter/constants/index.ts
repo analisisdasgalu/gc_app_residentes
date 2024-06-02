@@ -5,16 +5,24 @@ export const FilterStyles = StyleSheet.create({
     container: {
         width: '100%',
     },
+    filterHeaderContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        backgroundColor: colors.white,
+        borderBottomColor: colors.lightGray,
+        borderBottomWidth: 1,
+    },
     filterContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '100%',
         paddingHorizontal: '10%',
         paddingTop: 5,
-        backgroundColor: colors.red,
+        backgroundColor: colors.white,
     },
     filterControls: {
         flexDirection: 'row',
+        width: '50%',
         justifyContent: 'flex-end',
         paddingRight: 10,
         paddingTop: 5,
