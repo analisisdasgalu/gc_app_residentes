@@ -4,11 +4,15 @@ import { ViewStyle } from 'react-native'
 export type NotificationItemProps = {
     title: string
     date: string
+    body: string
 }
 
 export const container: ViewStyle = {
-    width: '100%',
+    width: '98%',
     backgroundColor: colors.white,
+    borderColor: colors.lightGray,
+    borderWidth: 1,
+    margin: 10,
 }
 
 export const titleContainer: ViewStyle = {

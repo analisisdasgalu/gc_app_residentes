@@ -6,4 +6,5 @@ export const VIEWS = {
     MENU: 'Menu',
     HOUSE_MANAGEMENT: 'HouseManagement',
     NOTIFICACIONES: 'Notificaciones',
+    READ_NOTIFICATION: 'ReadNotification',
 }
