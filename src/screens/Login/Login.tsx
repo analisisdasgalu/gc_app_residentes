@@ -29,6 +29,7 @@ import { LOCAL_STORAGE } from '@gcMobile/util/constants'
 import { registerDeviceId } from '@gcMobile/store/Notificaciones/api'
 import { registerForPushNotificationsAsync } from '@gcMobile/util/'
 import { getRecintoId } from '@gcMobile/store/Houses/api'
+import { addBadgeCount } from '@gcMobile/store/Notificaciones'
 
 interface INavigationProps {
     navigation: any
@@ -51,6 +52,7 @@ type LocalStoredData = {
 
 export default function LoginScreen({ navigation }: INavigationProps) {
     const dispatch = useDispatch()
+    const ref = React.useRef<any>()
     const { emailStyles, setEmailStyles, passwordStyles, setPasswordStyles, clicked, setClicked } = useStyles()
     const { isLoading } = useSelector((state: RootState) => state.uiReducer)
     //user data
@@ -72,6 +74,13 @@ export default function LoginScreen({ navigation }: INavigationProps) {
             .catch((error: any) => {
                 console.error(error)
             })
+
+        ref.current = Notifications.addNotificationReceivedListener((notification) => {
+            console.log('--- notification received ---')
+            console.log(notification)
+            console.log('------')
+            dispatch(addBadgeCount())
+        })
     }, [])
 
     const getInputValue = (value?: string) => {
