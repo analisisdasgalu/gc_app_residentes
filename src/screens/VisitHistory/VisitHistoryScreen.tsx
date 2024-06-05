@@ -14,8 +14,10 @@ export default function VisitHistoryScreen() {
     const { visitas } = useSelector((state: RootState) => state.historicoVisitasReducer)
 
     useEffect(() => {
-        dispatch(getHistoricoVisitas({ idInstalacion: currentHouseId, email }) as any)
-    }, [currentHouseId])
+        if (![''].includes(email)) {
+            dispatch(getHistoricoVisitas({ idInstalacion: currentHouseId, email }) as any)
+        }
+    }, [currentHouseId, email])
 
     return (
         <View style={visitorHistoryStyles.background}>

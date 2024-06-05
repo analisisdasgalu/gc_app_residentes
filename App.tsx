@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { StyleSheet } from 'react-native'
-import { Provider, useDispatch } from 'react-redux'
+import { Provider } from 'react-redux'
 import * as Notifications from 'expo-notifications'
 import { Header } from 'react-native-elements'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -11,6 +11,7 @@ import Menu from '@gcMobile/components/Menu'
 import { colors } from '@gcMobile/theme/default.styles'
 import { store, persistor } from '@gcMobile/store'
 import Loader from '@gcMobile/components/Loader'
+import { NotificationBadge } from '@gcMobile/components/NotificationsBadge/NotificationBadge'
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -21,38 +22,29 @@ Notifications.setNotificationHandler({
 })
 
 export default function App() {
-    const ref = React.useRef<any>()
-
-    useEffect(() => {
-        ref.current = Notifications.addNotificationReceivedListener((notification) => {
-            console.log('--- notification received ---')
-            console.log(notification)
-            console.log('------')
-        })
-    }, [])
-
     return (
         <Provider store={store}>
             <PersistGate persistor={persistor}>
-                <NavigationContainer>
-                    <Header
-                        leftComponent={<Menu />}
-                        containerStyle={{
-                            backgroundColor: colors.blue,
-                            justifyContent: 'space-around',
-                            height: 120,
-                        }}
-                        centerComponent={{
-                            text: 'Gestion y Control',
-                            style: { color: '#fff', marginTop: '25%', fontWeight: 'bold' },
-                        }}
-                    />
-                    <AlertNotificationRoot theme="light">
-                        <Loader>
+                <AlertNotificationRoot theme="light">
+                    <Loader>
+                        <NavigationContainer>
+                            <Header
+                                leftComponent={<Menu />}
+                                rightComponent={<NotificationBadge />}
+                                containerStyle={{
+                                    backgroundColor: colors.blue,
+                                    justifyContent: 'space-around',
+                                    height: 90,
+                                }}
+                                centerComponent={{
+                                    text: 'GESTIÓN Y CONTROL',
+                                    style: { color: '#fff', marginTop: '3%', fontWeight: 'bold' },
+                                }}
+                            />
                             <NavigationStack />
-                        </Loader>
-                    </AlertNotificationRoot>
-                </NavigationContainer>
+                        </NavigationContainer>
+                    </Loader>
+                </AlertNotificationRoot>
             </PersistGate>
         </Provider>
     )

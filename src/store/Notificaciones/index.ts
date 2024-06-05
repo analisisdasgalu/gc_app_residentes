@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { DevicesType } from './types'
+import { DevicesType, NotificacionesAvisos } from './types'
 
 const initialState: DevicesType = {
     recintoId: '',
     deviceId: '',
+    badgeCount: 0,
+    avisos: [],
 }
 
 const notificacionesSlice = createSlice({
@@ -14,7 +16,16 @@ const notificacionesSlice = createSlice({
             state.recintoId = action.payload.recintoId
             state.deviceId = action.payload.deviceId
         },
+        addBadgeCount(state) {
+            state.badgeCount += 1
+        },
+        clearBadgeCount(state) {
+            state.badgeCount = 0
+        },
+        setAvisos(state, action: PayloadAction<NotificacionesAvisos[]>) {
+            state.avisos = action.payload
+        },
     },
 })
-export const { setDevices } = notificacionesSlice.actions
+export const { setDevices, addBadgeCount, clearBadgeCount, setAvisos } = notificacionesSlice.actions
 export default notificacionesSlice.reducer

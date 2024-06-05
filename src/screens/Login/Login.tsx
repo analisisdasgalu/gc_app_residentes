@@ -19,7 +19,7 @@ import { buttonComponentStyles } from '@gcMobile/components/Button/constants'
 import { colors } from '@gcMobile/theme/default.styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUserData } from '@gcMobile/store/User'
-import { setCurrentHouseInfo, setHouse } from '@gcMobile/store/Houses'
+import { setCurrentHouseInfo, setHouse, setRecintoId } from '@gcMobile/store/Houses'
 import { IHouseManagement, styles } from '../HouseScreen/conts'
 import { setLoading } from '@gcMobile/store/UI'
 import { VIEWS } from '@gcMobile/navigation/constants'
@@ -28,6 +28,8 @@ import { RootState } from '@gcMobile/store'
 import { LOCAL_STORAGE } from '@gcMobile/util/constants'
 import { registerDeviceId } from '@gcMobile/store/Notificaciones/api'
 import { registerForPushNotificationsAsync } from '@gcMobile/util/'
+import { getRecintoId } from '@gcMobile/store/Houses/api'
+import { addBadgeCount } from '@gcMobile/store/Notificaciones'
 
 interface INavigationProps {
     navigation: any
@@ -50,6 +52,7 @@ type LocalStoredData = {
 
 export default function LoginScreen({ navigation }: INavigationProps) {
     const dispatch = useDispatch()
+    const ref = React.useRef<any>()
     const { emailStyles, setEmailStyles, passwordStyles, setPasswordStyles, clicked, setClicked } = useStyles()
     const { isLoading } = useSelector((state: RootState) => state.uiReducer)
     //user data
@@ -71,6 +74,13 @@ export default function LoginScreen({ navigation }: INavigationProps) {
             .catch((error: any) => {
                 console.error(error)
             })
+
+        ref.current = Notifications.addNotificationReceivedListener((notification) => {
+            console.log('--- notification received ---')
+            console.log(notification)
+            console.log('------')
+            dispatch(addBadgeCount())
+        })
     }, [])
 
     const getInputValue = (value?: string) => {
@@ -106,8 +116,10 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                 email: data.userEmail,
                 name: data.userName,
                 id: data.userId,
+                recintoId: data.recintoId || '0',
             })
         )
+        dispatch(setRecintoId(Number.parseInt(data.recintoId || '0', 10)))
     }
 
     const queryInstalaciones = async (instalaciones: string) => {
@@ -117,6 +129,8 @@ export default function LoginScreen({ navigation }: INavigationProps) {
             dispatch(setHouse(instalaciones as unknown as IHouseManagement[]))
             const _house = instalaciones.split(',')[0]
             const defaultHouse = data.find((inst: IHouseManagement) => `${inst.id}` === _house)
+            const rawRecinto = await getRecintoId(defaultHouse.id)
+            const res = await rawRecinto.json()
             dispatch(setHouse(data))
             dispatch(
                 setCurrentHouseInfo({
@@ -126,6 +140,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                     currentHouseManzana: defaultHouse.manzana || '',
                 })
             )
+            return res[0]?.id_recinto
         } catch (error) {
             console.error('Error Instalaciones ======>', error)
             Toast.show({
@@ -161,7 +176,8 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                 })
                 return
             }
-            await queryInstalaciones(instalaciones)
+            const recintoId = await queryInstalaciones(instalaciones)
+
             saveIntoAsyncStorage({
                 access_token,
                 userName: name,
@@ -171,7 +187,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                 instalaciones,
                 customerCode: code,
                 password,
-                recintoId: '1', // -- should be retrieved from login response
+                recintoId,
             })
             dispatch(setLoading(false))
             navigation.dispatch(StackActions.replace(VIEWS.VISITAS))
