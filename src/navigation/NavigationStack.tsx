@@ -25,8 +25,8 @@ const NavigationStack = () => {
                     headerTitleStyle: { fontFamily: 'Roboto', fontSize: 16, color: colors.darkGray, marginTop: 0 },
                 }}
             >
-                <Stack.Screen name={VIEWS.LOGIN} component={LoginScreen} options={{ title: '' }} />
-                <Stack.Screen name={VIEWS.CREATE_VISITA} component={Form} options={{ title: '' }} />
+                <Stack.Screen name={VIEWS.LOGIN} component={LoginScreen} options={{ title: '', headerShown: false }} />
+                <Stack.Screen name={VIEWS.CREATE_VISITA} component={Form} options={{ title: '', headerShown: false }} />
                 <Stack.Screen
                     name={VIEWS.VISITAS}
                     component={VisitsScreen}

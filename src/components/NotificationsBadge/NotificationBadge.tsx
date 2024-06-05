@@ -36,10 +36,6 @@ export const NotificationBadge = () => {
         navigation.navigate(VIEWS.NOTIFICACIONES as never)
     }
 
-    useEffect(() => {
-        console.log('badgeCount ====>', badgeCount)
-    }, [badgeCount])
-
     return (
         <>
             {access_token != '' && (

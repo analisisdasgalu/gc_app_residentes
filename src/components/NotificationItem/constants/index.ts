@@ -10,9 +10,10 @@ export type NotificationItemProps = {
 export const container: ViewStyle = {
     width: '98%',
     backgroundColor: colors.white,
-    borderColor: colors.lightGray,
-    borderWidth: 1,
-    margin: 10,
+    // borderColor: colors.lightGray,
+    // borderWidth: 1,
+    margin: 5,
+    elevation: 1,
 }
 
 export const titleContainer: ViewStyle = {

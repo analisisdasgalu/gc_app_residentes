@@ -9,12 +9,10 @@ export const getHistoricoVisitas =
     ({ idInstalacion, email }: { idInstalacion: number; email: string }) =>
     (dispatch: any) => {
         const url = stringTemplateAddQuery(`${base_url}${ENDPOINTS.VISITAS.HISTORIC}`, { idInstalacion, email })
-        console.log('getHistoricoVisitas url ====>', url)
         dispatch(setLoading(true))
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
-                console.log('Historic visitas =====>', data)
                 if (!Object.keys(data).includes('message')) {
                     dispatch(setHistoricVisitas(data as unknown as VisitaHistorica[]))
                 }

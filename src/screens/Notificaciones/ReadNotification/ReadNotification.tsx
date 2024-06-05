@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { ReadNotificationProps, readNotification, readNotificationBody, readNotificationHeader } from '../constants'
 import { colors, fonts } from '@gcMobile/theme/default.styles'
+import { sanitizeString } from '@gcMobile/util'
 
 export const ReadNotification = ({ route, navigation }: any) => {
     const { title, body } = route.params
@@ -32,11 +33,7 @@ export const ReadNotification = ({ route, navigation }: any) => {
                         },
                     ]}
                 >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui, debitis recusandae in ut quibusdam
-                    voluptatem est illum at saepe maiores harum officia nobis, quaerat similique rerum sit asperiores
-                    veritatis cupiditate! Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus eveniet
-                    accusamus culpa, eum totam beatae corrupti illum quis incidunt deleniti alias atque laboriosam porro
-                    autem voluptas iure minima? Magni, dolorum.
+                    {sanitizeString(body)}
                 </Text>
             </View>
         </View>

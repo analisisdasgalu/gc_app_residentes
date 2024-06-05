@@ -116,6 +116,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                 email: data.userEmail,
                 name: data.userName,
                 id: data.userId,
+                recintoId: data.recintoId || '0',
             })
         )
         dispatch(setRecintoId(Number.parseInt(data.recintoId || '0', 10)))
@@ -129,7 +130,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
             const _house = instalaciones.split(',')[0]
             const defaultHouse = data.find((inst: IHouseManagement) => `${inst.id}` === _house)
             const rawRecinto = await getRecintoId(defaultHouse.id)
-            const { id_recinto } = await rawRecinto.json()
+            const res = await rawRecinto.json()
             dispatch(setHouse(data))
             dispatch(
                 setCurrentHouseInfo({
@@ -139,7 +140,7 @@ export default function LoginScreen({ navigation }: INavigationProps) {
                     currentHouseManzana: defaultHouse.manzana || '',
                 })
             )
-            return id_recinto
+            return res[0]?.id_recinto
         } catch (error) {
             console.error('Error Instalaciones ======>', error)
             Toast.show({

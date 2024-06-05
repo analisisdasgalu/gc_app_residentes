@@ -17,7 +17,6 @@ export const readNotification: ViewStyle = {
 export const container: ViewStyle = {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
 }
 
 export const readNotificationHeader: ViewStyle = {
