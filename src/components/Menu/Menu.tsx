@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native'
 import { Entypo } from '@expo/vector-icons'
 import { colors } from '@gcMobile/theme/default.styles'
@@ -27,6 +27,13 @@ export const Menu = () => {
     const navigation = useNavigation()
     const [open, setOpen] = React.useState<boolean>(false)
     const { access_token } = useSelector((state: RootState) => state.userReducer)
+
+    useEffect(
+        () => () => {
+            setOpen(false)
+        },
+        []
+    )
 
     const onPress = () => {
         setOpen((prev) => !prev)
