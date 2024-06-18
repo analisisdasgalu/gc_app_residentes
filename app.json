@@ -1,38 +1,36 @@
 {
-  "expo": {
-    "name": "gcMobile",
-    "slug": "gcMobile",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.mfuentes1992.gcMobile"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.mfuentes1992.gcMobile"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "f286a13d-946a-402c-82de-07fb356674b2"
-      }
-    },
-    "owner": "mfuentes1992"
-  }
+    "expo": {
+        "name": "gcMobile",
+        "slug": "gcMobile",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/favicon_dasgalu_gc.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff"
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "com.mfuentes1992.gcMobile"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/favicon_dasgalu_gc.png",
+                "backgroundColor": "#ffffff"
+            },
+            "package": "com.mfuentes1992.gcMobile"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        },
+        "extra": {
+            "eas": {
+                "projectId": "f286a13d-946a-402c-82de-07fb356674b2"
+            }
+        },
+        "owner": "mfuentes1992"
+    }
 }
