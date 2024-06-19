@@ -33,8 +33,22 @@ export const readNotificationBody: ViewStyle = {
     width: '100%',
     height: '85%',
     padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     // alignItems: 'center',
     backgroundColor: 'white',
+}
+export const readNotificationAttachments: ViewStyle = {
+    width: '100%',
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    // alignItems: 'center',
+    backgroundColor: 'white',
+}
+
+export const AttachmentIcon: any = {
+    marginLeft: '2%',
+    fontSize: 24,
+    color: colors.gray,
 }
