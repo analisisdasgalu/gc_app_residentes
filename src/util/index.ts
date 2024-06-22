@@ -6,6 +6,7 @@ import { Alert, PermissionsAndroid, Platform } from 'react-native'
 import RNFetchBlob from 'rn-fetch-blob'
 import { CameraRoll } from '@react-native-camera-roll/camera-roll'
 import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
+import Share from 'react-native-share'
 
 export const getTipoVisitaIcon = (tipo_visita: string) => {
     const { catalogVisitas } = useSelector((state: RootState) => state.tipoVisitas)
@@ -146,5 +147,13 @@ export const saveToCameraRoll = async (url: string, message: string) => {
             type: ALERT_TYPE.DANGER,
             textBody: 'No se pudo guardar la imagen',
         })
+    }
+}
+
+export const onShareFile = async (uri: string) => {
+    try {
+        await Share.open({ url: uri, showAppsToView: true, saveToFiles: true })
+    } catch (error) {
+        console.log(error)
     }
 }

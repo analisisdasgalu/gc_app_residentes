@@ -9,6 +9,7 @@ import { VIEWS } from '@gcMobile/navigation/constants'
 import Notificaciones from '@gcMobile/screens/Notificaciones/'
 import { ReadNotification } from '@gcMobile/screens/Notificaciones/ReadNotification/ReadNotification'
 import { colors } from '@gcMobile/theme/default.styles'
+import { PDFViewer } from '@gcMobile/screens/PDFViewer/PDFViewer'
 
 const NavigationStack = () => {
     const Stack = createStackNavigator()
@@ -41,6 +42,7 @@ const NavigationStack = () => {
                     component={ReadNotification}
                     options={{ title: 'Consulta Aviso.' }}
                 />
+                <Stack.Screen name={VIEWS.PDF_VIEWER} component={PDFViewer} options={{ title: '' }} />
             </Stack.Group>
         </Stack.Navigator>
     )

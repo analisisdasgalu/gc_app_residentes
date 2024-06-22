@@ -3,29 +3,60 @@ import { View, Text } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import {
     AttachmentIcon,
+    IconStyle,
+    fileLabelStyle,
     readNotification,
     readNotificationAttachments,
     readNotificationBody,
     readNotificationHeader,
 } from '../constants'
 import { colors, fonts } from '@gcMobile/theme/default.styles'
-import { sanitizeString, saveToCameraRoll } from '@gcMobile/util'
+import { onShareFile, sanitizeString, saveToCameraRoll } from '@gcMobile/util'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { VIEWS } from '@gcMobile/navigation/constants'
+import RNFetchBlob from 'rn-fetch-blob'
+import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
 
 export const ReadNotification = ({ route, navigation }: any) => {
     const { title, body } = route.params
-    const attachment = 'avisos/1_6_6669f5dc532b4.pdf'
+    const [base64Uri, setBase64Uri] = React.useState<string>('')
+    const baseUrl = 'https://gcdemo.dasgalu.net/'
+    const attachment = 'avisos/1_5_6667453b2c291.pdf'
 
-    const handleAttachFile = (uri: string, url: string) => {
+    const handleAttachFile = (uri: string, fileName: string) => {
         const imageRegex = /\.(jpeg|jpg|gif|png)$/
-        const docRegex = /\.(pdf|doc|docx|xls|xlsx)$/
-        if (uri.match(imageRegex)) {
-            saveToCameraRoll(url, 'Imagen guardada en galería')
-        } else if (uri.match(docRegex)) {
-            // -- saveToCameraRoll(uri, 'Documento guardado en galería')
-            console.log('Document detected')
+        const docRegex = /\.(pdf)$/
+        if (fileName.match(imageRegex)) {
+            saveToCameraRoll(`${baseUrl}${attachment}`, 'Imagen guardada en galería')
+        } else if (uri.match(docRegex) && base64Uri !== '') {
+            navigation.navigate(VIEWS.PDF_VIEWER, { uri: base64Uri })
         }
     }
+
+    const urlFileToUri = (url: string) => {
+        try {
+            RNFetchBlob.config({
+                fileCache: true,
+                appendExt: 'pdf',
+            })
+                .fetch('GET', url)
+                .then((res) => {
+                    setBase64Uri(res.path())
+                })
+                .catch((error) => console.log(error))
+        } catch (error) {
+            Toast.show({
+                type: ALERT_TYPE.DANGER,
+                textBody: 'No se pudo obtener el archivo.',
+            })
+        }
+    }
+
+    React.useEffect(() => {
+        if (base64Uri === '') {
+            urlFileToUri(`${baseUrl}${attachment}`)
+        }
+    }, [])
 
     return (
         <View style={readNotification}>
@@ -58,39 +89,21 @@ export const ReadNotification = ({ route, navigation }: any) => {
                         {sanitizeString(body)}
                     </Text>
                 </View>
-                <TouchableOpacity
-                    style={readNotificationAttachments}
-                    onPress={() =>
-                        handleAttachFile(attachment, 'https://gcdemo.dasgalu.net/avisos/1_6_6669f5dc532b4.png')
-                    }
-                >
-                    <Text
-                        style={[
-                            {
-                                fontFamily: 'Roboto',
-                                fontSize: fonts.bodyText2,
-                                fontWeight: '200',
-                                color: colors.darkGray,
-                            },
-                        ]}
-                    >
-                        <FontAwesome name="paperclip" style={AttachmentIcon} />
-                    </Text>
-                    <Text
-                        style={[
-                            {
-                                fontFamily: 'Roboto',
-                                fontSize: fonts.bodyText3,
-                                fontWeight: '100',
-                                color: colors.darkGray,
-                                marginLeft: '2%',
-                                paddingTop: 5,
-                            },
-                        ]}
-                    >
-                        {attachment.split('/')[1]}
-                    </Text>
-                </TouchableOpacity>
+                {base64Uri !== '' && (
+                    <View style={readNotificationAttachments}>
+                        <TouchableOpacity onPress={() => handleAttachFile(base64Uri, attachment)}>
+                            <Text style={IconStyle}>
+                                <FontAwesome name="paperclip" style={AttachmentIcon} />
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => onShareFile(base64Uri)}>
+                            <Text>
+                                <FontAwesome name="download" style={AttachmentIcon} />
+                            </Text>
+                        </TouchableOpacity>
+                        <Text style={fileLabelStyle}>{attachment.split('/')[1]}</Text>
+                    </View>
+                )}
             </View>
         </View>
     )
