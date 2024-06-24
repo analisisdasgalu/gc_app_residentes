@@ -39,7 +39,7 @@ export const readNotificationBody: ViewStyle = {
     backgroundColor: 'white',
 }
 export const readNotificationAttachments: ViewStyle = {
-    width: '60%',
+    width: '80%',
     padding: 10,
     marginTop: 10,
     flexDirection: 'row',

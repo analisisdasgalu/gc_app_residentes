@@ -152,7 +152,7 @@ export const saveToCameraRoll = async (url: string, message: string) => {
 
 export const onShareFile = async (uri: string) => {
     try {
-        await Share.open({ url: uri, showAppsToView: true, saveToFiles: true })
+        await Share.open({ url: Platform.OS === 'android' ? `file://${uri}` : uri, saveToFiles: true })
     } catch (error) {
         console.log(error)
     }

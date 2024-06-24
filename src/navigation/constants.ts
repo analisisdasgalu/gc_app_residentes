@@ -10,4 +10,5 @@ export const VIEWS = {
     NOTIFICACIONES: 'Notificaciones',
     READ_NOTIFICATION: 'ReadNotification',
     PDF_VIEWER: 'PDFViewer',
+    ATTACH_IMAGE_VIEWER: 'ImageViewer',
 }

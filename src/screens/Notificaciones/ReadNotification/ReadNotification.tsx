@@ -21,23 +21,25 @@ export const ReadNotification = ({ route, navigation }: any) => {
     const { title, body } = route.params
     const [base64Uri, setBase64Uri] = React.useState<string>('')
     const baseUrl = 'https://gcdemo.dasgalu.net/'
-    const attachment = 'avisos/1_5_6667453b2c291.pdf'
+    // const attachment = 'avisos/1_5_6667453b2c291.pdf'
+    const attachment = 'avisos/1_6_6669f5dc532b4.png'
 
     const handleAttachFile = (uri: string, fileName: string) => {
         const imageRegex = /\.(jpeg|jpg|gif|png)$/
         const docRegex = /\.(pdf)$/
         if (fileName.match(imageRegex)) {
-            saveToCameraRoll(`${baseUrl}${attachment}`, 'Imagen guardada en galería')
+            // saveToCameraRoll(`${baseUrl}${attachment}`, 'Imagen guardada en galería')
+            navigation.navigate(VIEWS.ATTACH_IMAGE_VIEWER, { url: `${baseUrl}${attachment}` })
         } else if (uri.match(docRegex) && base64Uri !== '') {
             navigation.navigate(VIEWS.PDF_VIEWER, { uri: base64Uri })
         }
     }
 
-    const urlFileToUri = (url: string) => {
+    const urlFileToUri = (url: string, extension: string) => {
         try {
             RNFetchBlob.config({
                 fileCache: true,
-                appendExt: 'pdf',
+                appendExt: extension,
             })
                 .fetch('GET', url)
                 .then((res) => {
@@ -51,10 +53,12 @@ export const ReadNotification = ({ route, navigation }: any) => {
             })
         }
     }
-
     React.useEffect(() => {
         if (base64Uri === '') {
-            urlFileToUri(`${baseUrl}${attachment}`)
+            urlFileToUri(`${baseUrl}${attachment}`, attachment.split('.')[1])
+        }
+        return () => {
+            setBase64Uri('')
         }
     }, [])
 
@@ -98,7 +102,7 @@ export const ReadNotification = ({ route, navigation }: any) => {
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => onShareFile(base64Uri)}>
                             <Text>
-                                <FontAwesome name="download" style={AttachmentIcon} />
+                                <FontAwesome name="share" style={AttachmentIcon} />
                             </Text>
                         </TouchableOpacity>
                         <Text style={fileLabelStyle}>{attachment.split('/')[1]}</Text>
