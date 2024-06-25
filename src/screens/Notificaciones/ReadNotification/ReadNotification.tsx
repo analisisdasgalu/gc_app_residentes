@@ -1,6 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { colors, fonts } from '@gcMobile/theme/default.styles'
+import { onShareFile, sanitizeString } from '@gcMobile/util'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { VIEWS } from '@gcMobile/navigation/constants'
+import RNFetchBlob from 'rn-fetch-blob'
+import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
+import { base_web_server } from '@gcMobile/components/Auth/constants'
 import {
     AttachmentIcon,
     IconStyle,
@@ -10,26 +18,36 @@ import {
     readNotificationBody,
     readNotificationHeader,
 } from '../constants'
-import { colors, fonts } from '@gcMobile/theme/default.styles'
-import { onShareFile, sanitizeString, saveToCameraRoll } from '@gcMobile/util'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { VIEWS } from '@gcMobile/navigation/constants'
-import RNFetchBlob from 'rn-fetch-blob'
-import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
+import { RootState } from '@gcMobile/store'
+import { getAttachments } from '@gcMobile/store/Notificaciones/api'
 
 export const ReadNotification = ({ route, navigation }: any) => {
     const { title, body } = route.params
+    const dispatch = useDispatch()
     const [base64Uri, setBase64Uri] = React.useState<string>('')
-    const baseUrl = 'https://gcdemo.dasgalu.net/'
+    const [attachment, setAttachment] = React.useState<string>('')
+    const { attachments } = useSelector((state: RootState) => state.notificacionesReducer)
+    // const baseUrl = 'https://gcdemo.dasgalu.net/'
     // const attachment = 'avisos/1_5_6667453b2c291.pdf'
-    const attachment = 'avisos/1_6_6669f5dc532b4.png'
+    // const attachment = 'avisos/1_6_6669f5dc532b4.png'
+
+    useEffect(() => {
+        if (attachments.length === 0) {
+            dispatch(getAttachments('5') as any)
+        }
+        if (attachments.length > 0) {
+            const [firstElement] = attachments
+            const attachment = firstElement.nombre
+            setAttachment(attachment)
+            urlFileToUri(`${base_web_server}${attachment}`, attachment.split('.')[1])
+        }
+    }, [attachments])
 
     const handleAttachFile = (uri: string, fileName: string) => {
         const imageRegex = /\.(jpeg|jpg|gif|png)$/
         const docRegex = /\.(pdf)$/
         if (fileName.match(imageRegex)) {
-            // saveToCameraRoll(`${baseUrl}${attachment}`, 'Imagen guardada en galería')
-            navigation.navigate(VIEWS.ATTACH_IMAGE_VIEWER, { url: `${baseUrl}${attachment}` })
+            navigation.navigate(VIEWS.ATTACH_IMAGE_VIEWER, { url: `${base_web_server}${attachment}` })
         } else if (uri.match(docRegex) && base64Uri !== '') {
             navigation.navigate(VIEWS.PDF_VIEWER, { uri: base64Uri })
         }
@@ -53,14 +71,14 @@ export const ReadNotification = ({ route, navigation }: any) => {
             })
         }
     }
-    React.useEffect(() => {
+    /* React.useEffect(() => {
         if (base64Uri === '') {
-            urlFileToUri(`${baseUrl}${attachment}`, attachment.split('.')[1])
+            // urlFileToUri(`${baseUrl}${attachment}`, attachment.split('.')[1])
         }
         return () => {
             setBase64Uri('')
         }
-    }, [])
+    }, []) */
 
     return (
         <View style={readNotification}>
