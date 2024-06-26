@@ -49,6 +49,7 @@ export const getAttachments = (avisoId: string) => async (dispatch: any) => {
         dispatch(setLoading(true))
         const rawUrl = base_url + '/Notificaciones/avisos/adjuntos/index.php'
         const url = stringTemplateAddQuery(rawUrl, { avisoId })
+        console.log('url ====>', url)
         const requestOptions = {
             method: 'GET',
         }

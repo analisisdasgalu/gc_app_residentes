@@ -23,7 +23,13 @@ export const Notificaciones = () => {
         <SafeAreaView>
             <ScrollView contentContainerStyle={container}>
                 {avisos.map((item, index) => (
-                    <NotificationItem key={index} title={item.titulo} date={item.fecha} body={item.descripcion} />
+                    <NotificationItem
+                        key={index}
+                        id={item.id}
+                        title={item.titulo}
+                        date={item.fecha}
+                        body={item.descripcion}
+                    />
                 ))}
             </ScrollView>
         </SafeAreaView>

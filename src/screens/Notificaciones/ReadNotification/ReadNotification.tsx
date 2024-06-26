@@ -20,9 +20,10 @@ import {
 } from '../constants'
 import { RootState } from '@gcMobile/store'
 import { getAttachments } from '@gcMobile/store/Notificaciones/api'
+import { setAttachments } from '@gcMobile/store/Notificaciones'
 
 export const ReadNotification = ({ route, navigation }: any) => {
-    const { title, body } = route.params
+    const { id, title, body } = route.params
     const dispatch = useDispatch()
     const [base64Uri, setBase64Uri] = React.useState<string>('')
     const [attachment, setAttachment] = React.useState<string>('')
@@ -33,8 +34,14 @@ export const ReadNotification = ({ route, navigation }: any) => {
 
     useEffect(() => {
         if (attachments.length === 0) {
-            dispatch(getAttachments('5') as any)
+            dispatch(getAttachments(id) as any)
         }
+        return () => {
+            dispatch(setAttachments([]))
+        }
+    }, [])
+
+    useEffect(() => {
         if (attachments.length > 0) {
             const [firstElement] = attachments
             const attachment = firstElement.nombre
