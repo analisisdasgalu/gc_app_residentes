@@ -2,6 +2,11 @@ import { colorFilters } from '@gcMobile/components/Filter/constants'
 import { RootState } from '@gcMobile/store'
 import { useSelector } from 'react-redux'
 import Constants from 'expo-constants'
+import { Alert, PermissionsAndroid, Platform } from 'react-native'
+import RNFetchBlob from 'rn-fetch-blob'
+import { CameraRoll } from '@react-native-camera-roll/camera-roll'
+import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
+import Share from 'react-native-share'
 
 export const getTipoVisitaIcon = (tipo_visita: string) => {
     const { catalogVisitas } = useSelector((state: RootState) => state.tipoVisitas)
@@ -76,4 +81,79 @@ export const sanitizeString = (string: string) => {
     }
 
     return string.replace(/<b>|<\/b>|<i>|<\/i>|<br>|<br\/>|<br \/>|<p>|<\/p>/g, (tag) => replacements[tag])
+}
+
+const hasAndroidPermission = async () => {
+    const getCheckPermissionPromise = () => {
+        if (Platform.Version >= `33`) {
+            return Promise.all([
+                PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES),
+                PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO),
+            ]).then(
+                ([hasReadMediaImagesPermission, hasReadMediaVideoPermission]) =>
+                    hasReadMediaImagesPermission && hasReadMediaVideoPermission
+            )
+        } else {
+            return PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE)
+        }
+    }
+
+    const hasPermission = await getCheckPermissionPromise()
+    if (hasPermission) {
+        return true
+    }
+    const getRequestPermissionPromise = () => {
+        if (Platform.Version >= `33`) {
+            return PermissionsAndroid.requestMultiple([
+                PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+                PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+            ]).then((statuses) => {
+                console.log('statuses ====>', statuses)
+                return (
+                    statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] === PermissionsAndroid.RESULTS.GRANTED &&
+                    statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] === PermissionsAndroid.RESULTS.GRANTED
+                )
+            })
+        } else {
+            return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE).then(
+                (status) => status === PermissionsAndroid.RESULTS.GRANTED
+            )
+        }
+    }
+
+    return await getRequestPermissionPromise()
+}
+
+export const saveToCameraRoll = async (url: string, message: string) => {
+    if (Platform.OS === 'android' && !(await hasAndroidPermission())) {
+        return
+    }
+    try {
+        RNFetchBlob.config({
+            fileCache: true,
+            appendExt: 'png',
+        })
+            .fetch('GET', url)
+            .then((res) => {
+                CameraRoll.saveAsset(res.data, { type: 'photo' })
+                    .then(() => {
+                        Alert.alert('Informacion', message)
+                    })
+                    .catch((err: any) => console.log(err))
+            })
+            .catch((error) => console.log(error))
+    } catch (error) {
+        Toast.show({
+            type: ALERT_TYPE.DANGER,
+            textBody: 'No se pudo guardar la imagen',
+        })
+    }
+}
+
+export const onShareFile = async (uri: string) => {
+    try {
+        await Share.open({ url: Platform.OS === 'android' ? `file://${uri}` : uri, saveToFiles: true })
+    } catch (error) {
+        console.log(error)
+    }
 }

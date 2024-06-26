@@ -1,3 +1,5 @@
+import { PDFViewer } from '@gcMobile/screens/PDFViewer/PDFViewer'
+
 export const VIEWS = {
     LOGIN: 'Login',
     CREATE_VISITA: 'Form',
@@ -7,4 +9,6 @@ export const VIEWS = {
     HOUSE_MANAGEMENT: 'HouseManagement',
     NOTIFICACIONES: 'Notificaciones',
     READ_NOTIFICATION: 'ReadNotification',
+    PDF_VIEWER: 'PDFViewer',
+    ATTACH_IMAGE_VIEWER: 'ImageViewer',
 }

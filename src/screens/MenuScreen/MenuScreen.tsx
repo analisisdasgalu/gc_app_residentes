@@ -10,6 +10,7 @@ import { RootState } from '@gcMobile/store'
 import { cleanUserData, setUserData } from '@gcMobile/store/User'
 import { VIEWS } from '@gcMobile/navigation/constants'
 import { StackActions } from '@react-navigation/native'
+import { setMenuOpen } from '@gcMobile/store/UI'
 
 export const MenuScreen = ({ navigation }: MenuProps) => {
     const { currentHouseInstalacion, currentHouseManzana, currentResidence } = useSelector(
@@ -21,6 +22,7 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
     const handleLogout = async () => {
         const value = await logout()
         dispatch(cleanUserData())
+        dispatch(setMenuOpen(false))
         if (value) navigation.navigate(VIEWS.LOGIN as never)
     }
 
@@ -39,11 +41,25 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
                     </View>
                 </View>
             </View>
+            {/** Consulta de Avisos */}
+            <View style={styles.tenthHeight}>
+                <TouchableOpacity
+                    style={{ flexDirection: 'row' }}
+                    onPress={() => {
+                        dispatch(setMenuOpen(false))
+                        navigation.dispatch(StackActions.replace(VIEWS.NOTIFICACIONES))
+                    }}
+                >
+                    <FontAwesome name="bell-o" style={styles.iconStyles} />
+                    <Text style={styles.textStyles}>Avisos</Text>
+                </TouchableOpacity>
+            </View>
             {/** Consulta de casas */}
             <View style={styles.tenthHeight}>
                 <TouchableOpacity
                     style={{ flexDirection: 'row' }}
                     onPress={() => {
+                        dispatch(setMenuOpen(false))
                         navigation.dispatch(StackActions.replace(VIEWS.HOUSE_MANAGEMENT as never))
                     }}
                 >

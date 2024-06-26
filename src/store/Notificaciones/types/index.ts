@@ -1,3 +1,8 @@
+export type AttachmentsTypes = {
+    id: string
+    nombre: string
+}
+
 export type NotificacionesAvisos = {
     id: string
     titulo: string
@@ -11,4 +16,5 @@ export type DevicesType = {
     deviceId: string
     badgeCount: number
     avisos: NotificacionesAvisos[]
+    attachments: AttachmentsTypes[]
 }
