@@ -34,7 +34,7 @@ const NavigationStack = () => {
                     component={VisitsScreen}
                     options={{ title: 'Control de visitas.', headerShown: false }}
                 />
-                <Stack.Screen name={VIEWS.QR_DETAILS} component={QRDetails} options={{ title: '' }} />
+                <Stack.Screen name={VIEWS.QR_DETAILS} component={QRDetails} options={{ title: 'Detalle de QR.' }} />
                 <Stack.Screen name={VIEWS.MENU} component={MenuScreen} options={{ title: '', headerShown: false }} />
                 <Stack.Screen name={VIEWS.HOUSE_MANAGEMENT} component={HouseManagement} options={{ title: '' }} />
                 <Stack.Screen name={VIEWS.NOTIFICACIONES} component={Notificaciones} options={{ title: 'Avisos.' }} />
