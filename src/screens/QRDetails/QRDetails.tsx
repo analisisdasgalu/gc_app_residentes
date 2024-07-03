@@ -38,7 +38,7 @@ export const QRDetails = ({ route, navigation }: QRDetailsProps) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={{ flex: 0.4, alignItems: 'center', paddingTop: '10%' }}>
+            <View style={{ flex: 0.4, alignItems: 'center', paddingTop: '10%', marginBottom: '5%' }}>
                 <View
                     style={{
                         width: '60%',
