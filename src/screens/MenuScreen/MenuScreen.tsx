@@ -41,7 +41,7 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
                     </View>
                 </View>
             </View>
-            {/** Consulta de Avisos */}
+            {/** Consulta de notificaciones */}
             <View style={styles.tenthHeight}>
                 <TouchableOpacity
                     style={{ flexDirection: 'row' }}
@@ -51,6 +51,19 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
                     }}
                 >
                     <FontAwesome name="bell-o" style={styles.iconStyles} />
+                    <Text style={styles.textStyles}>Notificaciones</Text>
+                </TouchableOpacity>
+            </View>
+            {/** Consulta de Avisos */}
+            <View style={styles.tenthHeight}>
+                <TouchableOpacity
+                    style={{ flexDirection: 'row' }}
+                    onPress={() => {
+                        dispatch(setMenuOpen(false))
+                        navigation.dispatch(StackActions.replace(VIEWS.EDO_CUENTA as never))
+                    }}
+                >
+                    <MaterialCommunityIcons name="file-document-multiple-outline" style={styles.iconStyles} />
                     <Text style={styles.textStyles}>Avisos</Text>
                 </TouchableOpacity>
             </View>
@@ -65,19 +78,6 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
                 >
                     <FontAwesome name="building-o" style={styles.iconStyles} />
                     <Text style={styles.textStyles}>Consultar otra casa</Text>
-                </TouchableOpacity>
-            </View>
-            {/** Cambiar contrasenia */}
-            <View style={styles.tenthHeight}>
-                <TouchableOpacity
-                    style={{ flexDirection: 'row' }}
-                    onPress={() => {
-                        dispatch(setMenuOpen(false))
-                        navigation.dispatch(StackActions.replace(VIEWS.EDO_CUENTA as never))
-                    }}
-                >
-                    <MaterialCommunityIcons name="form-textbox-password" style={styles.iconStyles} />
-                    <Text style={styles.textStyles}>Avisos</Text>
                 </TouchableOpacity>
             </View>
             {/** Cambiar contrasenia */}
