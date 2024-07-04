@@ -69,6 +69,19 @@ export const MenuScreen = ({ navigation }: MenuProps) => {
             </View>
             {/** Cambiar contrasenia */}
             <View style={styles.tenthHeight}>
+                <TouchableOpacity
+                    style={{ flexDirection: 'row' }}
+                    onPress={() => {
+                        dispatch(setMenuOpen(false))
+                        navigation.dispatch(StackActions.replace(VIEWS.EDO_CUENTA as never))
+                    }}
+                >
+                    <MaterialCommunityIcons name="form-textbox-password" style={styles.iconStyles} />
+                    <Text style={styles.textStyles}>Avisos</Text>
+                </TouchableOpacity>
+            </View>
+            {/** Cambiar contrasenia */}
+            <View style={styles.tenthHeight}>
                 <TouchableOpacity style={{ flexDirection: 'row' }}>
                     <MaterialCommunityIcons name="form-textbox-password" style={styles.iconStyles} />
                     <Text style={styles.textStyles}>Cambiar contrasena</Text>
