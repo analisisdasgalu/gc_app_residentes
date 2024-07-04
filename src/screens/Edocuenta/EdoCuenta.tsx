@@ -12,6 +12,7 @@ import { EdoCuentaProps } from '@gcMobile/store/EdoCta/types'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '@gcMobile/store'
 import { getEstadosCuenta } from '@gcMobile/store/EdoCta/api'
+import { formatDate } from '@gcMobile/util'
 
 export const EdoCuenta = () => {
     const navigation = useNavigation<any>()
@@ -60,7 +61,7 @@ export const EdoCuenta = () => {
                 <NotificationItem
                     key={Math.random().toString(36).substring(7)}
                     title={item.titulo}
-                    date={item.fecha}
+                    date={formatDate(item.fecha).substring(0, 10)}
                     handlePress={() => handlePress(item.path)}
                 />
             ))}
