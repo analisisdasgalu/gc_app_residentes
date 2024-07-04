@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { container } from './constantes'
@@ -8,24 +8,32 @@ import { useNavigation } from '@react-navigation/native'
 import RNFetchBlob from 'rn-fetch-blob'
 import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
 import { base_web_server } from '@gcMobile/components/Auth/constants'
-
-type EdoCuentaProps = {
-    id: string
-    path: string
-    titulo: string
-    fecha: string
-}
+import { EdoCuentaProps } from '@gcMobile/store/EdoCta/types'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@gcMobile/store'
+import { getEstadosCuenta } from '@gcMobile/store/EdoCta/api'
 
 export const EdoCuenta = () => {
     const navigation = useNavigation<any>()
-    const [edoCuenta, setEdoCuenta] = React.useState<EdoCuentaProps[]>([
-        {
-            id: '1',
-            titulo: 'Estado de cuenta 1',
-            fecha: '2021-05-01',
-            path: 'estados_cuenta/1_202406A3.pdf',
-        },
-    ])
+    const dispatch = useDispatch()
+
+    const { currentHouseId } = useSelector((state: RootState) => state.houseReducer)
+    const userId = useSelector((state: RootState) => state.userReducer.id)
+    const { avisos } = useSelector((state: RootState) => state.estadoCuenta)
+
+    const [edoCuenta, setEdoCuenta] = React.useState<EdoCuentaProps[]>([])
+
+    useEffect(() => {
+        if (currentHouseId) {
+            dispatch(getEstadosCuenta(userId, currentHouseId.toString()) as any)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (avisos.length > 0) {
+            setEdoCuenta(avisos)
+        }
+    }, [avisos])
 
     const handlePress = (path: string) => {
         try {
