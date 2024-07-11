@@ -33,7 +33,7 @@ export const MenuScreen = () => {
             {/** Title row */}
             <View style={styles.residenceContainer}>
                 <View style={{ flexDirection: 'row' }}>
-                    <FontAwesome name="user-circle-o" style={styles.iconStyles} />
+                    {/* <FontAwesome name="user-circle-o" style={styles.iconStyles} /> */}
                     <View style={{ flexDirection: 'column' }}>
                         <Text style={styles.textStyles}>Asociacion de condominos - {currentResidence}</Text>
                         <View style={{ flexDirection: 'row' }}>
