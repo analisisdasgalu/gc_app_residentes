@@ -1,6 +1,6 @@
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons'
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
+import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons'
 import { View, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-elements'
 import { MenuProps, styles } from './constants'
@@ -58,7 +58,22 @@ export const MenuScreen = () => {
                     <Text style={styles.textStyles}>Estados de cuenta</Text>
                 </TouchableOpacity>
             </View>
-            {/** Consulta de Edo Cuenta */}
+            {/** Consulta de Recibos */}
+            <View style={styles.tenthHeight}>
+                <TouchableOpacity
+                    style={{ flexDirection: 'row' }}
+                    onPress={() => {
+                        dispatch(setMenuOpen(false))
+                        navigation.navigate({
+                            name: VIEWS.RECIBOS,
+                        } as never)
+                    }}
+                >
+                    <MaterialCommunityIcons name="credit-card-edit-outline" style={styles.iconStyles} />
+                    <Text style={styles.textStyles}>Recibos</Text>
+                </TouchableOpacity>
+            </View>
+            {/** Consulta de Avisos */}
             <View style={styles.tenthHeight}>
                 <TouchableOpacity
                     style={{ flexDirection: 'row' }}
