@@ -12,6 +12,7 @@ import { VIEWS } from '@gcMobile/navigation/constants'
 import { DrawerActions, StackActions, useNavigation } from '@react-navigation/native'
 import { setMenuOpen } from '@gcMobile/store/UI'
 import { DrawerContentScrollView } from '@react-navigation/drawer'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const MenuScreen = () => {
     const { currentHouseInstalacion, currentHouseManzana, currentResidence } = useSelector(
@@ -23,6 +24,7 @@ export const MenuScreen = () => {
 
     const handleLogout = async () => {
         const value = await logout()
+        AsyncStorage.clear()
         dispatch(cleanUserData())
         dispatch(setMenuOpen(false))
         if (value) navigation.navigate(VIEWS.LOGIN as never)

@@ -19,14 +19,16 @@ export const Recibos = () => {
     const { id } = useSelector((state: RootState) => state.userReducer)
 
     React.useEffect(() => {
-        dispatch(
-            getRecibos({
-                residenteId: id,
-                instalacionId: currentHouseId.toString(),
-                recintoId: recintoId.toString(),
-            }) as any
-        )
-    }, [])
+        if (![''].includes(id)) {
+            dispatch(
+                getRecibos({
+                    residenteId: id,
+                    instalacionId: currentHouseId.toString(),
+                    recintoId: recintoId.toString(),
+                }) as any
+            )
+        }
+    }, [id, currentHouseId])
 
     const handlePress = (path: string) => {
         try {
