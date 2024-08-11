@@ -161,3 +161,14 @@ export const onShareFile = async (uri: string) => {
 export const PROFILES = {
     OWNER: 2,
 }
+
+export const clearForm = (form: any) => {
+    Object.keys(form).forEach((key) => {
+        if (typeof form[key] === 'string') {
+            form[key] = ''
+        } else if (typeof form[key] === 'number') {
+            form[key] = 0
+        }
+    })
+    return form
+}

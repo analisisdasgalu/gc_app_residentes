@@ -24,6 +24,9 @@ const NavigationStack = () => {
             drawerContent={() => <MenuScreen />}
             backBehavior="initialRoute"
             initialRouteName={VIEWS.HOME}
+            screenOptions={{
+                unmountOnBlur: true,
+            }}
         >
             <Drawer.Screen name={VIEWS.HOME} component={Home} options={{ headerShown: false }} />
             <Drawer.Screen name={VIEWS.LOGIN} component={LoginScreen} options={{ headerShown: false }} />
