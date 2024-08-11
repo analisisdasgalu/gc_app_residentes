@@ -21,6 +21,10 @@ import {
     row_label,
 } from './constants'
 import { VIEWS } from '@gcMobile/navigation/constants'
+import { useSelector } from 'react-redux'
+import { base_web_server } from '@gcMobile/components/Auth/constants'
+import { RootState } from '@gcMobile/store'
+import { PROFILES } from '@gcMobile/util'
 
 const HeaderCard = (props: HomeCardProps) => {
     return (
@@ -128,10 +132,11 @@ export const NotificationCard = (props: NotificationCardProps) => {
 }
 
 export const Home = () => {
+    const { pictureUrl, id_profile } = useSelector((state: RootState) => state.userReducer)
     return (
         <ScrollView overScrollMode="never">
             <HeaderCard
-                imageUrl="https://via.placeholder.com/150"
+                imageUrl={`${base_web_server}${pictureUrl}`}
                 nombre="Victor Vargas"
                 recinto="Oyamel"
                 instalacion="Ambar 01"
@@ -147,7 +152,9 @@ export const Home = () => {
                 }}
             />
             <HomeCreateVisit window={VIEWS.CREATE_VISITA} icon="plus" />
-            <LastPaymentInformation dateAccountBalance="Julio 2020-01-01" dateLastPayment="Julio 2020-01-01" />
+            {[`${PROFILES.OWNER}`].includes(`${id_profile}`) && (
+                <LastPaymentInformation dateAccountBalance="Julio 2020-01-01" dateLastPayment="Julio 2020-01-01" />
+            )}
             <NotificationCard
                 title="Mantenimiento de Jardines"
                 date="2020-01-01"
