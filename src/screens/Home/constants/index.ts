@@ -1,9 +1,9 @@
 import { ViewStyle } from 'react-native'
 
-export const heade_container_styles: ViewStyle = {
+export const card_container_styles: ViewStyle = {
     width: '90%',
     margin: '5%',
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     padding: 10,
     backgroundColor: 'white',

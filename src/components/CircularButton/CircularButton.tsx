@@ -8,6 +8,7 @@ import { AntDesign } from '@expo/vector-icons'
 interface ICircularButtonProps {
     window: string
     icon: IconName
+    color: string
     styles: { [key: string]: string | number | any }
 }
 export type IconName = Extract<keyof typeof AntDesign.glyphMap, string>
@@ -19,7 +20,7 @@ export default function CircularButton(props: ICircularButtonProps) {
     }
     return (
         <TouchableOpacity style={props.styles} onPress={openWindow}>
-            <AntDesign name={props.icon} size={24} color="white" />
+            <AntDesign name={props.icon} size={24} color={props.color} />
         </TouchableOpacity>
     )
 }

@@ -1,4 +1,5 @@
 import { IconName } from '@gcMobile/components/CircularButton/CircularButton'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
 export type PaymentReference = {
     targetBank: string
@@ -24,4 +25,16 @@ export type HomeCardProps = {
 export type HomeCreateVisitProps = {
     window: string
     icon: IconName
+}
+
+export type LastPaymentInformationProps = {
+    dateAccountBalance: string
+    dateLastPayment: string
+}
+
+export type NotificationCardProps = {
+    title: string
+    date: string
+    icon: Extract<keyof typeof Ionicons.glyphMap, string>
+    iconColor: string
 }
