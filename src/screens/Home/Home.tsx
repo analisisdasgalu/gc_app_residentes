@@ -20,6 +20,7 @@ import {
     Main_Info_Headers,
     row_label,
 } from './constants'
+import { VIEWS } from '@gcMobile/navigation/constants'
 
 const HeaderCard = (props: HomeCardProps) => {
     return (
@@ -145,7 +146,7 @@ export const Home = () => {
                     cents: '0.00',
                 }}
             />
-            <HomeCreateVisit window="VisitScreen" icon="plus" />
+            <HomeCreateVisit window={VIEWS.CREATE_VISITA} icon="plus" />
             <LastPaymentInformation dateAccountBalance="Julio 2020-01-01" dateLastPayment="Julio 2020-01-01" />
             <NotificationCard
                 title="Mantenimiento de Jardines"
