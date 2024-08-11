@@ -1,8 +1,11 @@
 import React from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
-import { HomeCardProps } from './types'
+import { HomeCardProps, HomeCreateVisitProps } from './types'
 import { View, Text, Image } from 'react-native'
-import { heade_container_styles } from './constants'
+import { add_visit_button_styles, Generate_Visit_Styles, heade_container_styles } from './constants'
+import CircularButton from '@gcMobile/components/CircularButton'
+import { circularBtnStyles } from '@gcMobile/components/CircularButton/constants'
+import { fonts } from '@gcMobile/theme/default.styles'
 
 const HeaderCard = (props: HomeCardProps) => {
     return (
@@ -48,6 +51,19 @@ const HeaderCard = (props: HomeCardProps) => {
     )
 }
 
+const HomeCreateVisit = (props: HomeCreateVisitProps) => {
+    return (
+        <View style={[Generate_Visit_Styles]}>
+            <View style={[add_visit_button_styles]}>
+                <CircularButton styles={circularBtnStyles.container} window={props.window} icon={props.icon} />
+            </View>
+            <View style={[add_visit_button_styles]}>
+                <Text style={[{ fontSize: fonts.bodyText1 }]}>Generar visita</Text>
+            </View>
+        </View>
+    )
+}
+
 export const Home = () => {
     return (
         <ScrollView>
@@ -67,6 +83,7 @@ export const Home = () => {
                     cents: '0.00',
                 }}
             />
+            <HomeCreateVisit window="VisitScreen" icon="plus" />
         </ScrollView>
     )
 }

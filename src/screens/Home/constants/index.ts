@@ -10,3 +10,22 @@ export const heade_container_styles: ViewStyle = {
     borderRadius: 10,
     elevation: 5,
 }
+
+export const Generate_Visit_Styles: ViewStyle = {
+    width: '100%',
+    display: 'flex',
+    marginBottom: 15,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+}
+
+export const add_visit_button_styles: ViewStyle = {
+    display: 'flex',
+    width: '30%',
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+}

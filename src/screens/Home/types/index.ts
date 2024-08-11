@@ -1,3 +1,5 @@
+import { IconName } from '@gcMobile/components/CircularButton/CircularButton'
+
 export type PaymentReference = {
     targetBank: string
     reference: string
@@ -17,4 +19,9 @@ export type HomeCardProps = {
     instalacion: string
     bankInformation: BankInformation
     paymentReference: PaymentReference
+}
+
+export type HomeCreateVisitProps = {
+    window: string
+    icon: IconName
 }
