@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { HomeCardProps, HomeCreateVisitProps, LastPaymentInformationProps, NotificationCardProps } from './types'
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import CircularButton from '@gcMobile/components/CircularButton'
 import { circularBtnStyles } from '@gcMobile/components/CircularButton/constants'
 import { colors, fonts } from '@gcMobile/theme/default.styles'
@@ -24,9 +24,14 @@ import { VIEWS } from '@gcMobile/navigation/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { base_web_server } from '@gcMobile/components/Auth/constants'
 import { RootState } from '@gcMobile/store'
-import { PROFILES } from '@gcMobile/util'
+import { formatDateToHome, goToPDFViewer, PROFILES } from '@gcMobile/util'
 import { isEmpty } from 'lodash'
 import { getBankData, getPaymentReference } from '@gcMobile/store/RecintoBankData/api'
+import { getLastEdoCta } from '@gcMobile/store/EdoCta/api'
+import { EdoCuentaProps } from '@gcMobile/store/EdoCta/types'
+import { getLastRecibo } from '@gcMobile/store/Recibos/api'
+import { ReciboAttachment } from '@gcMobile/store/Recibos/types'
+import { getAvisosByDate } from '@gcMobile/store/Notificaciones/api'
 
 const HeaderCard = (props: HomeCardProps) => {
     return (
@@ -103,7 +108,10 @@ const HomeCreateVisit = (props: HomeCreateVisitProps) => {
 export const LastPaymentInformation = (props: LastPaymentInformationProps) => {
     return (
         <View style={[card_container_styles]}>
-            <View style={[Last_Payment_Row, { borderBottomColor: colors.gray, borderBottomWidth: 1 }]}>
+            <TouchableOpacity
+                style={[Last_Payment_Row, { borderBottomColor: colors.gray, borderBottomWidth: 1 }]}
+                onPress={props.accountBalancePress}
+            >
                 <View>
                     <Text style={[Main_Body_Titles]}>Último estado de cuenta</Text>
                     <Text style={{ color: colors.gray }}>{props.dateAccountBalance}</Text>
@@ -111,8 +119,8 @@ export const LastPaymentInformation = (props: LastPaymentInformationProps) => {
                 <View>
                     <MaterialCommunityIcons name="file-document-multiple-outline" style={icons_styles} />
                 </View>
-            </View>
-            <View style={[Last_Payment_Row]}>
+            </TouchableOpacity>
+            <TouchableOpacity style={[Last_Payment_Row]} onPress={props.lastPaymentPress}>
                 <View>
                     <Text style={[Main_Body_Titles]}>Último recibo de pago</Text>
                     <Text style={{ color: colors.gray }}>{props.dateLastPayment}</Text>
@@ -120,14 +128,14 @@ export const LastPaymentInformation = (props: LastPaymentInformationProps) => {
                 <View>
                     <MaterialCommunityIcons name="credit-card-edit-outline" style={icons_styles} />
                 </View>
-            </View>
+            </TouchableOpacity>
         </View>
     )
 }
 
 export const NotificationCard = (props: NotificationCardProps) => {
     return (
-        <View style={[card_container_styles]}>
+        <TouchableOpacity style={[card_container_styles, { marginBottom: 0 }]} onPress={props.onPress}>
             <View style={[Last_Payment_Row]}>
                 <View>
                     <Ionicons name={props.icon} size={24} color={props.iconColor} />
@@ -137,17 +145,22 @@ export const NotificationCard = (props: NotificationCardProps) => {
                     <Text style={{ color: colors.gray }}>{props.date}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
-export const Home = () => {
+export const Home = ({ navigation }: any) => {
     const dispatch = useDispatch()
-    const { pictureUrl, id_profile, name } = useSelector((state: RootState) => state.userReducer)
+    const { pictureUrl, id_profile, name, id: userId } = useSelector((state: RootState) => state.userReducer)
     const { currentHouseManzana, currentHouseInstalacion, currentResidence, recintoId, currentHouseId } = useSelector(
         (state: RootState) => state.houseReducer
     )
     const { numero_cuenta, clabe, banco, referencia } = useSelector((state: RootState) => state.RecintoBankData)
+    const { avisos } = useSelector((state: RootState) => state.estadoCuenta)
+    const { avisos: notificaciones } = useSelector((state: RootState) => state.notificacionesReducer)
+    const { recibos } = useSelector((state: RootState) => state.recibos)
+    const [lastAviso, setLastAviso] = React.useState<EdoCuentaProps>()
+    const [lastRecibo, setLastRecibo] = React.useState<ReciboAttachment>()
 
     useEffect(() => {
         if (recintoId) {
@@ -156,7 +169,29 @@ export const Home = () => {
         if (currentHouseId) {
             dispatch(getPaymentReference(currentHouseId.toString()) as any)
         }
+        dispatch(getLastEdoCta(userId, currentHouseId.toString()) as any)
+        dispatch(
+            getLastRecibo({
+                residenteId: userId,
+                instalacionId: currentHouseId.toString(),
+                recintoId: recintoId.toString(),
+            }) as any
+        )
+        const year = new Date().getFullYear()
+        const month = new Date().getMonth() + 1
+        dispatch(getAvisosByDate(recintoId.toString(), `${year}-${month}-01`) as any)
     }, [recintoId, currentHouseId])
+
+    useEffect(() => {
+        if (avisos.length > 0) {
+            const [aviso] = avisos
+            setLastAviso(aviso)
+        }
+        if (recibos.length > 0) {
+            const [recibo] = recibos
+            setLastRecibo(recibo)
+        }
+    }, [avisos, recibos])
 
     return (
         <ScrollView overScrollMode="never">
@@ -179,14 +214,33 @@ export const Home = () => {
             />
             <HomeCreateVisit window={VIEWS.CREATE_VISITA} icon="plus" />
             {[`${PROFILES.OWNER}`].includes(`${id_profile}`) && (
-                <LastPaymentInformation dateAccountBalance="Julio 2020-01-01" dateLastPayment="Julio 2020-01-01" />
+                <LastPaymentInformation
+                    dateAccountBalance={formatDateToHome(lastAviso?.fecha || '')}
+                    dateLastPayment={formatDateToHome(lastRecibo?.fecha.split(' ')[0] || '')}
+                    accountBalancePress={() => {
+                        goToPDFViewer(navigation, lastAviso?.path || '')
+                    }}
+                    lastPaymentPress={() => {
+                        goToPDFViewer(navigation, lastRecibo?.nombre || '')
+                    }}
+                />
             )}
-            <NotificationCard
-                title="Mantenimiento de Jardines"
-                date="2020-01-01"
-                icon="megaphone-outline"
-                iconColor={colors.gray}
-            />
+            {notificaciones.map((item, index) => (
+                <NotificationCard
+                    key={index}
+                    title={item.titulo}
+                    date={item.fecha}
+                    icon="megaphone-outline"
+                    iconColor={colors.gray}
+                    onPress={() => {
+                        navigation.navigate(VIEWS.READ_NOTIFICATION, {
+                            id: item.id,
+                            title: item.titulo,
+                            body: item.descripcion,
+                        })
+                    }}
+                />
+            ))}
         </ScrollView>
     )
 }

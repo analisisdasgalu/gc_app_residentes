@@ -31,6 +31,8 @@ export type HomeCreateVisitProps = {
 export type LastPaymentInformationProps = {
     dateAccountBalance: string
     dateLastPayment: string
+    accountBalancePress: () => void
+    lastPaymentPress: () => void
 }
 
 export type NotificationCardProps = {
@@ -38,4 +40,5 @@ export type NotificationCardProps = {
     date: string
     icon: Extract<keyof typeof Ionicons.glyphMap, string>
     iconColor: string
+    onPress: () => void
 }

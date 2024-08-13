@@ -11,4 +11,11 @@ export const ENDPOINTS = {
         BANK_DATA: '/instalaciones/get-recinto-bank-data/index.php',
         PAYMENT_REFERENCE: '/instalaciones/reference/index.php',
     },
+    EDO_CTA: {
+        LAST: '/Notificaciones/edo-cta/last-edo-cta/index.php',
+        RECIBOS_LAST: '/recibos/last-recibo/index.php',
+    },
+    AVISOS: {
+        DATE: '/Notificaciones/avisos/date/index.php',
+    },
 }
