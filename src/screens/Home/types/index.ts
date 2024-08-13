@@ -20,6 +20,7 @@ export type HomeCardProps = {
     instalacion: string
     bankInformation: BankInformation
     paymentReference: PaymentReference
+    showBankData: boolean
 }
 
 export type HomeCreateVisitProps = {

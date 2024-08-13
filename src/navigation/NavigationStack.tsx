@@ -23,7 +23,7 @@ const NavigationStack = () => {
         <Drawer.Navigator
             drawerContent={() => <MenuScreen />}
             backBehavior="initialRoute"
-            initialRouteName={VIEWS.HOME}
+            initialRouteName={VIEWS.LOGIN}
             screenOptions={{
                 unmountOnBlur: true,
             }}
