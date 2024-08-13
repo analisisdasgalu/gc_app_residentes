@@ -26,7 +26,7 @@ import { base_web_server } from '@gcMobile/components/Auth/constants'
 import { RootState } from '@gcMobile/store'
 import { PROFILES } from '@gcMobile/util'
 import { isEmpty } from 'lodash'
-import { getBankData } from '@gcMobile/store/RecintoBankData/api'
+import { getBankData, getPaymentReference } from '@gcMobile/store/RecintoBankData/api'
 
 const HeaderCard = (props: HomeCardProps) => {
     return (
@@ -144,16 +144,19 @@ export const NotificationCard = (props: NotificationCardProps) => {
 export const Home = () => {
     const dispatch = useDispatch()
     const { pictureUrl, id_profile, name } = useSelector((state: RootState) => state.userReducer)
-    const { currentHouseManzana, currentHouseInstalacion, currentResidence, recintoId } = useSelector(
+    const { currentHouseManzana, currentHouseInstalacion, currentResidence, recintoId, currentHouseId } = useSelector(
         (state: RootState) => state.houseReducer
     )
-    const { numero_cuenta, clabe, banco } = useSelector((state: RootState) => state.RecintoBankData)
+    const { numero_cuenta, clabe, banco, referencia } = useSelector((state: RootState) => state.RecintoBankData)
 
     useEffect(() => {
         if (recintoId) {
             dispatch(getBankData(recintoId.toString()) as any)
         }
-    }, [recintoId])
+        if (currentHouseId) {
+            dispatch(getPaymentReference(currentHouseId.toString()) as any)
+        }
+    }, [recintoId, currentHouseId])
 
     return (
         <ScrollView overScrollMode="never">
@@ -168,9 +171,9 @@ export const Home = () => {
                     CLABE: clabe,
                 }}
                 paymentReference={{
-                    targetBank: 'Banamex',
-                    reference: 'Pago de servicios',
-                    cents: '0.00',
+                    targetBank: referencia?.referencia_bancaria || '',
+                    reference: referencia?.referencia_concepto || '',
+                    cents: referencia?.referencia_centavos || '',
                 }}
                 showBankData={[`${PROFILES.OWNER}`].includes(`${id_profile}`)}
             />

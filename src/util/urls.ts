@@ -9,5 +9,6 @@ export const ENDPOINTS = {
     },
     HOME: {
         BANK_DATA: '/instalaciones/get-recinto-bank-data/index.php',
+        PAYMENT_REFERENCE: '/instalaciones/reference/index.php',
     },
 }
