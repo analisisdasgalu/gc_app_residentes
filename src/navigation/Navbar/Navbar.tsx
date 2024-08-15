@@ -10,7 +10,7 @@ import { styles } from '@gcMobile/screens/HouseScreen/conts'
 import { colors } from '@gcMobile/theme/default.styles'
 import { VIEWS } from '../constants'
 
-export const Navbar = (props: { title: string }) => {
+export const Navbar = (props: { title?: string }) => {
     const navigation = useNavigation()
     const { currentHouseManzana, currentHouseInstalacion } = useSelector((state: RootState) => state.houseReducer)
     return (
@@ -23,9 +23,15 @@ export const Navbar = (props: { title: string }) => {
                     <Text>{`${currentHouseManzana} ${currentHouseInstalacion}`}</Text>
                 </TouchableOpacity>
             </View>
-            <View style={[styles.teenthHeight, { backgroundColor: 'transparent' }]}>
-                <Text style={[styles.tinyText, { color: colors.blue }]}>{props.title}</Text>
-            </View>
+            {props.title && (
+                <View style={[styles.teenthHeight, { backgroundColor: 'transparent' }]}>
+                    <Text style={[styles.tinyText, { color: colors.blue }]}>{props.title}</Text>
+                </View>
+            )}
         </View>
     )
+}
+
+Navbar.defaultProps = {
+    title: '',
 }
