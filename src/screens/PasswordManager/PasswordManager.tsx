@@ -6,6 +6,9 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { pass_button, pass_container, pass_input, pass_text } from './constants'
 import { Button, Icon } from 'react-native-elements'
 import { colors } from '@gcMobile/theme/default.styles'
+import { useDispatch, useSelector } from 'react-redux'
+import { changePassword } from '@gcMobile/store/User/api'
+import { RootState } from '@gcMobile/store'
 
 type PasswordManagerProps = {
     currentPassword: string
@@ -14,6 +17,8 @@ type PasswordManagerProps = {
 }
 
 export const PasswordManager = () => {
+    const dispatch = useDispatch()
+    const { email } = useSelector((state: RootState) => state.userReducer)
     const [password, setPassword] = React.useState<PasswordManagerProps>({
         currentPassword: '',
         newPassword: '',
@@ -42,7 +47,7 @@ export const PasswordManager = () => {
             }
         })
         if (!isValid) return
-
+        dispatch(changePassword(email, form.newPassword) as any)
         // Do something
     }
 

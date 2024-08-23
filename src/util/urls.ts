@@ -18,4 +18,8 @@ export const ENDPOINTS = {
     AVISOS: {
         DATE: '/Notificaciones/avisos/date/index.php',
     },
+    USER: {
+        PROFILE: '/users/index.php',
+        CHANGE_PASSWORD: '/users/change-password/index.php',
+    },
 }
