@@ -215,3 +215,21 @@ export const goToPDFViewer = (navigation: any, uri: string) => {
         })
     }
 }
+
+export const passwordFormValidation = (form: { [key: string]: string }) => {
+    const errorObject: { [key: string]: { [key: string]: string | any } } = {}
+    Object.keys(form).forEach((key) => {
+        errorObject[key] = {}
+        if (form[key] === '') {
+            errorObject[key]['isEmpty'] = 'Este campo es requerido.'
+        } else {
+            errorObject[key]['isEmpty'] = ''
+        }
+    })
+    if (![form.repeatNewPassword].includes(form.newPassword)) {
+        errorObject['repeatNewPassword']['isSame'] = 'Las contraseñas no conciden.'
+    } else {
+        errorObject['repeatNewPassword']['isSame'] = ''
+    }
+    return errorObject
+}
