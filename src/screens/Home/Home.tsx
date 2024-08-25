@@ -26,7 +26,7 @@ import { VIEWS } from '@gcMobile/navigation/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { base_web_server } from '@gcMobile/components/Auth/constants'
 import { RootState } from '@gcMobile/store'
-import { formatDateToHome, goToPDFViewer, PROFILES } from '@gcMobile/util'
+import { formatCurrency, formatDateToHome, goToPDFViewer, PROFILES } from '@gcMobile/util'
 import { isEmpty } from 'lodash'
 import { getAdeudo, getBankData, getPaymentReference } from '@gcMobile/store/RecintoBankData/api'
 import { getLastEdoCta } from '@gcMobile/store/EdoCta/api'
@@ -51,12 +51,14 @@ const HeaderCard = (props: HomeCardProps) => {
                         <Text style={[Main_Body_Titles_small]}>
                             Adeudo al día:{' '}
                             <Text style={[{ color: props.adeudo > 0 ? colors.cherry : colors.gray }]}>
-                                {props.adeudo}
+                                {formatCurrency(props.adeudo)}
                             </Text>
                         </Text>
                         <Text style={[Main_Body_Titles_small]}>
                             Saldo a favor al día:{' '}
-                            <Text style={[{ color: props.saldo > 0 ? colors.green : colors.gray }]}>{props.saldo}</Text>
+                            <Text style={[{ color: props.saldo > 0 ? colors.green : colors.gray }]}>
+                                {formatCurrency(props.saldo)}
+                            </Text>
                         </Text>
                     </View>
                     <View style={[Main_Info_Body_Account]}>

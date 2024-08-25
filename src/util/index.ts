@@ -233,3 +233,7 @@ export const passwordFormValidation = (form: { [key: string]: string }) => {
     }
     return errorObject
 }
+
+export const formatCurrency = (amount: number) => {
+    return amount.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })
+}
