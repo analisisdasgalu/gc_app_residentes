@@ -10,6 +10,7 @@ export const ENDPOINTS = {
     HOME: {
         BANK_DATA: '/instalaciones/get-recinto-bank-data/index.php',
         PAYMENT_REFERENCE: '/instalaciones/reference/index.php',
+        ADEUDO: 'users/account-balance/debt/index.php',
     },
     EDO_CTA: {
         LAST: '/Notificaciones/edo-cta/last-edo-cta/index.php',
