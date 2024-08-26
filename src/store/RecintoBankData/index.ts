@@ -29,8 +29,11 @@ const RecintoBankDataSlice = createSlice({
         setAdeudo(state, action: PayloadAction<number>) {
             state.adeudo = action.payload
         },
+        setSaldo(state, action: PayloadAction<number>) {
+            state.saldo = action.payload
+        },
     },
 })
 
-export const { setBankData, setPaymentReference, setAdeudo } = RecintoBankDataSlice.actions
+export const { setBankData, setPaymentReference, setAdeudo, setSaldo } = RecintoBankDataSlice.actions
 export default RecintoBankDataSlice.reducer

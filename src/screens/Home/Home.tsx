@@ -28,7 +28,7 @@ import { base_web_server } from '@gcMobile/components/Auth/constants'
 import { RootState } from '@gcMobile/store'
 import { formatCurrency, formatDateToHome, goToPDFViewer, PROFILES } from '@gcMobile/util'
 import { isEmpty } from 'lodash'
-import { getAdeudo, getBankData, getPaymentReference } from '@gcMobile/store/RecintoBankData/api'
+import { getAdeudo, getBankData, getEquity, getPaymentReference } from '@gcMobile/store/RecintoBankData/api'
 import { getLastEdoCta } from '@gcMobile/store/EdoCta/api'
 import { EdoCuentaProps } from '@gcMobile/store/EdoCta/types'
 import { getLastRecibo } from '@gcMobile/store/Recibos/api'
@@ -171,7 +171,9 @@ export const Home = ({ navigation }: any) => {
     const { currentHouseManzana, currentHouseInstalacion, currentResidence, recintoId, currentHouseId } = useSelector(
         (state: RootState) => state.houseReducer
     )
-    const { numero_cuenta, clabe, banco, referencia, adeudo } = useSelector((state: RootState) => state.RecintoBankData)
+    const { numero_cuenta, clabe, banco, referencia, adeudo, saldo } = useSelector(
+        (state: RootState) => state.RecintoBankData
+    )
     const { avisos } = useSelector((state: RootState) => state.estadoCuenta)
     const { avisos: notificaciones } = useSelector((state: RootState) => state.notificacionesReducer)
     const { recibos } = useSelector((state: RootState) => state.recibos)
@@ -185,6 +187,7 @@ export const Home = ({ navigation }: any) => {
         if (currentHouseId) {
             dispatch(getPaymentReference(currentHouseId.toString()) as any)
             dispatch(getAdeudo(currentHouseId.toString()) as any)
+            dispatch(getEquity(currentHouseId.toString()) as any)
         }
         if (userId && currentHouseId) {
             dispatch(getLastEdoCta(userId, currentHouseId.toString()) as any)
@@ -233,8 +236,8 @@ export const Home = ({ navigation }: any) => {
                     cents: referencia?.referencia_centavos || '',
                 }}
                 showBankData={[`${PROFILES.OWNER}`].includes(`${id_profile}`)}
-                adeudo={adeudo}
-                saldo={0}
+                adeudo={Number.parseInt(adeudo.toString(), 10)}
+                saldo={Number.parseInt(saldo.toString(), 10)}
             />
             <HomeCreateVisit window={VIEWS.CREATE_VISITA} icon="plus" />
             {[`${PROFILES.OWNER}`].includes(`${id_profile}`) && (
