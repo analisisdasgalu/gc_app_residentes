@@ -231,6 +231,11 @@ export const passwordFormValidation = (form: { [key: string]: string }) => {
     } else {
         errorObject['repeatNewPassword']['isSame'] = ''
     }
+    if ([form.currentPassword].includes(form.newPassword)) {
+        errorObject['newPassword']['isPrevious'] = 'La nueva contraseña no puede ser igual a la anterior.'
+    } else {
+        errorObject['newPassword']['isPrevious'] = ''
+    }
     return errorObject
 }
 
