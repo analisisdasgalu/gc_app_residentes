@@ -33,7 +33,9 @@ export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
     multiple: <MaterialCommunityIcons name="account-multiple-plus" size={24} color="black" />,
 }
 
-export default function Form({ navigation }: any) {
+export default function Form({ route, navigation }: any) {
+    const { data } = route?.params
+
     const dispatch = useDispatch()
     const { catalogVisitas } = useSelector((state: RootState) => state.tipoVisitas)
     const { catalogIngreso } = useSelector((state: RootState) => state.tipoIngresoReducer)
