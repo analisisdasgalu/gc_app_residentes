@@ -11,7 +11,7 @@ import { RootState } from '@gcMobile/store'
 import RadioGroup from '@gcMobile/components/RadioGroup/'
 import { Calendar } from 'react-native-calendars'
 import { ModalHour } from '../ModalHour/ModalHour'
-import { createVisita } from '@gcMobile/store/Visitas/api'
+import { createVisita, getVisitaByuniqueId } from '@gcMobile/store/Visitas/api'
 import { setOperationSuccess } from '@gcMobile/store/UI'
 import { VIEWS } from '@gcMobile/navigation/constants'
 import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
@@ -20,7 +20,6 @@ import { Container } from '../Container/Container'
 import { VehicleInformation } from '../VehicleInformation/VehicleInformation'
 import { HeaderActionButton } from '../HeaderActionButton/HeaderActionButton'
 import { VehicleInformationState } from '../VehicleInformation/types'
-import { clearForm } from '@gcMobile/util'
 import { Navbar } from '@gcMobile/navigation/Navbar/Navbar'
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
@@ -34,15 +33,14 @@ export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
 }
 
 export default function Form({ route, navigation }: any) {
-    const { data } = route?.params
-
+    const { uniqueID } = route?.params
     const dispatch = useDispatch()
     const { catalogVisitas } = useSelector((state: RootState) => state.tipoVisitas)
     const { catalogIngreso } = useSelector((state: RootState) => state.tipoIngresoReducer)
     const { currentHouseId } = useSelector((state: RootState) => state.houseReducer)
     const { id } = useSelector((state: RootState) => state.userReducer)
     const { operationSuccess } = useSelector((state: RootState) => state.uiReducer)
-    const { newVisistaQR } = useSelector((state: RootState) => state.visitasReducer)
+    const { newVisistaQR, visita } = useSelector((state: RootState) => state.visitasReducer)
 
     const [formValues, setFormValues] = useState<{
         [key: string]: string | number
@@ -123,6 +121,29 @@ export default function Form({ route, navigation }: any) {
             acceso: -1,
         })
     }, [])
+
+    useEffect(() => {
+        if (uniqueID) {
+            dispatch(getVisitaByuniqueId(uniqueID) as any)
+        }
+    }, [uniqueID])
+
+    useEffect(() => {
+        if (visita?.visita_id) {
+            setFormValues((prev) => ({
+                ...prev,
+                visitaNombre: visita.nombre,
+                tipo_visita: visita.id_tipo_visita,
+                tipo_ingreso: visita.id_tipo_ingreso,
+                fromDate: visita.desde,
+                toDate: visita.hasta,
+                fromHour: visita.desde.split('T')[1].split(':')[0],
+                toHour: visita.hasta.split('T')[1].split(':')[0],
+                notificaciones: visita.notificaciones,
+                acceso: visita.multiple_entrada,
+            }))
+        }
+    }, [visita])
 
     useEffect(() => {
         if (operationSuccess) {

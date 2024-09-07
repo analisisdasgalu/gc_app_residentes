@@ -6,6 +6,7 @@ export const ENDPOINTS = {
         BY_TYPE: `visita/consulta/GetAllByType/index.php?email={email}&idInstalacion={instalacion}&idTipoVisita={filters}`,
         CREATE: '/visita/crear/index.php',
         HISTORIC: '/visita/consulta/GetAllHistoric/index.php',
+        BY_UNIQUE_ID: '/visita/consulta/uniqueId/index.php',
     },
     HOME: {
         BANK_DATA: '/instalaciones/get-recinto-bank-data/index.php',
