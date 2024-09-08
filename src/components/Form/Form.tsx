@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import _, { set } from 'lodash'
-import { View, Text, TouchableOpacity, TextInput, Modal, ScrollView, Switch } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Modal, ScrollView, Switch, Alert } from 'react-native'
 import { FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
 import { formStyles, formatDateToPayload } from './constants'
 import Button from '@gcMobile/components/Button'
@@ -11,7 +11,13 @@ import { RootState } from '@gcMobile/store'
 import RadioGroup from '@gcMobile/components/RadioGroup/'
 import { Calendar } from 'react-native-calendars'
 import { ModalHour } from '../ModalHour/ModalHour'
-import { createVisita, getVisitaByuniqueId } from '@gcMobile/store/Visitas/api'
+import {
+    createVisita,
+    deleteVehicle,
+    getVehiclesByUniqueId,
+    getVisitaByuniqueId,
+    updateVisita,
+} from '@gcMobile/store/Visitas/api'
 import { setOperationSuccess } from '@gcMobile/store/UI'
 import { VIEWS } from '@gcMobile/navigation/constants'
 import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
@@ -21,6 +27,8 @@ import { VehicleInformation } from '../VehicleInformation/VehicleInformation'
 import { HeaderActionButton } from '../HeaderActionButton/HeaderActionButton'
 import { VehicleInformationState } from '../VehicleInformation/types'
 import { Navbar } from '@gcMobile/navigation/Navbar/Navbar'
+import { clearEditableVisita, clearVehicles } from '@gcMobile/store/Visitas'
+import { TVisitaPayload } from '@gcMobile/store/Visitas/types'
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
     Visita: <FontAwesome name="user" size={24} color={colors.darkGray} />,
@@ -40,11 +48,12 @@ export default function Form({ route, navigation }: any) {
     const { currentHouseId } = useSelector((state: RootState) => state.houseReducer)
     const { id } = useSelector((state: RootState) => state.userReducer)
     const { operationSuccess } = useSelector((state: RootState) => state.uiReducer)
-    const { newVisistaQR, visita } = useSelector((state: RootState) => state.visitasReducer)
+    const { newVisistaQR, visita, vehicles } = useSelector((state: RootState) => state.visitasReducer)
 
     const [formValues, setFormValues] = useState<{
         [key: string]: string | number
     }>({
+        visita_id: '',
         visitaNombre: '',
         tipo_visita: '',
         tipo_ingreso: '',
@@ -60,6 +69,7 @@ export default function Form({ route, navigation }: any) {
     const [totalVehicles, setTotalVehicles] = useState<number>(1)
     const [vehicleData, setVehicleData] = useState<VehicleInformationState[]>([
         {
+            vehicle_id: '',
             brand: '',
             model: '',
             year: '',
@@ -89,42 +99,64 @@ export default function Form({ route, navigation }: any) {
             return
         }
 
-        dispatch(
-            createVisita({
-                idUsuario: id,
-                tipoVisita: formValues.tipo_visita.toString(),
-                tipoIngreso: formValues.tipo_ingreso.toString(),
-                fechaIngreso: formatDateToPayload(formValues.fromDate.toString(), formValues.fromHour.toString()),
-                fechaSalida: formatDateToPayload(formValues.toDate.toString(), formValues.toHour.toString()),
-                multEntry: formValues.acceso.toString(),
-                notificacion: formValues.notificaciones.toString(),
-                nombre: formValues.visitaNombre.toString(),
-                idInstalacion: currentHouseId.toString(),
-                vehicle: JSON.stringify(vehicleData),
-            }) as any
-        )
+        if (uniqueID) {
+            Alert.alert('¿Estás seguro?', '¿Deseas actualizar la visita?', [
+                {
+                    text: 'Cancelar',
+                    onPress: () => {},
+                    style: 'cancel',
+                },
+                {
+                    text: 'Aceptar',
+                    onPress: () => {
+                        const payload: TVisitaPayload = {
+                            idVisita: visita.visita_id,
+                            tipoVisita: formValues.tipo_visita.toString(),
+                            tipoIngreso: formValues.tipo_ingreso.toString(),
+                            fechaIngreso: formatDateToPayload(
+                                formValues.fromDate.toString(),
+                                formValues.fromHour.toString()
+                            ),
+                            fechaSalida: formatDateToPayload(
+                                formValues.toDate.toString(),
+                                formValues.toHour.toString()
+                            ),
+                            multiEntrada: formValues.acceso.toString(),
+                            notificaciones: formValues.notificaciones.toString(),
+                            nombreVisita: formValues.visitaNombre.toString(),
+                            vehicles: JSON.stringify(vehicleData),
+                        }
+                        dispatch(updateVisita(payload) as any)
+                    },
+                },
+            ])
+        } else {
+            dispatch(
+                createVisita({
+                    idUsuario: id,
+                    tipoVisita: formValues.tipo_visita.toString(),
+                    tipoIngreso: formValues.tipo_ingreso.toString(),
+                    fechaIngreso: formatDateToPayload(formValues.fromDate.toString(), formValues.fromHour.toString()),
+                    fechaSalida: formatDateToPayload(formValues.toDate.toString(), formValues.toHour.toString()),
+                    multEntry: formValues.acceso.toString(),
+                    notificacion: formValues.notificaciones.toString(),
+                    nombre: formValues.visitaNombre.toString(),
+                    idInstalacion: currentHouseId.toString(),
+                    vehicle: JSON.stringify(vehicleData),
+                }) as any
+            )
+        }
     }
 
     useEffect(() => {
         if (catalogIngreso.length === 0 || catalogIngreso === undefined)
             dispatch(getCatalogTipoIngreso() as unknown as any)
-
-        setFormValues({
-            visitaNombre: '',
-            tipo_visita: '',
-            tipo_ingreso: '',
-            fromDate: new Date().toISOString(),
-            toDate: new Date().toISOString(),
-            fromHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
-            toHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
-            notificaciones: 0,
-            acceso: -1,
-        })
     }, [])
 
     useEffect(() => {
         if (uniqueID) {
             dispatch(getVisitaByuniqueId(uniqueID) as any)
+            dispatch(getVehiclesByUniqueId(uniqueID) as any)
         }
     }, [uniqueID])
 
@@ -132,6 +164,7 @@ export default function Form({ route, navigation }: any) {
         if (visita?.visita_id) {
             setFormValues((prev) => ({
                 ...prev,
+                visita_id: visita.visita_id,
                 visitaNombre: visita.nombre,
                 tipo_visita: visita.id_tipo_visita,
                 tipo_ingreso: visita.id_tipo_ingreso,
@@ -142,8 +175,34 @@ export default function Form({ route, navigation }: any) {
                 notificaciones: visita.notificaciones,
                 acceso: visita.multiple_entrada,
             }))
+        } else {
+            setFormValues({
+                visita_id: '',
+                visitaNombre: '',
+                tipo_visita: '',
+                tipo_ingreso: '',
+                fromDate: new Date().toISOString(),
+                toDate: new Date().toISOString(),
+                fromHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
+                toHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
+                notificaciones: 0,
+                acceso: -1,
+            })
         }
-    }, [visita])
+        if (vehicles?.length > 0) {
+            setTotalVehicles(vehicles.length)
+            setVehicleData(
+                vehicles.map((vehicle) => ({
+                    vehicle_id: vehicle.vehicle_id,
+                    brand: vehicle.marca,
+                    model: vehicle.modelo,
+                    year: vehicle.anio,
+                    color: vehicle.color,
+                    plates: vehicle.placas,
+                }))
+            )
+        }
+    }, [visita, vehicles])
 
     useEffect(() => {
         if (operationSuccess) {
@@ -166,13 +225,32 @@ export default function Form({ route, navigation }: any) {
         ])
     }
 
-    const handleRemoveVehicle = (index: number) => {
+    const removeVehicleLocal = (index: number) => {
         setTotalVehicles((prev) => prev - 1)
         setVehicleData((prev) => {
             let temp = [...prev]
             temp.splice(index, 1)
             return temp
         })
+    }
+
+    const handleRemoveVehicle = (index: number) => {
+        if (uniqueID && vehicleData[index].vehicle_id) {
+            Alert.alert('¿Estás seguro?', '¿Deseas eliminar el vehículo?', [
+                {
+                    text: 'Cancelar',
+                    onPress: () => {},
+                    style: 'cancel',
+                },
+                {
+                    text: 'Aceptar',
+                    onPress: () =>
+                        dispatch(deleteVehicle(vehicleData[index].vehicle_id, () => removeVehicleLocal(index)) as any),
+                },
+            ])
+        } else {
+            removeVehicleLocal(index)
+        }
     }
 
     const handleVehicleOnChange = (index: number, key: string, value: string) => {
@@ -183,9 +261,36 @@ export default function Form({ route, navigation }: any) {
         })
     }
 
+    const clearScreenOnReturn = () => {
+        setFormValues({
+            visitaNombre: '',
+            tipo_visita: '',
+            tipo_ingreso: '',
+            fromDate: new Date().toISOString(),
+            toDate: new Date().toISOString(),
+            fromHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
+            toHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
+            notificaciones: 0,
+            acceso: -1,
+        })
+        setTotalVehicles(1)
+        setVehicleData([
+            {
+                vehicle_id: '',
+                brand: '',
+                model: '',
+                year: '',
+                color: '',
+                plates: '',
+            },
+        ])
+        dispatch(clearEditableVisita())
+        dispatch(clearVehicles())
+    }
+
     return (
         <>
-            <Navbar title="Generar visita" />
+            <Navbar title="Generar visita" callback={clearScreenOnReturn} />
             <SafeAreaView style={formStyles.container}>
                 <ScrollView
                     contentContainerStyle={{
@@ -373,6 +478,7 @@ export default function Form({ route, navigation }: any) {
                                 }}
                                 textButton="Cancelar"
                                 onPress={() => {
+                                    clearScreenOnReturn()
                                     navigation.navigate(VIEWS.HOME)
                                 }}
                             />

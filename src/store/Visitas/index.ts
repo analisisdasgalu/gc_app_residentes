@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { TVisita, TVisitas } from './types'
+import { TVehicles, TVisita, TVisitas } from './types'
 import { ICardProps } from '@gcMobile/components/Card/Card'
 
 const initialState: TVisitas = {
@@ -18,6 +18,7 @@ const initialState: TVisitas = {
         id_tipo_ingreso: '0',
         id_tipo_visita: '0',
     },
+    vehicles: [],
 }
 
 const visitasSlice = createSlice({
@@ -36,8 +37,15 @@ const visitasSlice = createSlice({
         clearEditableVisita: (state) => {
             state.visita = initialState.visita
         },
+        setVehicles: (state, action: PayloadAction<TVehicles[]>) => {
+            state.vehicles = action.payload
+        },
+        clearVehicles: (state) => {
+            state.vehicles = []
+        },
     },
 })
 
-export const { setVisitas, setNewVisitaQR, setEditableVisita, clearEditableVisita } = visitasSlice.actions
+export const { setVisitas, setNewVisitaQR, setEditableVisita, clearEditableVisita, setVehicles, clearVehicles } =
+    visitasSlice.actions
 export default visitasSlice.reducer

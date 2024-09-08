@@ -14,10 +14,20 @@ export type TVisita = {
     id_tipo_visita: string
 }
 
+export type TVehicles = {
+    vehicle_id: string
+    marca: string
+    modelo: string
+    anio: string
+    placas: string
+    color: string
+}
+
 export type TVisitas = {
     visitas: ICardProps[]
     newVisistaQR: string
     visita: TVisita
+    vehicles: TVehicles[]
 }
 
 export type visitasPayload = {
@@ -31,4 +41,16 @@ export type visitasPayload = {
     nombre: string
     idInstalacion: string
     vehicle?: string
+}
+
+export type TVisitaPayload = {
+    idVisita: string
+    tipoVisita: string
+    tipoIngreso: string
+    fechaIngreso: string
+    fechaSalida: string
+    multiEntrada: string
+    notificaciones: string
+    nombreVisita: string
+    vehicles: string
 }
