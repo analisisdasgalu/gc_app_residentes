@@ -8,6 +8,8 @@ import { Entypo } from '@expo/vector-icons'
 
 import { VIEWS } from '@gcMobile/navigation/constants'
 import { PopOverMenu } from '../PopOverMenu/PopOverMenu'
+import { useDispatch } from 'react-redux'
+import { deleteVisitaByUniqueId } from '@gcMobile/store/Visitas/api'
 
 export interface ICardProps {
     nombre: string
@@ -21,6 +23,7 @@ export interface ICardProps {
     uniqueID: string
     estado: string
     index: number
+    deleteCallback: () => void
 }
 
 export default function Card({
@@ -35,8 +38,10 @@ export default function Card({
     uniqueID,
     estado,
     index,
+    deleteCallback,
 }: ICardProps) {
     const navigation = useNavigation<any>()
+    const dispatch = useDispatch()
     const [showMenu, setOpenMenu] = React.useState<boolean>(false)
 
     const handleMenuIconPressed = (route: string) => {
@@ -48,7 +53,9 @@ export default function Card({
             case 'pencil':
                 navigation.navigate(VIEWS.CREATE_VISITA, { uniqueID })
                 break
-
+            case 'trash':
+                dispatch(deleteVisitaByUniqueId(uniqueID, deleteCallback) as any)
+                break
             default:
                 break
         }

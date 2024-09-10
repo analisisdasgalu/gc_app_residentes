@@ -84,7 +84,7 @@ export default function Form({ route, navigation }: any) {
             if (
                 _.isEmpty(formValues[key]) &&
                 typeof formValues[key] !== 'number' &&
-                !['vehicle_model', 'vehicle_color', 'vehicle_plate'].includes(key)
+                !['vehicle_model', 'vehicle_color', 'vehicle_plate', 'visita_id'].includes(key)
             ) {
                 flagEmpty = true
             }
@@ -94,11 +94,19 @@ export default function Form({ route, navigation }: any) {
             Toast.show({
                 type: ALERT_TYPE.DANGER,
                 title: 'Visita',
-                textBody: 'Favor de llenar todos los campos',
+                textBody: `Favor de llenar todos los campos`,
             })
             return
         }
-
+        const vehiclePayload = vehicleData.map((vehicle) => {
+            const tmp: { [key: string]: string } = {}
+            Object.keys(vehicle).forEach((key) => {
+                if (vehicle[key] !== '') {
+                    tmp[key] = vehicle[key]
+                }
+            })
+            return tmp
+        })
         if (uniqueID) {
             Alert.alert('¿Estás seguro?', '¿Deseas actualizar la visita?', [
                 {
@@ -124,7 +132,7 @@ export default function Form({ route, navigation }: any) {
                             multiEntrada: formValues.acceso.toString(),
                             notificaciones: formValues.notificaciones.toString(),
                             nombreVisita: formValues.visitaNombre.toString(),
-                            vehicles: JSON.stringify(vehicleData),
+                            vehicles: JSON.stringify(vehiclePayload),
                         }
                         dispatch(updateVisita(payload) as any)
                     },
@@ -142,7 +150,7 @@ export default function Form({ route, navigation }: any) {
                     notificacion: formValues.notificaciones.toString(),
                     nombre: formValues.visitaNombre.toString(),
                     idInstalacion: currentHouseId.toString(),
-                    vehicle: JSON.stringify(vehicleData),
+                    vehicle: JSON.stringify(vehiclePayload),
                 }) as any
             )
         }
@@ -193,7 +201,7 @@ export default function Form({ route, navigation }: any) {
             setTotalVehicles(vehicles.length)
             setVehicleData(
                 vehicles.map((vehicle) => ({
-                    vehicle_id: vehicle.vehicle_id,
+                    vehicle_id: vehicle?.vehicle_id,
                     brand: vehicle.marca,
                     model: vehicle.modelo,
                     year: vehicle.anio,
@@ -207,6 +215,7 @@ export default function Form({ route, navigation }: any) {
     useEffect(() => {
         if (operationSuccess) {
             dispatch(setOperationSuccess(false))
+            clearScreenOnReturn()
             navigation.navigate(VIEWS.QR_DETAILS, { uniqueID: newVisistaQR })
         }
     }, [operationSuccess])
@@ -263,6 +272,7 @@ export default function Form({ route, navigation }: any) {
 
     const clearScreenOnReturn = () => {
         setFormValues({
+            visita_id: '',
             visitaNombre: '',
             tipo_visita: '',
             tipo_ingreso: '',

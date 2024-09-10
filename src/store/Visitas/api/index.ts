@@ -184,7 +184,7 @@ export const deleteVehicle = (vehicle_id: string, callback: () => void) => async
     const formdata = new FormData()
     formdata.append('idVehicle', vehicle_id)
     try {
-        const res = await fetch(`${base_url}/${ENDPOINTS.VISITAS.DELETE}`, {
+        const res = await fetch(`${base_url}/${ENDPOINTS.VISITAS.DELETE_VEHICLE}`, {
             method: 'POST',
             body: formdata,
         })
@@ -207,6 +207,32 @@ export const deleteVehicle = (vehicle_id: string, callback: () => void) => async
             type: ALERT_TYPE.DANGER,
             title: 'Vehículo',
             textBody: 'Error al eliminar el vehículo',
+        })
+    }
+}
+
+export const deleteVisitaByUniqueId = (uniqueId: string, callback: () => void) => async (dispatch: any) => {
+    try {
+        dispatch(setLoading(true))
+        const raw = await fetch(stringTemplateAddQuery(`${base_url}/${ENDPOINTS.VISITAS.DELETE}`, { uniqueId }))
+        const data = await raw.json()
+        if (['200', 200].includes(data.estatus)) {
+            dispatch(setLoading(false))
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Visita',
+                textBody: 'Visita eliminada con éxito',
+            })
+            callback()
+        } else {
+            throw new Error(data)
+        }
+    } catch (error: any) {
+        console.error(error)
+        Toast.show({
+            type: ALERT_TYPE.DANGER,
+            title: 'Visita',
+            textBody: error?.message || 'Error al eliminar la visita',
         })
     }
 }
