@@ -40,6 +40,10 @@ export default function VisitorControlScreen({ navigation, filters }: VisitorCon
             dispatch(getVisitas(email, currentHouseId) as any)
         }
     }, [selectedFilters, newVisistaQR, currentHouseId])
+
+    const handleOnDelete = (email: string, houseId: number) => {
+        dispatch(getVisitas(email, houseId) as any)
+    }
     return (
         <View
             style={{
@@ -72,7 +76,11 @@ export default function VisitorControlScreen({ navigation, filters }: VisitorCon
                 >
                     {visitas?.map((data: any, index: number) => (
                         <View style={{ width: '100%' }} key={data?.uniqueID}>
-                            <Card {...data} index={index} />
+                            <Card
+                                {...data}
+                                deleteCallback={() => handleOnDelete(email, currentHouseId)}
+                                index={index}
+                            />
                         </View>
                     ))}
                 </ScrollView>
