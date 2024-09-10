@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React from 'react'
 import { cardStyles, popOverMenu } from './constants'
 import { colors } from '@gcMobile/theme/default.styles'
@@ -54,7 +54,17 @@ export default function Card({
                 navigation.navigate(VIEWS.CREATE_VISITA, { uniqueID })
                 break
             case 'trash':
-                dispatch(deleteVisitaByUniqueId(uniqueID, deleteCallback) as any)
+                Alert.alert('Eliminar', '¿Estás seguro de eliminar esta visita?', [
+                    {
+                        text: 'Cancelar',
+                        onPress: () => {},
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Eliminar',
+                        onPress: () => dispatch(deleteVisitaByUniqueId(uniqueID, deleteCallback) as any),
+                    },
+                ])
                 break
             default:
                 break
