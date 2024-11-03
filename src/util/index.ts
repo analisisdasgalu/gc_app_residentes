@@ -81,6 +81,11 @@ export const stringTemplateAddQuery = (cadena: string, object: any) => {
     return cadena
 }
 
+export const getCurrentHour = () => {
+    const date = new Date()
+    return `${date.getHours()}:${date.getMinutes()}`
+}
+
 // --- Push Notifications ---
 export const registerForPushNotificationsAsync = async (Notifications: any) => {
     let token = ''

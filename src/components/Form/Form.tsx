@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import _, { set } from 'lodash'
 import { View, Text, TouchableOpacity, TextInput, Modal, ScrollView, Switch, Alert } from 'react-native'
 import { FontAwesome, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
-import { formStyles, formatDateToPayload } from './constants'
+import { NEW_EMPTY_VEHICLE, VISITA_INITIAL_STATE, formStyles, formatDateToPayload } from './constants'
 import Button from '@gcMobile/components/Button'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors } from '@gcMobile/theme/default.styles'
@@ -25,10 +25,9 @@ import { getCatalogTipoIngreso } from '@gcMobile/store/TipoIngreso/api'
 import { Container } from '../Container/Container'
 import { VehicleInformation } from '../VehicleInformation/VehicleInformation'
 import { HeaderActionButton } from '../HeaderActionButton/HeaderActionButton'
-import { VehicleInformationState } from '../VehicleInformation/types'
 import { Navbar } from '@gcMobile/navigation/Navbar/Navbar'
 import { clearEditableVisita, clearVehicles } from '@gcMobile/store/Visitas'
-import { TVisitaPayload } from '@gcMobile/store/Visitas/types'
+import { TPedestrians, TVehicles, TVisitaPayload } from '@gcMobile/store/Visitas/types'
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
     Visita: <FontAwesome name="user" size={24} color={colors.darkGray} />,
@@ -46,46 +45,25 @@ export default function Form({ route, navigation }: any) {
     const { catalogVisitas } = useSelector((state: RootState) => state.tipoVisitas)
     const { catalogIngreso } = useSelector((state: RootState) => state.tipoIngresoReducer)
     const { currentHouseId } = useSelector((state: RootState) => state.houseReducer)
-    const { id } = useSelector((state: RootState) => state.userReducer)
+    const { id: idUsuario } = useSelector((state: RootState) => state.userReducer)
     const { operationSuccess } = useSelector((state: RootState) => state.uiReducer)
-    const { newVisistaQR, visita, vehicles } = useSelector((state: RootState) => state.visitasReducer)
-
+    const { createdQr, visita } = useSelector((state: RootState) => state.visitasReducer)
     const [formValues, setFormValues] = useState<{
-        [key: string]: string | number
-    }>({
-        visita_id: '',
-        visitaNombre: '',
-        tipo_visita: '',
-        tipo_ingreso: '',
-        fromDate: new Date().toISOString(),
-        toDate: new Date().toISOString(),
-        fromHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
-        toHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
-        notificaciones: 1,
-        acceso: -1,
-    })
+        [key: string]: string | number | Array<TVehicles> | Array<TPedestrians>
+    }>(VISITA_INITIAL_STATE)
     const [showModal, setShowModal] = useState<boolean>(false)
     const [showModalTime, setShowModalTime] = useState<boolean>(false)
-    const [totalVehicles, setTotalVehicles] = useState<number>(1)
-    const [vehicleData, setVehicleData] = useState<VehicleInformationState[]>([
-        {
-            vehicle_id: '',
-            brand: '',
-            model: '',
-            year: '',
-            color: '',
-            plates: '',
-        },
-    ])
 
     const handleSubmit = () => {
         let flagEmpty = false
         Object.keys(formValues).forEach((key) => {
-            if (
-                _.isEmpty(formValues[key]) &&
-                typeof formValues[key] !== 'number' &&
-                !['vehicle_model', 'vehicle_color', 'vehicle_plate', 'visita_id'].includes(key)
-            ) {
+            if (_.isEmpty(formValues[key]) && typeof formValues[key] !== 'number') {
+                flagEmpty = true
+            }
+        })
+        const vehiclePayload = formValues.vehicles as Array<TVehicles>
+        vehiclePayload.forEach((vehicle) => {
+            if (_.isEmpty(vehicle.conductor) || _.isEmpty(vehicle.placas)) {
                 flagEmpty = true
             }
         })
@@ -98,15 +76,6 @@ export default function Form({ route, navigation }: any) {
             })
             return
         }
-        const vehiclePayload = vehicleData.map((vehicle) => {
-            const tmp: { [key: string]: string } = {}
-            Object.keys(vehicle).forEach((key) => {
-                if (vehicle[key] !== '') {
-                    tmp[key] = vehicle[key]
-                }
-            })
-            return tmp
-        })
         if (uniqueID) {
             Alert.alert('¿Estás seguro?', '¿Deseas actualizar la visita?', [
                 {
@@ -118,41 +87,39 @@ export default function Form({ route, navigation }: any) {
                     text: 'Aceptar',
                     onPress: () => {
                         const payload: TVisitaPayload = {
-                            idVisita: visita.visita_id,
-                            tipoVisita: formValues.tipo_visita.toString(),
-                            tipoIngreso: formValues.tipo_ingreso.toString(),
-                            fechaIngreso: formatDateToPayload(
-                                formValues.fromDate.toString(),
-                                formValues.fromHour.toString()
-                            ),
-                            fechaSalida: formatDateToPayload(
-                                formValues.toDate.toString(),
-                                formValues.toHour.toString()
-                            ),
-                            multiEntrada: formValues.acceso.toString(),
+                            idVisita: formValues.visitaId.toString(),
+                            idTipoVisita: formValues.idTipoVisita.toString(),
+                            idTipoIngreso: formValues.idTipoIngreso.toString(),
+                            fechaIngreso: formValues.fechaIngreso.toString(),
+                            fechaSalida: formValues.fechaSalida.toString(),
+                            multiple: formValues.multiple.toString(),
                             notificaciones: formValues.notificaciones.toString(),
                             nombreVisita: formValues.visitaNombre.toString(),
-                            vehicles: JSON.stringify(vehiclePayload),
+                            vehiculos: JSON.stringify(vehiclePayload),
+                            peatones: JSON.stringify([]),
                         }
+                        console.info('update payload =====>', payload)
                         dispatch(updateVisita(payload) as any)
                     },
                 },
             ])
         } else {
-            dispatch(
-                createVisita({
-                    idUsuario: id,
-                    tipoVisita: formValues.tipo_visita.toString(),
-                    tipoIngreso: formValues.tipo_ingreso.toString(),
-                    fechaIngreso: formatDateToPayload(formValues.fromDate.toString(), formValues.fromHour.toString()),
-                    fechaSalida: formatDateToPayload(formValues.toDate.toString(), formValues.toHour.toString()),
-                    multEntry: formValues.acceso.toString(),
-                    notificacion: formValues.notificaciones.toString(),
-                    nombre: formValues.visitaNombre.toString(),
-                    idInstalacion: currentHouseId.toString(),
-                    vehicle: JSON.stringify(vehiclePayload),
-                }) as any
-            )
+            const payload = {
+                idUsuario,
+                idTipoVisita: formValues.idTipoVisita.toString(),
+                idTipoIngreso: formValues.idTipoIngreso.toString(),
+                idInstalacion: currentHouseId.toString(),
+                fechaIngreso: formValues.fechaIngreso.toString(),
+                fechaSalida: formValues.fechaSalida.toString(),
+                multiple: formValues.multiple.toString(),
+                notificaciones: formValues.notificaciones.toString(),
+                appGenerado: '1',
+                nombreVisita: formValues.visitaNombre.toString(),
+                vehiculos: JSON.stringify(vehiclePayload),
+                peatones: JSON.stringify([]),
+            }
+            console.info('create payload =====>', payload)
+            dispatch(createVisita(payload) as any)
         }
     }
 
@@ -164,87 +131,48 @@ export default function Form({ route, navigation }: any) {
     useEffect(() => {
         if (uniqueID) {
             dispatch(getVisitaByuniqueId(uniqueID) as any)
-            dispatch(getVehiclesByUniqueId(uniqueID) as any)
         }
     }, [uniqueID])
 
     useEffect(() => {
-        if (visita?.visita_id) {
-            setFormValues((prev) => ({
-                ...prev,
-                visita_id: visita.visita_id,
-                visitaNombre: visita.nombre,
-                tipo_visita: visita.id_tipo_visita,
-                tipo_ingreso: visita.id_tipo_ingreso,
-                fromDate: visita.desde,
-                toDate: visita.hasta,
-                fromHour: visita.desde.split('T')[1].split(':')[0],
-                toHour: visita.hasta.split('T')[1].split(':')[0],
-                notificaciones: visita.notificaciones,
-                acceso: visita.multiple_entrada,
-            }))
-        } else {
-            setFormValues({
-                visita_id: '',
-                visitaNombre: '',
-                tipo_visita: '',
-                tipo_ingreso: '',
-                fromDate: new Date().toISOString(),
-                toDate: new Date().toISOString(),
-                fromHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
-                toHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
-                notificaciones: 0,
-                acceso: -1,
-            })
-        }
-        if (vehicles?.length > 0) {
-            setTotalVehicles(vehicles.length)
-            setVehicleData(
-                vehicles.map((vehicle) => ({
-                    vehicle_id: vehicle?.vehicle_id,
-                    brand: vehicle.marca,
-                    model: vehicle.modelo,
-                    year: vehicle.anio,
-                    color: vehicle.color,
-                    plates: vehicle.placas,
-                }))
+        if (visita?.visitaId) {
+            setFormValues(
+                (prev) =>
+                    ({
+                        ...prev,
+                        ...visita,
+                    } as any)
             )
         }
-    }, [visita, vehicles])
+        return () => {
+            dispatch(clearVehicles())
+            dispatch(clearEditableVisita())
+            setFormValues(VISITA_INITIAL_STATE)
+        }
+    }, [visita])
 
     useEffect(() => {
         if (operationSuccess) {
             dispatch(setOperationSuccess(false))
             clearScreenOnReturn()
-            navigation.navigate(VIEWS.QR_DETAILS, { uniqueID: newVisistaQR })
+            navigation.navigate(VIEWS.QR_DETAILS, { uniqueID: createdQr })
         }
     }, [operationSuccess])
 
     const handleAddVehicle = () => {
-        setTotalVehicles((prev) => prev + 1)
-        setVehicleData((prev) => [
-            ...prev,
-            {
-                brand: '',
-                model: '',
-                year: '',
-                color: '',
-                plates: '',
-            },
-        ])
+        const newVehicle = NEW_EMPTY_VEHICLE
+        const vehiclesArr = [...(formValues.vehicles as TVehicles[]), newVehicle]
+        setFormValues((prev) => ({ ...prev, vehicles: vehiclesArr }))
     }
 
-    const removeVehicleLocal = (index: number) => {
-        setTotalVehicles((prev) => prev - 1)
-        setVehicleData((prev) => {
-            let temp = [...prev]
-            temp.splice(index, 1)
-            return temp
-        })
+    const removeVehicleLocal = (id: string) => {
+        const vehicles = formValues.vehicles as Array<TVehicles>
+        const filteredVehicles = vehicles.filter((v) => v.id !== id)
+        setFormValues((prev) => ({ ...prev, vehicles: filteredVehicles }))
     }
 
-    const handleRemoveVehicle = (index: number) => {
-        if (uniqueID && vehicleData[index].vehicle_id) {
+    const handleRemoveVehicle = (id: string) => {
+        if (uniqueID) {
             Alert.alert('¿Estás seguro?', '¿Deseas eliminar el vehículo?', [
                 {
                     text: 'Cancelar',
@@ -253,47 +181,27 @@ export default function Form({ route, navigation }: any) {
                 },
                 {
                     text: 'Aceptar',
-                    onPress: () =>
-                        dispatch(deleteVehicle(vehicleData[index].vehicle_id, () => removeVehicleLocal(index)) as any),
+                    onPress: () => dispatch(deleteVehicle(id.toString(), () => removeVehicleLocal(id)) as any),
                 },
             ])
         } else {
-            removeVehicleLocal(index)
+            removeVehicleLocal(id)
         }
     }
 
-    const handleVehicleOnChange = (index: number, key: string, value: string) => {
-        setVehicleData((prev) => {
-            let temp = [...prev]
-            temp[index][key] = value
-            return temp
-        })
+    const handleVehicleOnChange = (id: string, key: string, value: string) => {
+        const vehicles = formValues.vehicles as Array<TVehicles>
+        const vehicle = vehicles.find((v) => v.id === id) as any
+        if (vehicle) {
+            vehicle[key] = value
+            const filteredVehicles = vehicles.filter((v) => v.id !== id)
+            filteredVehicles.push(vehicle)
+            setFormValues((prev) => ({ ...prev, vehicles: filteredVehicles }))
+        }
     }
 
     const clearScreenOnReturn = () => {
-        setFormValues({
-            visita_id: '',
-            visitaNombre: '',
-            tipo_visita: '',
-            tipo_ingreso: '',
-            fromDate: new Date().toISOString(),
-            toDate: new Date().toISOString(),
-            fromHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
-            toHour: new Date().toLocaleString().split(' ')[1].split(':')[0],
-            notificaciones: 0,
-            acceso: -1,
-        })
-        setTotalVehicles(1)
-        setVehicleData([
-            {
-                vehicle_id: '',
-                brand: '',
-                model: '',
-                year: '',
-                color: '',
-                plates: '',
-            },
-        ])
+        setFormValues(VISITA_INITIAL_STATE)
         dispatch(clearEditableVisita())
         dispatch(clearVehicles())
     }
@@ -318,9 +226,9 @@ export default function Form({ route, navigation }: any) {
                                 label: catalog.tipo_visita,
                                 icon: TipoVisitasIcon[catalog.tipo_visita] as unknown as React.ReactNode,
                             }))}
-                            value={`${formValues.tipo_visita}`}
+                            value={formValues.idTipoVisita.toString()}
                             handleChange={(value: string) => {
-                                setFormValues((prev) => ({ ...prev, tipo_visita: value }))
+                                setFormValues((prev) => ({ ...prev, idTipoVisita: value }))
                             }}
                         />
                     </View>
@@ -333,10 +241,10 @@ export default function Form({ route, navigation }: any) {
                                     borderBottomColor: 'gray',
                                     borderBottomWidth: 1,
                                 }}
-                                value={formValues.visitaNombre.toString()}
+                                value={formValues.nombre.toString()}
                                 onFocus={() => {}}
                                 onBlur={() => {}}
-                                onChangeText={(text) => setFormValues({ ...formValues, visitaNombre: text })}
+                                onChangeText={(text) => setFormValues({ ...formValues, nombre: text })}
                                 autoCapitalize="none"
                                 maxLength={50}
                             />
@@ -355,7 +263,7 @@ export default function Form({ route, navigation }: any) {
                                 }}
                             >
                                 <Text style={[formStyles.date, { paddingVertical: 5 }]}>
-                                    {new Date(formValues['fromDate']).toLocaleDateString('es-MX', {})}
+                                    {new Date(formValues.fechaIngreso.toString()).toLocaleDateString('es-MX', {})}
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -365,7 +273,7 @@ export default function Form({ route, navigation }: any) {
                                 }}
                             >
                                 <Text style={[formStyles.date, { paddingVertical: 5 }]}>
-                                    {new Date(formValues['toDate']).toLocaleDateString('es-MX', {})}
+                                    {new Date(formValues.fechaSalida.toString()).toLocaleDateString('es-MX', {})}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -381,7 +289,7 @@ export default function Form({ route, navigation }: any) {
                                     setShowModalTime(true)
                                 }}
                             >
-                                <Text>{`${formValues['fromHour']}:00`}</Text>
+                                <Text>{`${formValues?.fechaIngresoHora}`}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={{ paddingVertical: 5 }}
@@ -390,7 +298,7 @@ export default function Form({ route, navigation }: any) {
                                     setShowModalTime(true)
                                 }}
                             >
-                                <Text>{`${formValues['toHour']}:00`}</Text>
+                                <Text>{`${formValues?.fechaSalidaHora}`}</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={formStyles.columnContainer}>
@@ -405,20 +313,19 @@ export default function Form({ route, navigation }: any) {
                                 label: catalog.tipo_ingreso,
                                 icon: TipoVisitasIcon[catalog.tipo_ingreso] as unknown as React.ReactNode,
                             }))}
-                            value={`${formValues.tipo_ingreso}`}
+                            value={`${formValues.idTipoIngreso}`}
                             handleChange={(value: string) => {
-                                setFormValues((prev) => ({ ...prev, tipo_ingreso: value }))
+                                setFormValues((prev) => ({ ...prev, idTipoIngreso: value }))
                             }}
                         />
                     </View>
-                    {formValues.tipo_ingreso === '1' && (
+                    {formValues.idTipoIngreso.toString() === '1' && (
                         <Container
                             title="Informacion del vehiculo"
                             actionButton={<HeaderActionButton icon="plus-circle" onPress={handleAddVehicle} />}
                         >
                             <VehicleInformation
-                                numberOfVehicles={totalVehicles}
-                                vehicleData={vehicleData}
+                                vehicles={formValues.vehicles as Array<TVehicles>}
                                 removeVehicle={handleRemoveVehicle}
                                 handleOnChange={handleVehicleOnChange}
                             />
@@ -434,8 +341,8 @@ export default function Form({ route, navigation }: any) {
                                 label: catalog.label,
                                 icon: TipoVisitasIcon[catalog.accesor] as unknown as React.ReactNode,
                             }))}
-                            value={`${formValues.acceso}`}
-                            handleChange={(value: string) => setFormValues((prev) => ({ ...prev, acceso: value }))}
+                            value={`${formValues.multiple}`}
+                            handleChange={(value: string) => setFormValues((prev) => ({ ...prev, multiple: value }))}
                         />
                     </View>
                     <View
@@ -456,15 +363,20 @@ export default function Form({ route, navigation }: any) {
                             <Text style={{ fontSize: 12, color: colors.gray, marginRight: '2%' }}>Notificaciones:</Text>
                             <Switch
                                 trackColor={{ false: colors.lightGray, true: colors.limeGreen }}
-                                thumbColor={formValues['notificaciones'] === 0 ? colors.lightGray : colors.white}
+                                thumbColor={
+                                    Number.parseInt(formValues.notificaciones.toString()) === 0
+                                        ? colors.lightGray
+                                        : colors.white
+                                }
                                 ios_backgroundColor="#3e3e3e"
                                 onValueChange={() =>
                                     setFormValues((prev) => ({
                                         ...prev,
-                                        notificaciones: prev['notificaciones'] === 0 ? 1 : 0,
+                                        notificaciones:
+                                            Number.parseInt(formValues.notificaciones.toString()) === 0 ? 1 : 0,
                                     }))
                                 }
-                                value={formValues['notificaciones'] === 1 ? true : false}
+                                value={Number.parseInt(formValues.notificaciones.toString()) === 1 ? true : false}
                             />
                         </View>
                     </View>
@@ -513,10 +425,10 @@ export default function Form({ route, navigation }: any) {
                     handleHourChange={(hour: string) => {
                         switch (formValues['hourType']) {
                             case 'from':
-                                setFormValues((prev) => ({ ...prev, fromHour: hour }))
+                                setFormValues((prev) => ({ ...prev, fechaIngresoHora: hour }))
                                 break
                             case 'to':
-                                setFormValues((prev) => ({ ...prev, toHour: hour }))
+                                setFormValues((prev) => ({ ...prev, fechaSalidaHora: hour }))
                                 break
                             default:
                                 break
@@ -528,11 +440,11 @@ export default function Form({ route, navigation }: any) {
                         <View style={{ flex: 1, width: '90%' }}>
                             <Calendar
                                 markedDates={{
-                                    [formValues['fromDate'].toString().split('T')[0]]: {
+                                    [formValues.fechaIngreso.toString().split('T')[0]]: {
                                         selected: true,
                                         selectedColor: colors.blue,
                                     },
-                                    [formValues['toDate'].toString().split('T')[0]]: {
+                                    [formValues.fechaSalida.toString().split('T')[0]]: {
                                         selected: true,
                                         selectedColor: colors.cherry,
                                     },
@@ -543,13 +455,13 @@ export default function Form({ route, navigation }: any) {
                                         case 'from':
                                             setFormValues((prev) => ({
                                                 ...prev,
-                                                fromDate: `${day.dateString}T23:59:00.000Z`,
+                                                fechaIngreso: `${day.dateString}T${prev.fechaIngresoHora}:00.000Z`,
                                             }))
                                             break
                                         case 'to':
                                             setFormValues((prev) => ({
                                                 ...prev,
-                                                toDate: `${day.dateString}T23:59:00.000Z`,
+                                                fechaSalida: `${day.dateString}T${prev.fechaSalidaHora}:00.000Z`,
                                             }))
                                             break
                                         default:
