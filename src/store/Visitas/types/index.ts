@@ -16,11 +16,11 @@ export type TVehicles = {
 
 export type TPedestrians = {
     id: string
-    idVisita: string
+    idVisita?: string
     nombre: string
-    fechaRegistro: string
-    fechaActualizacion: string
-    estatusRegistro: string
+    fechaRegistro?: string
+    fechaActualizacion?: string
+    estatusRegistro?: string
 }
 
 export type TVisita = {

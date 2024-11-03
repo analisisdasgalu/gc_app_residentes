@@ -28,6 +28,8 @@ import { HeaderActionButton } from '../HeaderActionButton/HeaderActionButton'
 import { Navbar } from '@gcMobile/navigation/Navbar/Navbar'
 import { clearEditableVisita, clearVehicles } from '@gcMobile/store/Visitas'
 import { TPedestrians, TVehicles, TVisitaPayload } from '@gcMobile/store/Visitas/types'
+import { Pedestrians } from '../PedestrianInformation/Pedestrians'
+import { NEW_PREDESTRAN } from '../PedestrianInformation/constants'
 
 export const TipoVisitasIcon: { [key: string]: React.ReactNode } = {
     Visita: <FontAwesome name="user" size={24} color={colors.darkGray} />,
@@ -160,7 +162,7 @@ export default function Form({ route, navigation }: any) {
     }, [operationSuccess])
 
     const handleAddVehicle = () => {
-        const newVehicle = NEW_EMPTY_VEHICLE
+        const newVehicle = { ...NEW_EMPTY_VEHICLE, id: Math.random().toString(36).substr(2, 9) }
         const vehiclesArr = [...(formValues.vehicles as TVehicles[]), newVehicle]
         setFormValues((prev) => ({ ...prev, vehicles: vehiclesArr }))
     }
@@ -189,6 +191,36 @@ export default function Form({ route, navigation }: any) {
         }
     }
 
+    const handleAddPedestrians = () => {
+        const newPedestrian = { ...NEW_PREDESTRAN, id: Math.random().toString(36).substr(2, 9) }
+        const pedestriansArr = [...(formValues.pedestrians as TPedestrians[]), newPedestrian]
+        setFormValues((prev) => ({ ...prev, pedestrians: pedestriansArr }))
+    }
+
+    const removePedestriansLocal = (id: string) => {
+        const pedestrians = formValues.pedestrians as Array<TPedestrians>
+        const filteredPedestrians = pedestrians.filter((v) => v.id !== id)
+        setFormValues((prev) => ({ ...prev, pedestrians: filteredPedestrians }))
+    }
+
+    const handleRemovePedestrians = (id: string) => {
+        if (uniqueID) {
+            Alert.alert('¿Estás seguro?', '¿Deseas eliminar al acompanante?', [
+                {
+                    text: 'Cancelar',
+                    onPress: () => {},
+                    style: 'cancel',
+                },
+                {
+                    text: 'Aceptar',
+                    onPress: () => {}, // -- TODO: implement remote delete
+                },
+            ])
+        } else {
+            removePedestriansLocal(id)
+        }
+    }
+
     const handleVehicleOnChange = (id: string, key: string, value: string) => {
         const vehicles = formValues.vehicles as Array<TVehicles>
         const vehicle = vehicles.find((v) => v.id === id) as any
@@ -197,6 +229,17 @@ export default function Form({ route, navigation }: any) {
             const filteredVehicles = vehicles.filter((v) => v.id !== id)
             filteredVehicles.push(vehicle)
             setFormValues((prev) => ({ ...prev, vehicles: filteredVehicles }))
+        }
+    }
+
+    const handlePedestrianOnChange = (id: string, key: string, value: string) => {
+        const pedestrians = formValues.pedestrian as Array<TPedestrians>
+        const pedestrian = pedestrians.find((v) => v.id === id) as any
+        if (pedestrian) {
+            pedestrian[key] = value
+            const filteredPedestrians = pedestrians.filter((v) => v.id !== id)
+            filteredPedestrians.push(pedestrian)
+            setFormValues((prev) => ({ ...prev, pedestrian: filteredPedestrians }))
         }
     }
 
@@ -328,6 +371,18 @@ export default function Form({ route, navigation }: any) {
                                 vehicles={formValues.vehicles as Array<TVehicles>}
                                 removeVehicle={handleRemoveVehicle}
                                 handleOnChange={handleVehicleOnChange}
+                            />
+                        </Container>
+                    )}
+                    {formValues.idTipoIngreso.toString() === '2' && (
+                        <Container
+                            title="Agregar acompañantes"
+                            actionButton={<HeaderActionButton icon="plus-circle" onPress={handleAddPedestrians} />}
+                        >
+                            <Pedestrians
+                                pedestrians={formValues.pedestrians as Array<TPedestrians>}
+                                removePedestrian={handleRemovePedestrians}
+                                handleOnChange={handlePedestrianOnChange}
                             />
                         </Container>
                     )}
