@@ -1,6 +1,7 @@
 import { ICardProps } from '@gcMobile/components/Card/Card'
 
 export type TVehicles = {
+    [key: string]: string
     id: string
     idVisita: string
     conductor: string
@@ -15,6 +16,7 @@ export type TVehicles = {
 }
 
 export type TPedestrians = {
+    [key: string]: string | undefined
     id: string
     idVisita?: string
     nombre: string
@@ -69,7 +71,7 @@ export type TVisitaPayload = {
     multiple: string
     notificaciones: string
     appGenerado?: string
-    nombreVisita: string
+    nombre: string
     vehiculos?: string
     peatones?: string
 }

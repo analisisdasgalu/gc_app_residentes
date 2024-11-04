@@ -13,6 +13,7 @@ import { Calendar } from 'react-native-calendars'
 import { ModalHour } from '../ModalHour/ModalHour'
 import {
     createVisita,
+    deletePeaton,
     deleteVehicle,
     getVehiclesByUniqueId,
     getVisitaByuniqueId,
@@ -59,13 +60,51 @@ export default function Form({ route, navigation }: any) {
     const handleSubmit = () => {
         let flagEmpty = false
         Object.keys(formValues).forEach((key) => {
-            if (_.isEmpty(formValues[key]) && typeof formValues[key] !== 'number') {
+            if (
+                _.isEmpty(formValues[key]) &&
+                typeof formValues[key] !== 'number' &&
+                ![
+                    'uniqueId',
+                    'autor',
+                    'emailAutor',
+                    'residencialSeccion',
+                    'residencialNumInterior',
+                    'residencialNumExterior',
+                    'residencialCalle',
+                    'residencialColonia',
+                    'residencialCiudad',
+                    'residencialEstado',
+                    'residencialCP',
+                    'residencialNombre',
+                    'vehicles',
+                    'pedestrians',
+                ].includes(key)
+            ) {
                 flagEmpty = true
             }
         })
-        const vehiclePayload = formValues.vehicles as Array<TVehicles>
+        const vehiclePayload = (formValues.vehicles as Array<TVehicles>).map((vehicle) => {
+            return {
+                ...vehicle,
+                estatusRegistro: formValues.idTipoIngreso.toString() === '1' ? '1' : '0',
+            }
+        })
+        if (formValues.idTipoIngreso.toString() === '2' && vehiclePayload.length === 0) {
+        }
         vehiclePayload.forEach((vehicle) => {
             if (_.isEmpty(vehicle.conductor) || _.isEmpty(vehicle.placas)) {
+                flagEmpty = true
+            }
+        })
+
+        const pedestriansPayload = (formValues.pedestrians as Array<TPedestrians>).map((pedestrian) => {
+            return {
+                ...pedestrian,
+                estatusRegistro: formValues.idTipoIngreso.toString() === '2' ? '1' : '0',
+            }
+        })
+        pedestriansPayload.forEach((pedestrian) => {
+            if (_.isEmpty(pedestrian.nombre)) {
                 flagEmpty = true
             }
         })
@@ -96,11 +135,14 @@ export default function Form({ route, navigation }: any) {
                             fechaSalida: formValues.fechaSalida.toString(),
                             multiple: formValues.multiple.toString(),
                             notificaciones: formValues.notificaciones.toString(),
-                            nombreVisita: formValues.visitaNombre.toString(),
-                            vehiculos: JSON.stringify(vehiclePayload),
-                            peatones: JSON.stringify([]),
+                            nombre: formValues.nombre.toString(),
+                            vehiculos: ['1'].includes(formValues.idTipoIngreso.toString())
+                                ? JSON.stringify(vehiclePayload)
+                                : JSON.stringify([]),
+                            peatones: ['2'].includes(formValues.idTipoIngreso.toString())
+                                ? JSON.stringify(pedestriansPayload)
+                                : JSON.stringify([]),
                         }
-                        console.info('update payload =====>', payload)
                         dispatch(updateVisita(payload) as any)
                     },
                 },
@@ -116,11 +158,14 @@ export default function Form({ route, navigation }: any) {
                 multiple: formValues.multiple.toString(),
                 notificaciones: formValues.notificaciones.toString(),
                 appGenerado: '1',
-                nombreVisita: formValues.visitaNombre.toString(),
-                vehiculos: JSON.stringify(vehiclePayload),
-                peatones: JSON.stringify([]),
+                nombre: formValues.nombre.toString(),
+                vehiculos: ['1'].includes(formValues.idTipoIngreso.toString())
+                    ? JSON.stringify(vehiclePayload)
+                    : JSON.stringify([]),
+                peatones: ['2'].includes(formValues.idTipoIngreso.toString())
+                    ? JSON.stringify(pedestriansPayload)
+                    : JSON.stringify([]),
             }
-            console.info('create payload =====>', payload)
             dispatch(createVisita(payload) as any)
         }
     }
@@ -138,17 +183,13 @@ export default function Form({ route, navigation }: any) {
 
     useEffect(() => {
         if (visita?.visitaId) {
-            setFormValues(
-                (prev) =>
-                    ({
-                        ...prev,
-                        ...visita,
-                    } as any)
-            )
+            setFormValues((prev) => ({
+                ...prev,
+                ...visita,
+            }))
         }
         return () => {
             dispatch(clearVehicles())
-            dispatch(clearEditableVisita())
             setFormValues(VISITA_INITIAL_STATE)
         }
     }, [visita])
@@ -213,7 +254,7 @@ export default function Form({ route, navigation }: any) {
                 },
                 {
                     text: 'Aceptar',
-                    onPress: () => {}, // -- TODO: implement remote delete
+                    onPress: () => dispatch(deletePeaton(id.toString(), () => removePedestriansLocal(id)) as any), // -- TODO: implement remote delete
                 },
             ])
         } else {
@@ -222,25 +263,31 @@ export default function Form({ route, navigation }: any) {
     }
 
     const handleVehicleOnChange = (id: string, key: string, value: string) => {
-        const vehicles = formValues.vehicles as Array<TVehicles>
-        const vehicle = vehicles.find((v) => v.id === id) as any
-        if (vehicle) {
-            vehicle[key] = value
-            const filteredVehicles = vehicles.filter((v) => v.id !== id)
-            filteredVehicles.push(vehicle)
-            setFormValues((prev) => ({ ...prev, vehicles: filteredVehicles }))
-        }
+        setFormValues((prev) => {
+            const vehicles = [...(prev.vehicles as Array<TVehicles>)]
+            const vehicle = vehicles.find((v) => v.id === id) as TVehicles
+            if (vehicle) {
+                const tmp = { ...vehicle, [`${key}`]: value }
+                const filteredVehicles = vehicles.filter((v) => v.id !== id)
+                filteredVehicles.push(tmp)
+                return { ...prev, vehicles: filteredVehicles }
+            }
+            return prev
+        })
     }
 
     const handlePedestrianOnChange = (id: string, key: string, value: string) => {
-        const pedestrians = formValues.pedestrian as Array<TPedestrians>
-        const pedestrian = pedestrians.find((v) => v.id === id) as any
-        if (pedestrian) {
-            pedestrian[key] = value
-            const filteredPedestrians = pedestrians.filter((v) => v.id !== id)
-            filteredPedestrians.push(pedestrian)
-            setFormValues((prev) => ({ ...prev, pedestrian: filteredPedestrians }))
-        }
+        setFormValues((prev) => {
+            const pedestrians = prev.pedestrians as Array<TPedestrians>
+            const pedestrian = pedestrians.find((v) => v.id === id) as TPedestrians
+            if (pedestrian) {
+                const tmp = { ...pedestrian, [`${key}`]: value }
+                const filteredPedestrians = pedestrians.filter((v) => v.id !== id)
+                filteredPedestrians.push(tmp)
+                return { ...prev, pedestrians: filteredPedestrians }
+            }
+            return prev
+        })
     }
 
     const clearScreenOnReturn = () => {
@@ -287,7 +334,7 @@ export default function Form({ route, navigation }: any) {
                                 value={formValues.nombre.toString()}
                                 onFocus={() => {}}
                                 onBlur={() => {}}
-                                onChangeText={(text) => setFormValues({ ...formValues, nombre: text })}
+                                onChangeText={(text) => setFormValues((prev) => ({ ...prev, nombre: text }))}
                                 autoCapitalize="none"
                                 maxLength={50}
                             />

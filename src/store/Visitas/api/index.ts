@@ -8,11 +8,13 @@ import { setLoading, setOperationSuccess } from '@gcMobile/store/UI'
 
 export const getVisitaByuniqueId = (uniqueId: string) => async (dispatch: any) => {
     dispatch(setLoading(true))
+    console.info(`FETCHING::VISITA::UNIQUEID::${base_url}/${ENDPOINTS.VISITAS.BY_UNIQUE_ID}`)
     fetch(stringTemplateAddQuery(`${base_url}/${ENDPOINTS.VISITAS.BY_UNIQUE_ID}`, { uniqueId }))
         .then((res) =>
             res
                 .json()
                 .then((data) => {
+                    console.info(`FETCHED::VISITA::UNIQUEID::${JSON.stringify(data)}`)
                     dispatch(setEditableVisita(data as TVisita))
                     dispatch(setLoading(false))
                 })
@@ -112,7 +114,7 @@ export const createVisita = (data: TVisitaPayload) => async (dispatch: any) => {
     formdata.append('multiple', data.multiple)
     formdata.append('notificaciones', data.notificaciones)
     formdata.append('appGenerado', data.appGenerado || '1')
-    formdata.append('nombreVisita', data.nombreVisita)
+    formdata.append('nombreVisita', data.nombre)
     formdata.append('vehiculos', data?.vehiculos || '')
     formdata.append('peatones', data?.peatones || '')
     dispatch(setLoading(true))
@@ -153,7 +155,7 @@ export const updateVisita = (data: TVisitaPayload) => async (dispatch: any) => {
     formdata.append('fechaSalida', data.fechaSalida)
     formdata.append('multiple', data.multiple)
     formdata.append('notificaciones', data.notificaciones)
-    formdata.append('nombreVisita', data.nombreVisita)
+    formdata.append('nombreVisita', data.nombre)
     formdata.append('vehiculos', data?.vehiculos || '')
     formdata.append('peatones', data?.peatones || '')
     dispatch(setLoading(true))
@@ -185,7 +187,7 @@ export const updateVisita = (data: TVisitaPayload) => async (dispatch: any) => {
 export const deleteVehicle = (vehicle_id: string, callback: () => void) => async (dispatch: any) => {
     dispatch(setLoading(true))
     const formdata = new FormData()
-    formdata.append('idVehicle', vehicle_id)
+    formdata.append('id', vehicle_id)
     try {
         const res = await fetch(`${base_url}/${ENDPOINTS.VISITAS.DELETE_VEHICLE}`, {
             method: 'POST',
@@ -210,6 +212,38 @@ export const deleteVehicle = (vehicle_id: string, callback: () => void) => async
             type: ALERT_TYPE.DANGER,
             title: 'Vehículo',
             textBody: 'Error al eliminar el vehículo',
+        })
+    }
+}
+
+export const deletePeaton = (peaton_id: string, callback: () => void) => async (dispatch: any) => {
+    dispatch(setLoading(true))
+    const formdata = new FormData()
+    formdata.append('id', peaton_id)
+    try {
+        const res = await fetch(`${base_url}/${ENDPOINTS.VISITAS.DELETE_PEDESTRIAN}`, {
+            method: 'POST',
+            body: formdata,
+        })
+        const data = await res.json()
+        if (['200', 200].includes(data.estatus)) {
+            dispatch(setLoading(false))
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'Acompañante',
+                textBody: 'Acompañante eliminado con éxito',
+            })
+            callback()
+        } else {
+            throw new Error(data)
+        }
+    } catch (error) {
+        dispatch(setLoading(false))
+        console.error(error)
+        Toast.show({
+            type: ALERT_TYPE.DANGER,
+            title: 'Peatón',
+            textBody: 'Error al eliminar el Acompañante',
         })
     }
 }
