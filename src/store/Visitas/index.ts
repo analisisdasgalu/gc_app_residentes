@@ -1,23 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TVehicles, TVisita, TVisitas } from './types'
 import { ICardProps } from '@gcMobile/components/Card/Card'
+import { VISITA_INITIAL_STATE } from '@gcMobile/components/Form/constants'
 
 const initialState: TVisitas = {
     visitas: [],
-    newVisistaQR: '',
-    visita: {
-        visita_id: '',
-        nombre: '',
-        desde: '',
-        hasta: '',
-        multiple_entrada: '',
-        notificaciones: '',
-        uniqueID: '',
-        estatus_registro: '',
-        tipo_ingreso: '',
-        id_tipo_ingreso: '0',
-        id_tipo_visita: '0',
-    },
+    createdQr: '',
+    visita: VISITA_INITIAL_STATE,
     vehicles: [],
 }
 
@@ -29,7 +18,7 @@ const visitasSlice = createSlice({
             state.visitas = action.payload
         },
         setNewVisitaQR: (state, action: PayloadAction<string>) => {
-            state.newVisistaQR = action.payload
+            state.createdQr = action.payload
         },
         setEditableVisita: (state, action: PayloadAction<TVisita>) => {
             state.visita = action.payload

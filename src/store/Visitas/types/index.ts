@@ -1,56 +1,77 @@
 import { ICardProps } from '@gcMobile/components/Card/Card'
 
-export type TVisita = {
-    visita_id: string
-    nombre: string
-    desde: string
-    hasta: string
-    multiple_entrada: string
-    notificaciones: string
-    uniqueID: string
-    estatus_registro: string
-    tipo_ingreso: string
-    id_tipo_ingreso: string
-    id_tipo_visita: string
-}
-
 export type TVehicles = {
-    vehicle_id: string
+    [key: string]: string
+    id: string
+    idVisita: string
+    conductor: string
     marca: string
     modelo: string
     anio: string
     placas: string
     color: string
+    fechaRegistro: string
+    fechaActualizacion: string
+    estatusRegistro: string
+}
+
+export type TPedestrians = {
+    [key: string]: string | undefined
+    id: string
+    idVisita?: string
+    nombre: string
+    fechaRegistro?: string
+    fechaActualizacion?: string
+    estatusRegistro?: string
+}
+
+export type TVisita = {
+    visitaId: string
+    idTipoVisita: string
+    idTipoIngreso: string
+    idUsuario: string
+    fechaIngreso: string
+    fechaSalida: string
+    multiple: string
+    notificaciones: string
+    appGenerado: string
+    vigenciaQR: string
+    uniqueId: string
+    autor: string
+    emailAutor: string
+    residencialSeccion: string
+    residencialNumInterior: string
+    residencialNumExterior: string
+    residencialCalle: string
+    residencialColonia: string
+    residencialCiudad: string
+    residencialEstado: string
+    residencialCP: string
+    residencialNombre: string
+    nombre: string
+    vehicles: TVehicles[]
+    pedestrians: TPedestrians[]
 }
 
 export type TVisitas = {
     visitas: ICardProps[]
-    newVisistaQR: string
+    createdQr: string
     visita: TVisita
     vehicles: TVehicles[]
 }
 
-export type visitasPayload = {
-    idUsuario: string
-    tipoVisita: string
-    tipoIngreso: string
-    fechaIngreso: string
-    fechaSalida: string
-    multEntry: string
-    notificacion: string
-    nombre: string
-    idInstalacion: string
-    vehicle?: string
-}
-
 export type TVisitaPayload = {
-    idVisita: string
-    tipoVisita: string
-    tipoIngreso: string
+    idVisita?: string
+    idUsuario?: string
+    idTipoVisita: string
+    idTipoIngreso: string
+    idInstalacion?: string
     fechaIngreso: string
     fechaSalida: string
-    multiEntrada: string
+    multiple: string
     notificaciones: string
-    nombreVisita: string
-    vehicles: string
+    appGenerado?: string
+    nombre: string
+    vehiculos?: string
+    peatones?: string
 }

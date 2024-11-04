@@ -60,7 +60,8 @@ export const formatTime = (hora: string) => {
 }
 
 export const dateTimeFormat = (date: string) => {
-    const hours = new Date(date).getHours()
+    const sanityDate = date.replace(/[zZ]/g, '')
+    const hours = new Date(sanityDate).getHours()
     const minutes = new Date(date).getMinutes()
     const tweleveHour = hours > 12 ? hours - 12 : hours
     const ampm = hours >= 12 ? 'pm' : 'am'
@@ -79,6 +80,11 @@ export const stringTemplateAddQuery = (cadena: string, object: any) => {
     })
     cadena = cadena.slice(0, -1)
     return cadena
+}
+
+export const getCurrentHour = () => {
+    const date = new Date()
+    return `${date.getHours()}:${date.getMinutes()}`
 }
 
 // --- Push Notifications ---
