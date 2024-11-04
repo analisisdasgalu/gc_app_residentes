@@ -178,6 +178,8 @@ export default function Form({ route, navigation }: any) {
     useEffect(() => {
         if (uniqueID) {
             dispatch(getVisitaByuniqueId(uniqueID) as any)
+        } else {
+            dispatch(clearEditableVisita())
         }
     }, [uniqueID])
 
@@ -186,6 +188,16 @@ export default function Form({ route, navigation }: any) {
             setFormValues((prev) => ({
                 ...prev,
                 ...visita,
+                fechaIngresoHora: new Date(visita.fechaIngreso).toLocaleTimeString('es-MX', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true,
+                }),
+                fechaSalidaHora: new Date(visita.fechaSalida).toLocaleTimeString('es-MX', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true,
+                }),
             }))
         }
         return () => {
@@ -527,10 +539,22 @@ export default function Form({ route, navigation }: any) {
                     handleHourChange={(hour: string) => {
                         switch (formValues['hourType']) {
                             case 'from':
-                                setFormValues((prev) => ({ ...prev, fechaIngresoHora: hour }))
+                                setFormValues((prev) => ({
+                                    ...prev,
+                                    fechaIngresoHora: hour,
+                                    fechaIngreso: prev.fechaIngreso
+                                        .toString()
+                                        .replace(/T\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}/g, `T${hour}:00.000`),
+                                }))
                                 break
                             case 'to':
-                                setFormValues((prev) => ({ ...prev, fechaSalidaHora: hour }))
+                                setFormValues((prev) => ({
+                                    ...prev,
+                                    fechaSalidaHora: hour,
+                                    fechaSalida: prev.fechaSalida
+                                        .toString()
+                                        .replace(/T\d{1,2}:\d{1,2}:\d{1,2}\.\d{1,3}/g, `T${hour}:00.000`),
+                                }))
                                 break
                             default:
                                 break
@@ -557,13 +581,13 @@ export default function Form({ route, navigation }: any) {
                                         case 'from':
                                             setFormValues((prev) => ({
                                                 ...prev,
-                                                fechaIngreso: `${day.dateString}T${prev.fechaIngresoHora}:00.000Z`,
+                                                fechaIngreso: `${day.dateString}T${prev.fechaIngresoHora}:00.000`,
                                             }))
                                             break
                                         case 'to':
                                             setFormValues((prev) => ({
                                                 ...prev,
-                                                fechaSalida: `${day.dateString}T${prev.fechaSalidaHora}:00.000Z`,
+                                                fechaSalida: `${day.dateString}T${prev.fechaSalidaHora}:00.000`,
                                             }))
                                             break
                                         default:
