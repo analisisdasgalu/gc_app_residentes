@@ -100,7 +100,8 @@ export default function LoginScreen() {
             .then(async (deviceIdLs: any) => {
                 if (deviceIdLs === null) {
                     registerForPushNotificationsAsync(Notifications).then(async (deviceId) => {
-                        const { estatus, message } = await registerDeviceId(deviceId || '', data.recintoId || '0')
+                        console.log("Token Firebase -> "+deviceId);
+                        const { estatus, message } = await registerDeviceId(deviceId || '', data.recintoId || '0', data.userId||"")
                         if (['200', '201'].includes(estatus)) {
                             console.info({ estatus, message })
                             AsyncStorage.setItem(LOCAL_STORAGE.NOTIFICACIONES, deviceId || '')

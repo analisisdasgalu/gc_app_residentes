@@ -6,11 +6,12 @@ import { setAttachments, setAvisos } from '@gcMobile/store/Notificaciones'
 import { ALERT_TYPE, Toast } from 'react-native-alert-notification'
 import { ENDPOINTS } from '@gcMobile/util/urls'
 
-export const registerDeviceId = async (deviceId: string, recintoId: string) => {
+export const registerDeviceId = async (deviceId: string, recintoId: string, userId:string) => {
     const url = base_url + '/Notificaciones/register/index.php'
     const data = new FormData()
     data.append('deviceId', deviceId)
     data.append('idRecinto', recintoId)
+    data.append('idUser', userId)
     const requestOptions = {
         method: 'POST',
         body: data,

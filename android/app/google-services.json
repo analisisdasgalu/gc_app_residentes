@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "383841318790",
-    "project_id": "gcmobile-5d55a",
-    "storage_bucket": "gcmobile-5d55a.appspot.com"
+    "project_number": "107078103372",
+    "project_id": "app-gcmovil-push-notifications",
+    "storage_bucket": "app-gcmovil-push-notifications.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:383841318790:android:d3ceb8d484563b1b9a1e07",
+        "mobilesdk_app_id": "1:107078103372:android:3b0cff738a394f2e9f1fe9",
         "android_client_info": {
           "package_name": "com.mfuentes1992.gcMobile"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAjLvLVEePrj8e8cA-V6pgrognBScx8APU"
+          "current_key": "AIzaSyCkhODWlHZ3o9eTjKhwAEbQWLRAEY-cqAE"
         }
       ],
       "services": {

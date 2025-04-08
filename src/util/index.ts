@@ -38,18 +38,14 @@ export const getTipoVisitaIcon = (tipo_visita: string, alt: boolean = false) => 
 }
 
 export const formatDate = (date: string) => {
-    if (date.includes('T')) {
-        const dateNotime = date.split('T')[0]
-        const newDate = new Date(dateNotime)
-        return newDate.toLocaleDateString('es-MX', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        })
-    }
-    const newDate = new Date(date)
-    return newDate.toLocaleString('es-MX')
-}
+    const newDate = new Date(date); // usa el string completo
+    return newDate.toLocaleDateString("es-MX", {
+      timeZone: "America/Mexico_City", // Cambia esto a tu zona local
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
 export const plateFormat = (plate: string) => {
     return plate.length > 16 ? plate.slice(0, 16) + '...' : plate
@@ -212,11 +208,13 @@ export const clearForm = (form: any) => {
 }
 
 export const formatDateToHome = (date: string) => {
-    if (date === '') return ''
-    const [year, month, day] = date.split('-')
-    const monthName = CANNONICAL_MONTHS[Number.parseInt(month, 10)]
-    return `${monthName} ${day}/${month}/${year}`
-}
+    if (!date) return '';
+    // Extrae la parte de la fecha antes de la "T"
+    const datePart = date.split('T')[0]; // "2025-04-03"
+    const [year, month, day] = datePart.split('-');
+    const monthName = CANNONICAL_MONTHS[Number.parseInt(month, 10)];
+    return `${monthName} ${day}/${month}/${year}`;
+  };
 
 export const goToPDFViewer = (navigation: any, uri: string) => {
     try {
