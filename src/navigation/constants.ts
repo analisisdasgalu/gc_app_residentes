@@ -1,3 +1,4 @@
+import Comentarios from '@gcMobile/screens/ComplaintsClaims/Comentarios'
 import { PDFViewer } from '@gcMobile/screens/PDFViewer/PDFViewer'
 
 export const VIEWS = {
@@ -16,4 +17,5 @@ export const VIEWS = {
     AVISOS: 'Avisos',
     RECIBOS: 'Recibos',
     CHANGE_PASSWORD: 'ChangePassword',
+    COMENTARIOS: 'Comentarios',
 }

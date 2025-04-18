@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { ScrollView } from 'react-native-gesture-handler'
 import { HomeCardProps, HomeCreateVisitProps, LastPaymentInformationProps, NotificationCardProps } from './types'
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Button } from 'react-native'
 import CircularButton from '@gcMobile/components/CircularButton'
 import { circularBtnStyles } from '@gcMobile/components/CircularButton/constants'
 import { colors, fonts } from '@gcMobile/theme/default.styles'
@@ -220,6 +220,12 @@ export const Home = ({ navigation }: any) => {
 
     return (
         <ScrollView overScrollMode="never" contentContainerStyle={[{ paddingBottom: 10 }]}>
+            <Button                   
+                title='prueba'
+                onPress={() => {
+                    navigation.navigate(VIEWS.COMENTARIOS)
+                }}
+            />
             <HeaderCard
                 imageUrl={`${base_web_server}${pictureUrl}`}
                 nombre={name}
